@@ -1,1 +1,3 @@
 .vercel
+# Supabase config with real credentials (copy from supabase-config.example.js)
+supabase-config.js
