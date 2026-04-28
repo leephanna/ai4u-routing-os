@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" onerror="window.chartJsFailed=true"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onerror="window.supabaseFailed=true"></script>
 <style>
 /* ═══════════════════════════════════════════════════════════
    DESIGN TOKENS
@@ -1288,6 +1289,7 @@ canvas{max-width:100%;height:auto}
           <button class="btn btn-sm btn-primary" onclick="copyResult()" id="btn-copy-route" style="display:none">Copy Result</button>
           <button class="btn btn-sm btn-gold" onclick="showPanel('prompt')" id="btn-to-prompt" style="display:none">Build Prompt →</button>
           <button class="btn btn-sm btn-ghost" onclick="logFromRouter()" id="btn-log-route" style="display:none">Log to Ledger</button>
+          <button class="btn btn-sm btn-green" onclick="saveRouteDecisionToSB()" id="btn-save-route" style="display:none" title="Save this route decision to Supabase">Save Route Decision</button>
         </div>
       </div>
     </div>
@@ -1667,6 +1669,54 @@ The output will include:
       </div>
     </div>
 
+    <!-- SAVE PROOF RECEIPT -->
+    <div class="divider"></div>
+    <div class="section-title">Proof Persistence</div>
+    <div class="section-heading" style="font-size:clamp(16px,2.5vw,24px)">Save a Proof Receipt</div>
+    <p class="section-sub" style="margin-bottom:24px">Record a proof artifact to your Supabase ledger. Works locally if not signed in.</p>
+    <div class="card" style="margin-bottom:0">
+      <div class="grid-2" style="gap:20px">
+        <div>
+          <div class="form-group">
+            <label class="form-label">Proof Type</label>
+            <select class="form-select" id="pr-type">
+              <option value="">— Select Type —</option>
+              <option value="browser">Browser Proof (live URL)</option>
+              <option value="build">Build Proof (CI passed)</option>
+              <option value="link">Link Proof (all URLs resolve)</option>
+              <option value="data">Data Persistence Proof</option>
+              <option value="screenshot">Screenshot / Log Proof</option>
+              <option value="automation">Automation Proof</option>
+              <option value="fallback">Failure Fallback Proof</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Proof Title</label>
+            <input class="form-input" id="pr-title" type="text" placeholder="e.g., routing.ai4utech.com loads — V4 deploy">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Proof URL</label>
+            <input class="form-input" id="pr-url" type="text" placeholder="https://...">
+          </div>
+        </div>
+        <div>
+          <div class="form-group">
+            <label class="form-label">Notes / Log Excerpt</label>
+            <textarea class="form-textarea" id="pr-notes" placeholder="Screenshot URL, commit SHA, build log snippet..." rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="pr-status">
+              <option value="verified">✓ Verified</option>
+              <option value="pending">⏳ Pending</option>
+              <option value="failed">✗ Failed</option>
+            </select>
+          </div>
+          <button class="btn btn-primary btn-full" onclick="saveProofReceiptToSB()">Save Proof Receipt</button>
+        </div>
+      </div>
+    </div>
+
     <!-- PROOF CHAIN PROTOCOL -->
     <div class="divider"></div>
     <div class="section-title">Proof Protocol</div>
@@ -1741,9 +1791,9 @@ The output will include:
   <div class="section">
     <div class="section-title">Permanent Learning System</div>
     <div class="section-heading">AI Task Ledger</div>
-    <div class="info-banner" style="margin-top:16px">
+    <div class="info-banner" style="margin-top:16px" id="ledger-mode-banner">
       <div class="info-banner-icon">💾</div>
-      <div><strong>Local V1 Ledger</strong> — Entries are saved to your browser's localStorage and persist across sessions. Supabase cloud persistence is the next upgrade (V2).</div>
+      <div><strong>Local V3 Ledger</strong> — Entries saved to browser localStorage. Configure Supabase in Settings to upgrade to Persistent V4.</div>
     </div>
 
     <div class="grid-2" style="margin-top:24px;gap:24px">
@@ -1808,7 +1858,9 @@ The output will include:
       <div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
           <div class="card-title">Ledger Entries</div>
-          <div style="display:flex;gap:8px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-sm btn-green" onclick="sbSyncNow()" title="Sync unsynced entries to Supabase">Sync Now</button>
+            <button class="btn btn-sm btn-ghost" onclick="sbMigrateLedger()" title="Push all local entries to Supabase">Migrate</button>
             <button class="btn btn-sm btn-ghost" onclick="exportData()">Export JSON</button>
             <button class="btn btn-sm btn-danger" onclick="clearLedger()">Clear All</button>
           </div>
@@ -1824,6 +1876,35 @@ The output will include:
             <div style="font-size:32px;margin-bottom:12px">📊</div>
             <div style="font-family:var(--font-head);font-size:12px;color:var(--white3);margin-bottom:6px">No entries yet</div>
             <div style="font-size:12px;color:var(--white3)">Log your first task outcome to start building your AI performance database.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEARNING INTELLIGENCE SUMMARY -->
+    <div style="margin-top:24px" id="ledger-intelligence">
+      <div class="card-title" style="margin-bottom:12px">Learning Intelligence</div>
+      <div class="card card-sm" style="background:linear-gradient(135deg,rgba(0,212,255,0.05),rgba(139,92,246,0.05))">
+        <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:center;justify-content:space-around">
+          <div style="text-align:center">
+            <div style="font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--cyan);text-shadow:0 0 16px var(--cyan-glow)" id="li-total">—</div>
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--white3)">Outcomes</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--gold);text-shadow:0 0 16px var(--gold-glow)" id="li-winrate">—</div>
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--white3)">Win Rate %</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--green)" id="li-best">—</div>
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--white3)">Top Platform</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:var(--font-head);font-size:16px;font-weight:700;color:var(--red)" id="li-fail">—</div>
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--white3)">Most Failed</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-size:11px;color:var(--white3)" id="li-source">Local data</div>
+            <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--white3)">Data Source</div>
           </div>
         </div>
       </div>
@@ -2017,6 +2098,121 @@ The output will include:
         </div>
       </div>
     </div>
+
+    <!-- SUPABASE V4 CONFIGURATION -->
+    <div class="divider"></div>
+    <div class="section-title">Supabase Integration</div>
+    <div class="section-heading" style="font-size:clamp(16px,2.5vw,24px)">Persistent V4 Intelligence Layer</div>
+    <div style="display:flex;align-items:center;gap:12px;margin:12px 0 24px;flex-wrap:wrap">
+      <span id="sb-status-indicator" class="badge badge-red">Not Configured</span>
+      <span id="sb-v4-badge" class="badge badge-green" style="display:none">V4 Active</span>
+      <span id="sb-user-email" style="font-size:12px;color:var(--white3)">Not signed in</span>
+    </div>
+
+    <div class="grid-2" style="gap:24px">
+      <!-- Connection Settings -->
+      <div class="card">
+        <div class="card-title">Connection Settings</div>
+        <div class="info-banner" style="margin-bottom:16px">
+          <div class="info-banner-icon">🔑</div>
+          <div style="font-size:12px">Paste your Supabase project URL and anon key. RLS protects all data — the anon key is safe here. <strong style="color:var(--red)">Never paste the service_role key.</strong></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Supabase Project URL</label>
+          <input class="form-input" id="sb-url" type="text" placeholder="https://xxxx.supabase.co">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Supabase Anon Key (public only)</label>
+          <input class="form-input" id="sb-anon-key" type="password" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+          <button class="btn btn-primary btn-sm" onclick="sbSaveConfig()">Save Config</button>
+          <button class="btn btn-ghost btn-sm" onclick="sbTestConnection()">Test Connection</button>
+        </div>
+        <div id="sb-test-result" style="font-size:12px;margin-top:10px;min-height:16px"></div>
+        <div id="sb-last-synced" style="font-size:11px;color:var(--white3);margin-top:6px"></div>
+        <div style="margin-top:16px">
+          <div class="card-title" style="margin-bottom:10px">Sync Actions</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-ghost btn-sm btn-full" onclick="sbSyncNow()">Sync Now — Retry Unsynced Records</button>
+            <button class="btn btn-ghost btn-sm btn-full" onclick="sbMigrateLedger()">Migrate Local Ledger → Supabase</button>
+            <button class="btn btn-ghost btn-sm btn-full" onclick="sbExportAll()">Export All Data as JSON</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth -->
+      <div class="card">
+        <div class="card-title">Authentication</div>
+        <div id="sb-signin-area">
+          <p style="font-size:13px;color:var(--white2);margin-bottom:16px;line-height:1.6">Sign in to activate the Persistent V4 Ledger. Records survive browser clears, device changes, and session ends.</p>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input class="form-input" id="sb-email" type="email" placeholder="lee@ai4utech.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password <span style="color:var(--white3)">(leave blank for magic link)</span></label>
+            <input class="form-input" id="sb-password" type="password" placeholder="Password or leave blank for email link">
+          </div>
+          <button class="btn btn-primary btn-full" onclick="sbSignIn()">Sign In / Send Magic Link</button>
+        </div>
+        <button class="btn btn-danger btn-sm" id="sb-signout-btn" style="display:none;margin-bottom:16px" onclick="sbSignOut()">Sign Out</button>
+
+        <div style="margin-top:20px">
+          <div class="card-title" style="margin-bottom:10px">Persistence Status</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--white2)">
+            <div>• Local V3 Ledger: always active (localStorage)</div>
+            <div>• Persistent V4: requires Supabase config + sign in</div>
+            <div>• Offline: writes queue locally, syncs when reconnected</div>
+            <div>• RLS: each record bound to your auth.uid() only</div>
+          </div>
+        </div>
+
+        <div style="margin-top:20px">
+          <div class="card-title" style="margin-bottom:10px">Tech Stack — V4</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span class="badge badge-cyan">Static HTML</span>
+            <span class="badge badge-cyan">Vanilla JS</span>
+            <span class="badge badge-green">Supabase Auth</span>
+            <span class="badge badge-green">Supabase Postgres</span>
+            <span class="badge badge-green">RLS Enforced</span>
+            <span class="badge badge-gold">Vercel Deploy</span>
+            <span class="badge badge-gold">GitHub Source</span>
+            <span class="badge badge-violet">localStorage Fallback</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEARNING INTELLIGENCE -->
+    <div class="divider"></div>
+    <div class="section-title">Self-Improvement Engine</div>
+    <div class="section-heading" style="font-size:clamp(16px,2.5vw,24px)">Learning Intelligence</div>
+    <p class="section-sub" style="margin-bottom:24px">Computed from your outcome logs. No fake numbers — shows empty state if no data exists.</p>
+    <div class="card" id="intelligence-card">
+      <div class="grid-4" style="gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;padding-bottom:20px">
+        <div class="stat-block">
+          <div class="stat-num" id="intel-total">—</div>
+          <div class="stat-label">Total Outcomes</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num gold" id="intel-winrate">—</div>
+          <div class="stat-label">Win Rate %</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num" id="intel-best-platform" style="font-size:clamp(14px,2vw,20px)">—</div>
+          <div class="stat-label">Top Success Platform</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-num" id="intel-fail-platform" style="font-size:clamp(14px,2vw,20px);color:var(--red);text-shadow:0 0 20px rgba(239,68,68,0.4)">—</div>
+          <div class="stat-label">Most Failed Platform</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div id="intel-sync-info" style="font-size:12px;color:var(--white3)">No data yet — log outcomes to populate Learning Intelligence.</div>
+        <button class="btn btn-ghost btn-sm" onclick="refreshIntelligence()">Refresh Stats</button>
+      </div>
+    </div>
   </div>
 </div><!-- /panel-settings -->
 
@@ -2039,6 +2235,11 @@ The output will include:
 <div id="toast"></div>
 
 </div><!-- /app -->
+
+<!-- Supabase config (optional file — ignored by git, safe to commit anon key) -->
+<script src="supabase-config.js" onerror="void 0"></script>
+<!-- Supabase persistence layer — defines window.AI4U_SB -->
+<script src="supabase-persistence.js" onerror="window.AI4U_SB=null"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
@@ -2324,7 +2525,10 @@ function runRouter(){
 
   const confidence = risk==='critical' ? 91 : risk==='high' ? 94 : risk==='medium' ? 96 : 98;
 
-  state.lastRouteResult = {stage, risk, goal, asset, failure, output, platform: route.platform};
+  state.lastRouteResult = {
+    stage, risk, goal, asset, failure, output,
+    platform: route.platform, why: route.why, avoid: route.avoid, where: route.where, confidence
+  };
 
   const html = `
     <div class="route-platform-badge">
@@ -2354,7 +2558,7 @@ function runRouter(){
   document.getElementById('route-result').classList.add('has-result');
 
   // Show action buttons
-  ['btn-copy-route','btn-to-prompt','btn-log-route'].forEach(id=>{
+  ['btn-copy-route','btn-to-prompt','btn-log-route','btn-save-route'].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.style.display = 'inline-flex';
   });
@@ -2533,7 +2737,7 @@ function logPrompt(){
 /* ═══════════════════════════════════════════════════════
    LEDGER
 ═══════════════════════════════════════════════════════ */
-function addLogEntry(){
+async function addLogEntry(){
   const task     = document.getElementById('l-task').value.trim();
   const platform = document.getElementById('l-platform').value;
   const outcome  = document.getElementById('l-outcome').value;
@@ -2550,7 +2754,9 @@ function addLogEntry(){
   const entry = {
     id: Date.now(),
     date: new Date().toLocaleDateString(),
-    task, platform, outcome, why, framework, artifact, proof
+    task, platform, outcome, why, framework, artifact, proof,
+    sync_status: 'local_only',
+    remote_id: null
   };
 
   state.ledger.unshift(entry);
@@ -2564,7 +2770,53 @@ function addLogEntry(){
   document.getElementById('l-outcome').value='';
 
   refreshLedger();
-  showToast('✓ Entry added to ledger');
+
+  // Try Supabase sync
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB && AI4U_SB.canSync()){
+    showToast('⏳ Saving to Supabase…');
+    const res = await AI4U_SB.saveOutcomeLog({
+      task_title:    entry.task,
+      platform_used: entry.platform,
+      outcome:       entry.outcome,
+      why_it_worked: entry.outcome !== 'failed' ? entry.why : null,
+      why_it_failed: entry.outcome === 'failed'  ? entry.why : null,
+      evidence:      entry.proof    || null,
+      artifact_url:  entry.artifact || null
+    });
+    if(!res.error && !res.local_only){
+      state.ledger[0].sync_status = 'synced';
+      state.ledger[0].remote_id   = res.remote_id;
+      if(entry.outcome === 'worked' && entry.framework){
+        await AI4U_SB.saveSuccessPattern({
+          pattern_title: entry.task, platform: entry.platform,
+          framework_to_duplicate: entry.framework, source_outcome_id: res.remote_id
+        });
+      }
+      if(entry.outcome === 'failed' && entry.framework){
+        await AI4U_SB.saveFailureRule({
+          failure_title: entry.task, platform: entry.platform,
+          avoidance_rule: entry.framework, source_outcome_id: res.remote_id
+        });
+      }
+      if(entry.artifact){
+        await AI4U_SB.saveArtifactLink({
+          artifact_type: 'output', artifact_title: entry.task,
+          artifact_url: entry.artifact, platform: entry.platform, outcome_log_id: res.remote_id
+        });
+      }
+      localStorage.setItem('ai4u_ledger', JSON.stringify(state.ledger));
+      refreshLedger();
+      showToast('✓ Entry saved and synced to Supabase');
+    } else {
+      state.ledger[0].sync_status = 'sync_failed';
+      localStorage.setItem('ai4u_ledger', JSON.stringify(state.ledger));
+      refreshLedger();
+      showToast('✓ Saved locally — Supabase sync failed, use Sync Now to retry');
+    }
+  } else {
+    showToast('✓ Entry added to local ledger');
+  }
+  refreshIntelligence();
 }
 
 function refreshLedger(filter='all'){
@@ -2580,7 +2832,15 @@ function refreshLedger(filter='all'){
   const outcomeColors = {worked:'var(--green)',partial:'var(--gold)',failed:'var(--red)'};
   const outcomeLabels = {worked:'✓ Worked','partial':'⚡ Partial',failed:'✗ Failed'};
 
-  list.innerHTML = entries.map(e=>`
+  list.innerHTML = entries.map(e=>{
+    const syncBadge = e.sync_status === 'synced'
+      ? `<span class="badge badge-green" style="font-size:9px">✓ Synced</span>`
+      : e.sync_status === 'sync_failed'
+        ? `<span class="badge badge-red" style="font-size:9px">✗ Sync Failed</span>`
+        : e.sync_status === 'local_only'
+          ? `<span class="badge" style="font-size:9px;background:rgba(255,255,255,0.05);color:var(--white3);border:1px solid var(--border)">Local Only</span>`
+          : '';
+    return `
     <div class="ledger-entry" id="entry-${e.id}">
       <div class="ledger-entry-header">
         <div class="ledger-entry-task">${e.task}</div>
@@ -2589,6 +2849,7 @@ function refreshLedger(filter='all'){
       <div class="ledger-entry-meta">
         <span class="badge badge-cyan">${e.platform}</span>
         <span class="badge" style="background:${outcomeColors[e.outcome]}22;color:${outcomeColors[e.outcome]};border:1px solid ${outcomeColors[e.outcome]}44">${outcomeLabels[e.outcome]}</span>
+        ${syncBadge}
         <span style="font-size:10px;color:var(--white3)">${e.date}</span>
       </div>
       ${e.why ? `<div class="ledger-entry-detail"><strong style="color:var(--white2)">Why:</strong> ${e.why}</div>` : ''}
@@ -2596,7 +2857,7 @@ function refreshLedger(filter='all'){
       ${e.artifact ? `<div style="margin-top:6px"><a href="${e.artifact}" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">View Artifact →</a></div>` : ''}
       ${e.proof ? `<div style="margin-top:4px;font-size:11px;color:var(--white3)">Proof: ${e.proof}</div>` : ''}
     </div>
-  `).join('');
+  `;}).join('');
 }
 
 function filterLedger(filter, el){
@@ -2620,13 +2881,19 @@ function clearLedger(){
   showToast('Ledger cleared');
 }
 
-function exportData(){
-  const data = {
-    exported: new Date().toISOString(),
-    version: '3.0',
-    ledger: state.ledger,
-    settings: state.settings
-  };
+async function exportData(){
+  let data;
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB && AI4U_SB.canSync()){
+    showToast('⏳ Fetching Supabase data…');
+    data = await AI4U_SB.exportAllData();
+  } else {
+    data = {
+      exported: new Date().toISOString(),
+      version: '4.0',
+      local: { ledger: state.ledger, settings: state.settings },
+      supabase: null
+    };
+  }
   const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -2646,6 +2913,16 @@ function loadSettingsUI(){
   if(s.defaultRisk) document.getElementById('s-default-risk').value = s.defaultRisk;
   if(s.name) document.getElementById('s-name').value = s.name;
   if(s.org) document.getElementById('s-org').value = s.org;
+  // Load Supabase config fields if present
+  const sbUrl = localStorage.getItem('ai4u_sb_url');
+  const sbKey = localStorage.getItem('ai4u_sb_anon_key');
+  if(sbUrl){ const el=document.getElementById('sb-url'); if(el) el.value=sbUrl; }
+  if(sbKey){ const el=document.getElementById('sb-anon-key'); if(el) el.value=sbKey; }
+  // Refresh last-synced display
+  const ls = localStorage.getItem('ai4u_last_synced');
+  if(ls){ const el=document.getElementById('sb-last-synced'); if(el) el.textContent='Last synced: '+new Date(ls).toLocaleString(); }
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB) AI4U_SB.updateStatusUI();
+  refreshIntelligence();
 }
 
 function saveSettings(){
@@ -2707,6 +2984,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   refreshLedger();
   loadSettingsUI();
   buildMatrix();
+  refreshIntelligence();
 
   // Apply saved settings defaults
   const s = state.settings;
@@ -2718,6 +2996,13 @@ document.addEventListener('DOMContentLoaded',()=>{
     const rs = document.getElementById('r-risk');
     if(rs) rs.value = s.defaultRisk;
   }
+
+  // Initialize Supabase persistence layer
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB){
+    AI4U_SB.init().then(()=>{
+      if(AI4U_SB.canSync()) refreshIntelligence();
+    });
+  }
 });
 
 // Close mobile menu on outside click
@@ -2728,6 +3013,240 @@ document.addEventListener('click',e=>{
     menu.classList.remove('open');
   }
 });
+
+/* ═══════════════════════════════════════════════════════
+   SUPABASE INTEGRATION HANDLERS
+═══════════════════════════════════════════════════════ */
+
+function sbSaveConfig(){
+  const url    = (document.getElementById('sb-url')?.value    || '').trim();
+  const anonKey= (document.getElementById('sb-anon-key')?.value || '').trim();
+  if(!url || !anonKey){
+    showToast('⚠️ Enter both Supabase URL and Anon Key');
+    return;
+  }
+  if(url.includes('YOUR_PROJECT_REF') || anonKey.includes('YOUR_ANON_KEY')){
+    showToast('⚠️ Replace the placeholder values with your real credentials');
+    return;
+  }
+  localStorage.setItem('ai4u_sb_url', url);
+  localStorage.setItem('ai4u_sb_anon_key', anonKey);
+  showToast('✓ Config saved — initializing connection…');
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB){
+    AI4U_SB.init().then(r=>{
+      if(r) showToast('✓ Supabase connected — sign in to activate V4');
+      else  showToast('⚠️ Connection failed — check URL and key');
+    });
+  }
+}
+
+async function sbTestConnection(){
+  const resultEl = document.getElementById('sb-test-result');
+  if(!typeof AI4U_SB !== 'undefined' || !AI4U_SB){
+    if(resultEl) resultEl.textContent='⚠️ Save config first';
+    return;
+  }
+  if(resultEl) resultEl.textContent = 'Testing…';
+  const res = await AI4U_SB.testConnection();
+  if(resultEl){
+    resultEl.style.color = res.ok ? 'var(--green)' : 'var(--red)';
+    resultEl.textContent = res.msg;
+  }
+  showToast(res.ok ? '✓ ' + res.msg : '✗ ' + res.msg);
+}
+
+async function sbSignIn(){
+  const email    = (document.getElementById('sb-email')?.value    || '').trim();
+  const password = (document.getElementById('sb-password')?.value || '').trim();
+  if(!email){ showToast('⚠️ Enter your email'); return; }
+  if(typeof AI4U_SB === 'undefined' || !AI4U_SB){
+    showToast('⚠️ Save Supabase config first'); return;
+  }
+  showToast('⏳ Signing in…');
+  const res = await AI4U_SB.signIn(email, password || null);
+  if(res.error){
+    showToast('✗ ' + res.error.message, 4000);
+  } else if(!password){
+    showToast('✓ Magic link sent — check your email', 4000);
+  } else {
+    showToast('✓ Signed in as ' + email);
+    refreshIntelligence();
+  }
+}
+
+async function sbSignOut(){
+  if(typeof AI4U_SB === 'undefined' || !AI4U_SB) return;
+  await AI4U_SB.signOut();
+  showToast('✓ Signed out');
+  refreshIntelligence();
+}
+
+async function sbSyncNow(){
+  if(typeof AI4U_SB === 'undefined' || !AI4U_SB || !AI4U_SB.canSync()){
+    showToast('⚠️ Sign in first to sync');
+    return;
+  }
+  showToast('⏳ Syncing…');
+  const res = await AI4U_SB.syncNow();
+  // Update in-memory ledger from localStorage (syncNow modifies it)
+  state.ledger = JSON.parse(localStorage.getItem('ai4u_ledger') || '[]');
+  refreshLedger();
+  refreshIntelligence();
+  showToast(`✓ Synced ${res.synced} record(s)${res.failed ? ', '+res.failed+' failed' : ''}`);
+}
+
+async function sbMigrateLedger(){
+  if(typeof AI4U_SB === 'undefined' || !AI4U_SB || !AI4U_SB.canSync()){
+    showToast('⚠️ Sign in first to migrate');
+    return;
+  }
+  // Mark all local records as not synced so syncNow will process them
+  state.ledger.forEach(e=>{ e.sync_status = 'local_only'; });
+  localStorage.setItem('ai4u_ledger', JSON.stringify(state.ledger));
+  showToast('⏳ Migrating all local entries…');
+  const res = await AI4U_SB.syncNow();
+  state.ledger = JSON.parse(localStorage.getItem('ai4u_ledger') || '[]');
+  refreshLedger();
+  refreshIntelligence();
+  showToast(`✓ Migrated ${res.synced} record(s)${res.failed ? ', '+res.failed+' failed' : ''}`);
+}
+
+async function sbExportAll(){
+  await exportData();
+}
+
+async function saveRouteDecisionToSB(){
+  const r = state.lastRouteResult;
+  if(!r){ showToast('⚠️ Run the router first'); return; }
+
+  const payload = {
+    task_title:          r.goal || 'Route Decision',
+    task_stage:          r.stage,
+    risk_level:          r.risk,
+    goal:                r.goal,
+    current_asset:       r.asset,
+    failure_point:       r.failure,
+    required_output:     r.output,
+    selected_platform:   r.platform,
+    fallback_platform:   null,
+    why_selected:        r.why,
+    what_not_to_use_yet: r.avoid,
+    where_to_paste:      r.where,
+    confidence_score:    r.confidence,
+    status:              'draft'
+  };
+
+  // Always save locally
+  const localDecisions = JSON.parse(localStorage.getItem('ai4u_route_decisions') || '[]');
+  localDecisions.unshift(Object.assign({id: Date.now(), created_at: new Date().toISOString(), sync_status: 'local_only'}, payload));
+  localStorage.setItem('ai4u_route_decisions', JSON.stringify(localDecisions));
+
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB && AI4U_SB.canSync()){
+    showToast('⏳ Saving route decision…');
+    const res = await AI4U_SB.saveRouteDecision(payload);
+    if(!res.error && !res.local_only){
+      localDecisions[0].sync_status = 'synced';
+      localDecisions[0].remote_id   = res.remote_id;
+      localStorage.setItem('ai4u_route_decisions', JSON.stringify(localDecisions));
+      showToast('✓ Route decision saved to Supabase');
+    } else {
+      showToast('✓ Saved locally — sync failed, use Sync Now to retry');
+    }
+  } else {
+    showToast('✓ Route decision saved locally (sign in to sync)');
+  }
+}
+
+async function saveProofReceiptToSB(){
+  const type  = document.getElementById('pr-type')?.value;
+  const title = (document.getElementById('pr-title')?.value || '').trim();
+  const url   = (document.getElementById('pr-url')?.value   || '').trim();
+  const notes = (document.getElementById('pr-notes')?.value || '').trim();
+  const status= document.getElementById('pr-status')?.value || 'verified';
+
+  if(!type || !title){
+    showToast('⚠️ Proof Type and Title are required');
+    return;
+  }
+
+  const payload = {
+    proof_type:  type,
+    proof_title: title,
+    proof_url:   url   || null,
+    proof_notes: notes || null,
+    proof_status: status,
+    verified_at: status === 'verified' ? new Date().toISOString() : null
+  };
+
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB && AI4U_SB.canSync()){
+    showToast('⏳ Saving proof receipt…');
+    const res = await AI4U_SB.saveProofReceipt(payload);
+    if(!res.error && !res.local_only){
+      showToast('✓ Proof receipt saved to Supabase');
+      ['pr-type','pr-title','pr-url','pr-notes'].forEach(id=>{
+        const el=document.getElementById(id);
+        if(el) el.value='';
+      });
+    } else {
+      showToast('⚠️ Save failed: ' + (res.error?.message || 'not synced'));
+    }
+  } else {
+    // Store locally
+    const receipts = JSON.parse(localStorage.getItem('ai4u_proof_receipts') || '[]');
+    receipts.unshift(Object.assign({id: Date.now(), created_at: new Date().toISOString(), sync_status: 'local_only'}, payload));
+    localStorage.setItem('ai4u_proof_receipts', JSON.stringify(receipts));
+    showToast('✓ Proof receipt saved locally (sign in to sync to Supabase)');
+    ['pr-type','pr-title','pr-url','pr-notes'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.value='';
+    });
+  }
+}
+
+async function refreshIntelligence(){
+  let stats;
+  if(typeof AI4U_SB !== 'undefined' && AI4U_SB){
+    stats = await AI4U_SB.getIntelligenceStats();
+  } else {
+    const ledger = state.ledger;
+    const total  = ledger.length;
+    const worked = ledger.filter(e=>e.outcome==='worked').length;
+    const wins={}, fails={};
+    ledger.forEach(e=>{
+      if(e.outcome==='worked') wins[e.platform]  = (wins[e.platform]  ||0)+1;
+      if(e.outcome==='failed') fails[e.platform] = (fails[e.platform] ||0)+1;
+    });
+    const tw=Object.entries(wins).sort((a,b)=>b[1]-a[1])[0];
+    const tf=Object.entries(fails).sort((a,b)=>b[1]-a[1])[0];
+    stats = { total, worked, winRate: total?Math.round(worked/total*100):0,
+              topWin: tw?tw[0]:'—', topFail: tf?tf[0]:'—',
+              lastSynced: localStorage.getItem('ai4u_last_synced') };
+  }
+  // Update Settings panel intelligence card
+  const setEl=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v||'—'; };
+  setEl('intel-total', stats.total||'—');
+  setEl('intel-winrate', stats.total ? stats.winRate+'%' : '—');
+  setEl('intel-best-platform', stats.topWin);
+  setEl('intel-fail-platform', stats.topFail);
+  const syncInfo = document.getElementById('intel-sync-info');
+  if(syncInfo){
+    if(!stats.total){
+      syncInfo.textContent = 'No data yet — log outcomes to populate Learning Intelligence.';
+    } else {
+      const src = (typeof AI4U_SB!=='undefined'&&AI4U_SB&&AI4U_SB.canSync()) ? 'Supabase' : 'localStorage';
+      syncInfo.textContent = `${stats.total} outcome(s) loaded from ${src}.${stats.lastSynced?' Last sync: '+new Date(stats.lastSynced).toLocaleString():''}`;
+    }
+  }
+  // Update Ledger panel mini-intelligence
+  setEl('li-total', stats.total||'—');
+  setEl('li-winrate', stats.total ? stats.winRate+'%' : '—');
+  setEl('li-best', stats.topWin);
+  setEl('li-fail', stats.topFail);
+  const liSrc = document.getElementById('li-source');
+  if(liSrc){
+    liSrc.textContent = (typeof AI4U_SB!=='undefined'&&AI4U_SB&&AI4U_SB.canSync()) ? 'Supabase' : 'Local data';
+  }
+}
 </script>
 </body>
 </html>

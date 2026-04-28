@@ -1,1 +1,3 @@
 .vercel
+# supabase-config.js contains only the anon PUBLIC key — safe to commit.
+# The service_role key must NEVER be placed here or anywhere in the repo.
