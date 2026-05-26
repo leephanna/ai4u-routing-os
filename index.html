@@ -836,6 +836,26 @@ canvas{max-width:100%;height:auto}
   .hero-ctas{flex-direction:column;align-items:stretch}
   .hero-ctas .btn{justify-content:center}
 }
+/* ═══════════════════════════════════════════════════════════
+   HOW TO USE ENHANCEMENTS
+═══════════════════════════════════════════════════════════ */
+.form-sublabel{font-size:11px;color:var(--white3);margin-top:-4px;margin-bottom:6px;line-height:1.4;font-weight:400;letter-spacing:0}
+.example-task-card{cursor:pointer;text-align:center}
+.example-task-card:hover{border-color:var(--cyan);background:var(--cyan-dim);transform:translateY(-3px)}
+.glossary-item{border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+.glossary-trigger{
+  width:100%;background:var(--bg-card);border:none;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 20px;cursor:pointer;
+  font-family:var(--font-head);font-size:11px;font-weight:600;
+  letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--white2);transition:var(--transition);text-align:left;
+}
+.glossary-trigger:hover,.glossary-trigger.open{color:var(--cyan);background:var(--cyan-dim)}
+.glossary-trigger-arrow{transition:transform 0.2s;flex-shrink:0;font-style:normal}
+.glossary-trigger.open .glossary-trigger-arrow{transform:rotate(180deg)}
+.glossary-body{display:none;padding:14px 20px;background:var(--bg-input);font-size:13px;color:var(--white2);line-height:1.7}
+.glossary-body.open{display:block}
 </style>
 </head>
 <body>
@@ -1034,12 +1054,100 @@ canvas{max-width:100%;height:auto}
      PANEL: HOW TO USE
 ═══════════════════════════════════════════════════════ -->
 <div class="panel" id="panel-howto">
-  <div class="section">
-    <div class="section-title">Interactive Walkthrough</div>
-    <div class="section-heading">How To Use The AI4U Routing OS</div>
-    <p class="section-sub">A step-by-step guide to routing every task to the perfect AI platform — every time.</p>
 
-    <div class="card" style="margin-top:32px;padding:0;overflow:hidden">
+  <!-- HERO -->
+  <div class="section" style="text-align:center;padding-bottom:24px">
+    <div style="font-family:var(--font-head);font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px">Start Here</div>
+    <h2 style="font-family:var(--font-head);font-size:clamp(22px,4vw,38px);font-weight:800;color:var(--white1);margin-bottom:14px;line-height:1.2">Not Sure Which AI To Use?<br>Start Here.</h2>
+    <p style="font-size:clamp(14px,1.8vw,16px);color:var(--white2);max-width:660px;margin:0 auto 28px;line-height:1.7">Describe what you want done. AI4U picks the best tool, writes the instructions, and shows you exactly what to do next.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center">
+      <button class="btn btn-primary" onclick="loadExampleTask('email')">Try a Real-Life Example →</button>
+      <button class="btn btn-gold" onclick="showPanel('router')">Start With My Own Task →</button>
+      <button class="btn btn-ghost" onclick="scrollToWalkthrough()">See Power Features</button>
+    </div>
+  </div>
+
+  <!-- BENEFIT CARDS -->
+  <div class="section" style="padding-top:0">
+    <div class="grid-4" style="gap:16px">
+      <div class="card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">🎯</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:6px">Pick the right AI</div>
+        <div style="font-size:12px;color:var(--white3);line-height:1.5">Stop guessing between ChatGPT, Claude, Gemini, and more</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">✍️</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px">Get the exact words to use</div>
+        <div style="font-size:12px;color:var(--white3);line-height:1.5">AI4U writes the prompt for you</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">🗺️</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--violet);margin-bottom:6px">Know where to start</div>
+        <div style="font-size:12px;color:var(--white3);line-height:1.5">We show you what to click and what to type</div>
+      </div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:28px;margin-bottom:10px">📚</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--green);margin-bottom:6px">Save what worked</div>
+        <div style="font-size:12px;color:var(--white3);line-height:1.5">Build your own AI playbook over time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAMPLE TASK GRID -->
+  <div class="section" style="padding-top:0">
+    <div class="section-title">Try It Now</div>
+    <div class="section-heading">Pick a real task to see how it works</div>
+    <p class="section-sub" style="margin-bottom:24px">Click any card — AI4U fills in the Route Engine and shows you exactly which AI to use and what to say.</p>
+    <div class="grid-4" style="gap:16px">
+      <div class="card example-task-card" onclick="loadExampleTask('email')">
+        <div style="font-size:28px;margin-bottom:10px">📧</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Write a professional email</div>
+        <div style="font-size:11px;color:var(--white3)">Writing · Low risk</div>
+      </div>
+      <div class="card example-task-card" onclick="loadExampleTask('resume')">
+        <div style="font-size:28px;margin-bottom:10px">📄</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Improve my resume</div>
+        <div style="font-size:11px;color:var(--white3)">Writing · Medium risk</div>
+      </div>
+      <div class="card example-task-card" onclick="loadExampleTask('compare')">
+        <div style="font-size:28px;margin-bottom:10px">🔍</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Compare products before buying</div>
+        <div style="font-size:11px;color:var(--white3)">Research · Low risk</div>
+      </div>
+      <div class="card example-task-card" onclick="loadExampleTask('website')">
+        <div style="font-size:28px;margin-bottom:10px">🌐</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Build a website or app</div>
+        <div style="font-size:11px;color:var(--white3)">Building · Medium risk</div>
+      </div>
+      <div class="card example-task-card" onclick="loadExampleTask('fix')">
+        <div style="font-size:28px;margin-bottom:10px">🔧</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Fix something that isn't working</div>
+        <div style="font-size:11px;color:var(--white3)">Repair · High risk</div>
+      </div>
+      <div class="card example-task-card" onclick="loadExampleTask('automate')">
+        <div style="font-size:28px;margin-bottom:10px">⚙️</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Automate a repetitive task</div>
+        <div style="font-size:11px;color:var(--white3)">Automation · Medium risk</div>
+      </div>
+      <div class="card example-task-card" onclick="loadExampleTask('content')">
+        <div style="font-size:28px;margin-bottom:10px">📢</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Create content for my business</div>
+        <div style="font-size:11px;color:var(--white3)">Content · Low risk</div>
+      </div>
+      <div class="card example-task-card" onclick="loadExampleTask('research')">
+        <div style="font-size:28px;margin-bottom:10px">🧪</div>
+        <div style="font-family:var(--font-head);font-size:11px;font-weight:700;color:var(--white1);margin-bottom:6px">Research something deeply</div>
+        <div style="font-size:11px;color:var(--white3)">Research · Medium risk</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WALKTHROUGH -->
+  <div class="section" style="padding-top:0" id="howto-walkthrough">
+    <div class="section-title">Step by Step</div>
+    <div class="section-heading">How AI4U Works — Plain English</div>
+
+    <div class="card" style="margin-top:24px;padding:0;overflow:hidden">
       <div class="slideshow">
         <div class="slides-container">
 
@@ -1047,13 +1155,13 @@ canvas{max-width:100%;height:auto}
           <div class="slide active" id="slide-1">
             <div class="slide-num">STEP 01 / 07</div>
             <span class="slide-icon">🎯</span>
-            <div class="slide-title">What Is the <span>AI4U Routing OS?</span></div>
-            <div class="slide-body">The AI4U Routing OS is an intelligent decision framework that analyzes your task and routes it to the single best AI platform for that specific job. No more guessing, no more wasted tokens, no more mediocre outputs.</div>
+            <div class="slide-title">What <span>AI4U Does For You</span></div>
+            <div class="slide-body">Most people waste time guessing which AI to use, typing bad prompts, and getting mediocre results. AI4U fixes that. You describe what you want. AI4U picks the right tool, writes the instructions for you, and shows you exactly what to do next — no tech background required.</div>
             <ul class="slide-steps">
+              <li><div class="slide-step-num">→</div>Works for writing, research, building apps, automating tasks, and more</li>
+              <li><div class="slide-step-num">→</div>Covers ChatGPT, Claude, Gemini, and 11 other top AI platforms</li>
+              <li><div class="slide-step-num">→</div>Free to use — no account required to start</li>
               <li><div class="slide-step-num">→</div>Built by Lee Hanna, AI Consultant at AI4U LLC</li>
-              <li><div class="slide-step-num">→</div>Maps 14 platforms across 8 task stages and 4 risk levels</li>
-              <li><div class="slide-step-num">→</div>Works for solo consultants, teams, and enterprises</li>
-              <li><div class="slide-step-num">→</div>Generates platform-specific prompts with one click</li>
             </ul>
           </div>
 
@@ -1061,13 +1169,13 @@ canvas{max-width:100%;height:auto}
           <div class="slide" id="slide-2">
             <div class="slide-num">STEP 02 / 07</div>
             <span class="slide-icon">📝</span>
-            <div class="slide-title">Step 1 — <span>Define Your Task</span></div>
-            <div class="slide-body">Navigate to the <strong style="color:var(--cyan)">Route Engine</strong> tab. Describe your task in plain English. Be specific about the output format, audience, and constraints.</div>
+            <div class="slide-title">Start With <span>What You Want Done</span></div>
+            <div class="slide-body">Click the <strong style="color:var(--cyan)">Route Engine</strong> tab in the navigation. Describe your task in plain language — just say what you're trying to get done, like you'd explain it to a friend. You don't need to know which AI to use yet. That's AI4U's job.</div>
             <ul class="slide-steps">
-              <li><div class="slide-step-num">1</div>Click the <strong style="color:var(--cyan)">Route Engine</strong> tab in the navigation</li>
-              <li><div class="slide-step-num">2</div>Type your task goal (e.g., "Build a full-stack SaaS app with auth")</li>
-              <li><div class="slide-step-num">3</div>Describe your current asset and the failure point or constraint</li>
-              <li><div class="slide-step-num">4</div>Specify the required output format</li>
+              <li><div class="slide-step-num">1</div>Click <strong style="color:var(--cyan)">Route Engine</strong> in the top navigation</li>
+              <li><div class="slide-step-num">2</div>Type your goal — what do you want to have when you're done?</li>
+              <li><div class="slide-step-num">3</div>Add what you already have (optional) and what's blocking you (optional)</li>
+              <li><div class="slide-step-num">4</div>Describe what you want back — a document, a live app, a plan?</li>
             </ul>
           </div>
 
@@ -1075,13 +1183,13 @@ canvas{max-width:100%;height:auto}
           <div class="slide" id="slide-3">
             <div class="slide-num">STEP 03 / 07</div>
             <span class="slide-icon">🧠</span>
-            <div class="slide-title">Step 2 — <span>Pick Stage &amp; Risk</span></div>
-            <div class="slide-body">Select the <strong style="color:var(--gold)">task stage</strong> (Idea → Production → Automation) and the <strong style="color:var(--gold)">risk level</strong> (Low → Mission Critical). These two inputs dramatically change the routing recommendation.</div>
+            <div class="slide-title">Tell AI4U <span>How Far Along You Are</span></div>
+            <div class="slide-body">Two quick dropdowns help AI4U pick the right tool. <strong style="color:var(--gold)">Stage</strong> tells us where you are in your project. <strong style="color:var(--gold)">Risk</strong> tells us how much accuracy matters. Both dramatically change which AI gets recommended.</div>
             <ul class="slide-steps">
-              <li><div class="slide-step-num">1</div>Select Task Stage: Idea, Prototype, Broken Codebase, Production, etc.</li>
-              <li><div class="slide-step-num">2</div>Select Risk Level: Low / Medium / High / Mission Critical</li>
-              <li><div class="slide-step-num">3</div>Click <strong style="color:var(--cyan)">Route This Task</strong> to run the analysis</li>
-              <li><div class="slide-step-num">4</div>Review the platform recommendation and confidence score</li>
+              <li><div class="slide-step-num">1</div><strong style="color:var(--gold)">Stage:</strong> Just an idea / Starting a draft / Fixing something / Ready to launch / Want to automate</li>
+              <li><div class="slide-step-num">2</div><strong style="color:var(--gold)">Risk:</strong> Exploring / Needs a solid answer / Must be verified / Cannot afford to be wrong</li>
+              <li><div class="slide-step-num">3</div>Click <strong style="color:var(--cyan)">Route This Task</strong> — AI4U runs the analysis instantly</li>
+              <li><div class="slide-step-num">4</div>You'll see which platform to use and exactly why</li>
             </ul>
           </div>
 
@@ -1089,55 +1197,56 @@ canvas{max-width:100%;height:auto}
           <div class="slide" id="slide-4">
             <div class="slide-num">STEP 04 / 07</div>
             <span class="slide-icon">⚡</span>
-            <div class="slide-title">Step 3 — <span>Generate Your Prompt</span></div>
-            <div class="slide-body">Navigate to <strong style="color:var(--cyan)">Prompt Gen</strong> to build a platform-specific, expert-level prompt that extracts maximum performance from your chosen AI tool.</div>
+            <div class="slide-title">Let AI4U <span>Choose the Best Tool</span></div>
+            <div class="slide-body">AI4U gives you a clear platform recommendation in plain English — not a confidence score first, but a straight answer. It tells you which AI to open, why it's the right pick for this specific task, and what to avoid using for now.</div>
             <ul class="slide-steps">
-              <li><div class="slide-step-num">1</div>Select the target platform from the dropdown</li>
-              <li><div class="slide-step-num">2</div>Describe your goal, audience, and constraints</li>
-              <li><div class="slide-step-num">3</div>Click <strong style="color:var(--cyan)">Generate Prompt</strong></li>
-              <li><div class="slide-step-num">4</div>Copy to clipboard and paste into the selected platform</li>
+              <li><div class="slide-step-num">→</div>The recommended platform appears at the top of the result</li>
+              <li><div class="slide-step-num">→</div>You get the reasoning in plain English — no jargon</li>
+              <li><div class="slide-step-num">→</div>A fallback option is listed in case the first choice doesn't work</li>
+              <li><div class="slide-step-num">→</div>A verification checklist tells you how to know it worked</li>
             </ul>
           </div>
 
           <!-- SLIDE 5 -->
           <div class="slide" id="slide-5">
             <div class="slide-num">STEP 05 / 07</div>
-            <span class="slide-icon">🧾</span>
-            <div class="slide-title">Step 4 — <span>Verify Proof</span></div>
-            <div class="slide-body">After running the task, verify your output against the <strong style="color:var(--gold)">Proof Chain</strong>. Every result needs browser proof, build proof, and link proof before it's considered complete.</div>
+            <span class="slide-icon">📋</span>
+            <div class="slide-title">Copy the <span>Ready-Made Instructions</span></div>
+            <div class="slide-body">Go to <strong style="color:var(--cyan)">Prompt Gen</strong> to get a complete, ready-to-paste set of instructions for the AI platform AI4U recommended. You don't have to figure out how to phrase things — AI4U writes it for you, formatted for that specific tool.</div>
             <ul class="slide-steps">
-              <li><div class="slide-step-num">1</div>Go to the <strong style="color:var(--cyan)">Proof Chain</strong> tab</li>
-              <li><div class="slide-step-num">2</div>Verify: Browser proof → Build proof → Link proof</li>
-              <li><div class="slide-step-num">3</div>Screenshot or log the evidence</li>
-              <li><div class="slide-step-num">4</div>Mark each proof item as PASS or document the failure</li>
+              <li><div class="slide-step-num">1</div>Click the <strong style="color:var(--cyan)">Prompt Gen</strong> tab</li>
+              <li><div class="slide-step-num">2</div>Select the platform AI4U recommended</li>
+              <li><div class="slide-step-num">3</div>Describe your goal — you can copy it from the Route Engine result</li>
+              <li><div class="slide-step-num">4</div>Click Generate, then Copy — paste it directly into the AI tool</li>
             </ul>
           </div>
 
           <!-- SLIDE 6 -->
           <div class="slide" id="slide-6">
             <div class="slide-num">STEP 06 / 07</div>
-            <span class="slide-icon">📊</span>
-            <div class="slide-title">Step 5 — <span>Record in the Ledger</span></div>
-            <div class="slide-body">Log every task outcome in the <strong style="color:var(--cyan)">Ledger</strong>. This builds your personal AI performance database and improves future routing decisions.</div>
+            <span class="slide-icon">✅</span>
+            <div class="slide-title">Run It and <span>Check the Result</span></div>
+            <div class="slide-body">Paste the prompt into the recommended AI tool and run it. Before you call it done, check the result against five simple questions. This takes 60 seconds and prevents hours of rework.</div>
             <ul class="slide-steps">
-              <li><div class="slide-step-num">1</div>Go to the <strong style="color:var(--cyan)">Ledger</strong> tab</li>
-              <li><div class="slide-step-num">2</div>Record: Task, Platform, Outcome (Worked / Partial / Failed)</li>
-              <li><div class="slide-step-num">3</div>Add why it worked, why it failed, and the artifact link</li>
-              <li><div class="slide-step-num">4</div>Tag the entry for future pattern analysis</li>
+              <li><div class="slide-step-num">1</div>Does the output match what I asked for?</li>
+              <li><div class="slide-step-num">2</div>Is it complete — or did the AI stop early?</li>
+              <li><div class="slide-step-num">3</div>Would my intended audience understand it?</li>
+              <li><div class="slide-step-num">4</div>Did anything important get left out?</li>
+              <li><div class="slide-step-num">5</div>Can I use this as-is, or does it need one more pass?</li>
             </ul>
           </div>
 
           <!-- SLIDE 7 -->
           <div class="slide" id="slide-7">
             <div class="slide-num">STEP 07 / 07</div>
-            <span class="slide-icon">🏆</span>
-            <div class="slide-title">Step 6 — <span>Duplicate What Worked</span></div>
-            <div class="slide-body">You now have everything you need to operate the AI4U Routing OS at full power. Duplicate successful routes. Avoid failed ones. Visit <strong style="color:var(--gold)">AI4UTECH.COM</strong> for consulting, training, and the full AI4U ecosystem.</div>
+            <span class="slide-icon">📚</span>
+            <div class="slide-title">Save What Worked — <span>Build Your Playbook</span></div>
+            <div class="slide-body">Every time you run a successful task, log it in the <strong style="color:var(--cyan)">Ledger</strong>. Over time, you build a personal AI playbook — a record of exactly which tools worked for which tasks, so you never have to guess again.</div>
             <ul class="slide-steps">
-              <li><div class="slide-step-num">→</div>Duplicate frameworks that produced verified results</li>
-              <li><div class="slide-step-num">→</div>Create avoidance rules from documented failures</li>
-              <li><div class="slide-step-num">→</div>Share your routing intelligence with your team</li>
-              <li><div class="slide-step-num">→</div><a href="https://ai4utech.com" target="_blank" rel="noopener" style="color:var(--gold)">Visit AI4Utech.com for advanced consulting →</a></li>
+              <li><div class="slide-step-num">→</div>Click the <strong style="color:var(--cyan)">Ledger</strong> tab and log what you did and how it went</li>
+              <li><div class="slide-step-num">→</div>Record which platform you used and why it worked (or didn't)</li>
+              <li><div class="slide-step-num">→</div>Your Ledger becomes your personal AI success database</li>
+              <li><div class="slide-step-num">→</div><a href="https://ai4utech.com" target="_blank" rel="noopener" style="color:var(--gold)">Visit AI4Utech.com for advanced AI consulting →</a></li>
             </ul>
           </div>
 
@@ -1198,6 +1307,43 @@ canvas{max-width:100%;height:auto}
       </div>
     </div>
   </div>
+
+  <!-- GLOSSARY -->
+  <div class="section" style="padding-top:0">
+    <div class="section-title">Plain English Glossary</div>
+    <div class="section-heading">What All These Terms Actually Mean</div>
+    <div style="margin-top:24px;display:flex;flex-direction:column;gap:4px">
+      <div class="glossary-item">
+        <button class="glossary-trigger" onclick="toggleGlossary(this)">Route Engine<span class="glossary-trigger-arrow">▾</span></button>
+        <div class="glossary-body">The tool that analyzes your task and recommends the single best AI platform for the job based on where you are and how much is at stake.</div>
+      </div>
+      <div class="glossary-item">
+        <button class="glossary-trigger" onclick="toggleGlossary(this)">Task Stage<span class="glossary-trigger-arrow">▾</span></button>
+        <div class="glossary-body">Where you are in your project — whether you're starting an idea, building a draft, fixing something broken, deploying to the public, or automating a process.</div>
+      </div>
+      <div class="glossary-item">
+        <button class="glossary-trigger" onclick="toggleGlossary(this)">Risk Level<span class="glossary-trigger-arrow">▾</span></button>
+        <div class="glossary-body">How much accuracy matters for this task — from freely exploring ideas all the way to mission-critical work where an error cannot happen.</div>
+      </div>
+      <div class="glossary-item">
+        <button class="glossary-trigger" onclick="toggleGlossary(this)">Prompt Gen<span class="glossary-trigger-arrow">▾</span></button>
+        <div class="glossary-body">The tool that writes the exact instructions for the AI platform AI4U recommended — ready to copy and paste, no prompt engineering required.</div>
+      </div>
+      <div class="glossary-item">
+        <button class="glossary-trigger" onclick="toggleGlossary(this)">Proof Chain<span class="glossary-trigger-arrow">▾</span></button>
+        <div class="glossary-body">A checklist of evidence that confirms your AI task actually worked — things like a live URL loading, a build passing, or a document being complete and accurate.</div>
+      </div>
+      <div class="glossary-item">
+        <button class="glossary-trigger" onclick="toggleGlossary(this)">Ledger<span class="glossary-trigger-arrow">▾</span></button>
+        <div class="glossary-body">Your personal log of every AI task you've run — what worked, what didn't, and why — so you can duplicate successes and avoid repeating failures.</div>
+      </div>
+      <div class="glossary-item">
+        <button class="glossary-trigger" onclick="toggleGlossary(this)">Platform Matrix<span class="glossary-trigger-arrow">▾</span></button>
+        <div class="glossary-body">A reference grid showing all 14 AI platforms AI4U tracks, what each one is best at, and when to use it — so you can compare options at a glance.</div>
+      </div>
+    </div>
+  </div>
+
 </div><!-- /panel-howto -->
 
 <!-- ═══════════════════════════════════════════════════════
@@ -1240,18 +1386,22 @@ canvas{max-width:100%;height:auto}
           </div>
           <div class="form-group">
             <label class="form-label">Your Goal</label>
+            <div class="form-sublabel">Describe what you want done in normal language</div>
             <textarea class="form-textarea" id="r-goal" placeholder="e.g., Build a full-stack SaaS app with user auth and Stripe billing" rows="3"></textarea>
           </div>
           <div class="form-group">
             <label class="form-label">Current Asset</label>
+            <div class="form-sublabel">What you already have (optional)</div>
             <input class="form-input" id="r-asset" type="text" placeholder="e.g., Figma mockup, partial codebase, rough idea">
           </div>
           <div class="form-group">
             <label class="form-label">Failure Point / Constraint</label>
+            <div class="form-sublabel">What's blocking you (optional)</div>
             <input class="form-input" id="r-failure" type="text" placeholder="e.g., No backend experience, tight deadline, budget limit">
           </div>
           <div class="form-group">
             <label class="form-label">Required Output</label>
+            <div class="form-sublabel">What you want back</div>
             <input class="form-input" id="r-output" type="text" placeholder="e.g., Live URL, deployed app, working API, PDF report">
           </div>
           <button class="btn btn-primary btn-full" onclick="runRouter()" style="margin-top:8px">
@@ -3200,6 +3350,60 @@ async function saveProofReceiptToSB(){
       const el=document.getElementById(id);
       if(el) el.value='';
     });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   HOW TO USE — EXAMPLE TASKS + GLOSSARY
+═══════════════════════════════════════════════════════ */
+const EXAMPLE_TASKS = {
+  email:    {goal:'Write a professional email requesting a meeting with a potential client',asset:'My name and a one-line description of my business',failure:'Needs to be polite, brief, and actually get a response',output:'A ready-to-send email',stage:'idea',risk:'low'},
+  resume:   {goal:'Improve my resume to highlight my AI and technology skills for a senior consulting role',asset:'Existing resume draft',failure:'Not getting callbacks — resume isn\'t standing out',output:'Revised resume ready to submit',stage:'idea',risk:'medium'},
+  compare:  {goal:'Compare the top 5 project management tools to find the best one for a small remote team',asset:'Current tool shortlist and team size',failure:'Hard to tell which tool fits our workflow',output:'Comparison table with a clear recommendation',stage:'idea',risk:'low'},
+  website:  {goal:'Build a simple website for my consulting business with a contact form and services page',asset:'Logo and rough content outline',failure:'No coding experience',output:'Live website URL',stage:'prototype',risk:'medium'},
+  fix:      {goal:'My website contact form stopped sending emails — diagnose and fix it',asset:'Existing website with a broken contact form',failure:'Emails stopped arriving three days ago — clients can\'t reach me',output:'Working contact form that sends emails reliably',stage:'broken',risk:'high'},
+  automate: {goal:'Automatically save email attachments from Gmail to Google Drive and send a Slack notification',asset:'Gmail, Google Drive, and Slack accounts',failure:'Spending 20 minutes a day manually moving files',output:'Automation that runs without me touching it',stage:'automation',risk:'medium'},
+  content:  {goal:'Create a month of LinkedIn and Instagram posts for my AI consulting business',asset:'Brand voice guide and two recent case studies',failure:'Running out of ideas and posting inconsistently',output:'30 ready-to-post captions with hashtags',stage:'idea',risk:'low'},
+  research: {goal:'Research the current state of AI adoption in small businesses — statistics, examples, and key trends',asset:'Rough outline of the topic',failure:'Need credible recent data and sources, not just opinions',output:'Structured research report with citations',stage:'idea',risk:'medium'}
+};
+
+function loadExampleTask(type){
+  const t = EXAMPLE_TASKS[type];
+  if(!t) return;
+  showPanel('router');
+  setTimeout(function(){
+    const stage = document.getElementById('r-stage');
+    const risk  = document.getElementById('r-risk');
+    const goal  = document.getElementById('r-goal');
+    const asset = document.getElementById('r-asset');
+    const fail  = document.getElementById('r-failure');
+    const out   = document.getElementById('r-output');
+    if(stage) stage.value = t.stage;
+    if(risk)  risk.value  = t.risk;
+    if(goal)  goal.value  = t.goal;
+    if(asset) asset.value = t.asset;
+    if(fail)  fail.value  = t.failure;
+    if(out)   out.value   = t.output;
+    runRouter();
+    showToast('Example loaded — see the recommendation on the right');
+  }, 80);
+}
+
+function scrollToWalkthrough(){
+  const el = document.getElementById('howto-walkthrough');
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+
+function toggleGlossary(trigger){
+  const body = trigger.nextElementSibling;
+  const isOpen = trigger.classList.contains('open');
+  document.querySelectorAll('.glossary-trigger.open').forEach(function(t){
+    t.classList.remove('open');
+    if(t.nextElementSibling) t.nextElementSibling.classList.remove('open');
+  });
+  if(!isOpen){
+    trigger.classList.add('open');
+    if(body) body.classList.add('open');
   }
 }
 
