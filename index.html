@@ -916,6 +916,146 @@ canvas{max-width:100%;height:auto}
     <h1 class="hero-h1">AI4U Right-Tool<br>Routing OS</h1>
     <h2 class="hero-h2">Route every task to the right AI. Prove the result.<br>Preserve the artifact. Learn from every win or failure.</h2>
     <p class="hero-sub">The world's first AI operating system for consultants, builders, and operators who refuse to guess which AI to use.</p>
+
+    <!-- See it in action -->
+    <style>
+@keyframes pulse {0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes slideIn {from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes flow {to{stroke-dashoffset:-24}}
+.flow-line{stroke-dasharray:6 4;animation:flow 1.2s linear infinite}
+.step-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:500;flex-shrink:0}
+.example-btn{background:none;border:0.5px solid rgba(255,255,255,0.15);border-radius:8px;padding:6px 12px;font-size:12px;color:rgba(255,255,255,0.6);cursor:pointer;transition:all .15s;text-align:left;white-space:nowrap}
+.example-btn:hover,.example-btn.active{background:rgba(99,102,241,0.2);color:#a5b4fc;border-color:rgba(99,102,241,0.5)}
+.result-card{background:rgba(16,185,129,0.08);border:0.5px solid rgba(16,185,129,0.25);border-radius:8px;padding:10px 14px;animation:slideIn .3s ease}
+.stage-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.06);border:0.5px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5)}
+.platform-tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(99,102,241,0.2);color:#a5b4fc}
+.flow-node{cursor:pointer}
+.flow-node rect{transition:opacity .15s}
+.flow-node:hover rect{opacity:.75}
+</style>
+
+<div style="background:rgba(255,255,255,0.03);border:0.5px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;margin:24px 0">
+  <p style="font-size:11px;letter-spacing:.08em;color:rgba(255,255,255,0.35);margin:0 0 16px;text-transform:uppercase">See it in action</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+
+    <!-- LEFT: visual flow -->
+    <div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin:0 0 10px">How it works</p>
+      <svg width="100%" viewBox="0 0 300 420">
+        <defs>
+          <marker id="arr-demo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M2 1L8 5L2 9" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </marker>
+        </defs>
+
+        <!-- Node 1: Task -->
+        <g class="flow-node" onclick="document.getElementById('ai4u-node-detail').textContent='You describe your task in plain English — no jargon needed.'">
+          <rect x="75" y="10" width="150" height="44" rx="8" fill="rgba(139,92,246,0.25)" stroke="rgba(139,92,246,0.6)" stroke-width="0.5"/>
+          <text x="150" y="28" text-anchor="middle" dominant-baseline="central" fill="rgba(196,181,253,1)" font-size="13" font-weight="500" font-family="Inter,sans-serif">Your task</text>
+          <text x="150" y="46" text-anchor="middle" dominant-baseline="central" fill="rgba(196,181,253,0.6)" font-size="11" font-family="Inter,sans-serif">describe in plain English</text>
+        </g>
+
+        <line class="flow-line" x1="150" y1="54" x2="150" y2="82" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" marker-end="url(#arr-demo)"/>
+
+        <!-- Node 2: Stage + Risk -->
+        <g class="flow-node" onclick="document.getElementById('ai4u-node-detail').textContent='Pick how far along you are and how careful the result needs to be. Two choices — that\'s it.'">
+          <rect x="75" y="88" width="150" height="44" rx="8" fill="rgba(20,184,166,0.2)" stroke="rgba(20,184,166,0.5)" stroke-width="0.5"/>
+          <text x="150" y="106" text-anchor="middle" dominant-baseline="central" fill="rgba(153,246,228,1)" font-size="13" font-weight="500" font-family="Inter,sans-serif">Stage + Risk</text>
+          <text x="150" y="124" text-anchor="middle" dominant-baseline="central" fill="rgba(153,246,228,0.6)" font-size="11" font-family="Inter,sans-serif">how far along + how careful</text>
+        </g>
+
+        <line class="flow-line" x1="150" y1="132" x2="150" y2="160" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" marker-end="url(#arr-demo)"/>
+
+        <!-- Node 3: Routing OS -->
+        <g class="flow-node" onclick="document.getElementById('ai4u-node-detail').textContent='The routing engine analyzes your task against 14 platforms and picks the best one for this specific job.'">
+          <rect x="55" y="166" width="190" height="44" rx="8" fill="rgba(245,158,11,0.2)" stroke="rgba(245,158,11,0.5)" stroke-width="0.5"/>
+          <text x="150" y="184" text-anchor="middle" dominant-baseline="central" fill="rgba(253,230,138,1)" font-size="13" font-weight="500" font-family="Inter,sans-serif">AI4U Routing OS</text>
+          <text x="150" y="202" text-anchor="middle" dominant-baseline="central" fill="rgba(253,230,138,0.6)" font-size="11" font-family="Inter,sans-serif">analyzes across 14 platforms</text>
+        </g>
+
+        <!-- Fan lines -->
+        <line class="flow-line" x1="90"  y1="210" x2="55"  y2="264" stroke="rgba(255,255,255,0.15)" stroke-width="1" marker-end="url(#arr-demo)"/>
+        <line class="flow-line" x1="130" y1="210" x2="115" y2="264" stroke="rgba(255,255,255,0.15)" stroke-width="1" marker-end="url(#arr-demo)"/>
+        <line class="flow-line" x1="150" y1="210" x2="175" y2="264" stroke="rgba(255,255,255,0.3)"  stroke-width="1.5" marker-end="url(#arr-demo)"/>
+        <line class="flow-line" x1="185" y1="210" x2="230" y2="264" stroke="rgba(255,255,255,0.15)" stroke-width="1" marker-end="url(#arr-demo)"/>
+
+        <!-- Dim platforms -->
+        <g style="opacity:.35">
+          <rect x="14"  y="270" width="72" height="30" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <text x="50"  y="285" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.5)" font-size="11" font-family="Inter,sans-serif">ChatGPT</text>
+        </g>
+        <g style="opacity:.35">
+          <rect x="96"  y="270" width="72" height="30" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <text x="132" y="285" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.5)" font-size="11" font-family="Inter,sans-serif">Manus</text>
+        </g>
+        <!-- Best fit platform -->
+        <g class="flow-node" onclick="document.getElementById('ai4u-node-detail').textContent='The best-fit platform is highlighted. You also get the reason — not just the name.'">
+          <rect x="142" y="264" width="72" height="42" rx="8" fill="rgba(59,130,246,0.25)" stroke="rgba(59,130,246,0.7)" stroke-width="1"/>
+          <text x="178" y="278" text-anchor="middle" dominant-baseline="central" fill="rgba(147,197,253,1)" font-size="12" font-weight="500" font-family="Inter,sans-serif">Claude</text>
+          <text x="178" y="296" text-anchor="middle" dominant-baseline="central" fill="rgba(147,197,253,0.7)" font-size="11" font-family="Inter,sans-serif">✓ Best fit</text>
+        </g>
+        <g style="opacity:.35">
+          <rect x="200" y="270" width="84" height="30" rx="6" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+          <text x="242" y="285" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.5)" font-size="11" font-family="Inter,sans-serif">Perplexity</text>
+        </g>
+
+        <line class="flow-line" x1="178" y1="306" x2="150" y2="334" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" marker-end="url(#arr-demo)"/>
+
+        <!-- Node 5: Prompt -->
+        <g class="flow-node" onclick="document.getElementById('ai4u-node-detail').textContent='AI4U writes the exact prompt for you — optimized for the recommended platform. Copy and paste.'">
+          <rect x="65" y="340" width="170" height="44" rx="8" fill="rgba(239,68,68,0.2)" stroke="rgba(239,68,68,0.5)" stroke-width="0.5"/>
+          <text x="150" y="358" text-anchor="middle" dominant-baseline="central" fill="rgba(252,165,165,1)" font-size="13" font-weight="500" font-family="Inter,sans-serif">Ready-made prompt</text>
+          <text x="150" y="376" text-anchor="middle" dominant-baseline="central" fill="rgba(252,165,165,0.6)" font-size="11" font-family="Inter,sans-serif">copy → paste → run</text>
+        </g>
+
+        <text x="150" y="410" text-anchor="middle" fill="rgba(255,255,255,0.2)" font-size="11" font-family="Inter,sans-serif">tap any node to learn more</text>
+      </svg>
+
+      <div id="ai4u-node-detail" style="min-height:40px;margin-top:4px;padding:8px 10px;background:rgba(255,255,255,0.04);border-radius:8px;font-size:12px;color:rgba(255,255,255,0.45);line-height:1.5">
+        Tap any step above to see what it does.
+      </div>
+    </div>
+
+    <!-- RIGHT: example picker -->
+    <div>
+      <p style="font-size:12px;color:rgba(255,255,255,0.4);margin:0 0 10px">Try a real example</p>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+        <button class="example-btn active" onclick="ai4uShowExample(0)">&#x270D;&#xFE0F; Write a professional email</button>
+        <button class="example-btn" onclick="ai4uShowExample(1)">&#x1F4C4; Improve my resume</button>
+        <button class="example-btn" onclick="ai4uShowExample(2)">&#x1F50D; Compare products before buying</button>
+        <button class="example-btn" onclick="ai4uShowExample(3)">&#x1F310; Build a simple website</button>
+        <button class="example-btn" onclick="ai4uShowExample(4)">&#x1F527; Fix something that broke</button>
+        <button class="example-btn" onclick="ai4uShowExample(5)">&#x2699;&#xFE0F; Automate a weekly task</button>
+        <button class="example-btn" onclick="ai4uShowExample(6)">&#x1F4CA; Research before deciding</button>
+        <button class="example-btn" onclick="ai4uShowExample(7)">&#x1F3A8; Create content for my business</button>
+      </div>
+      <div id="ai4u-result-panel"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+var ai4uExamples=[
+{goal:"Write a professional reply to a client email without sounding stiff",stage:"Idea",risk:"Medium",platform:"Claude Sonnet",why:"Best at careful, natural-sounding rewriting. Preserves your voice.",prompt:"Rewrite this email reply professionally but in a warm, direct tone. Keep it under 150 words.",proof:"Does it sound like you? Is it professional? Does it answer the client&#39;s question?"},
+{goal:"Improve my resume for a customer service management role",stage:"Prototype",risk:"High",platform:"Claude Opus",why:"Strongest at careful long-form editing without inventing experience.",prompt:"Edit this resume for a customer service management role. Keep all real experience. Improve clarity and impact.",proof:"Does it keep your real experience? Does it sound more compelling? No invented claims?"},
+{goal:"Compare three wireless headphones before I buy one",stage:"Idea",risk:"Low",platform:"Perplexity Pro",why:"Real-time research with sources. Gets you current prices and reviews.",prompt:"Compare Sony WH-1000XM5, Bose QC45, and Apple AirPods Max. Focus on sound quality, battery, and price.",proof:"Are sources cited? Are prices current? Does it answer your actual decision criteria?"},
+{goal:"Build a one-page website for my small business",stage:"Prototype",risk:"Medium",platform:"Manus Agent",why:"Handles full build from idea to deployed site in one session.",prompt:"Build a clean one-page website for my business. I&#39;ll provide the logo and copy. Mobile-friendly, easy to edit.",proof:"Does it load? Does it look professional on mobile? Are all links working?"},
+{goal:"My automation workflow stopped working and I don&#39;t know why",stage:"Broken Codebase",risk:"High",platform:"Claude Code",why:"Reads full context and applies surgical fixes without breaking other things.",prompt:"Diagnose why this workflow broke. Explain the cause in plain English before making any changes.",proof:"Did it explain the cause? Is the fix working? Did anything else break?"},
+{goal:"Send me a weekly summary of my top emails every Monday",stage:"Automation",risk:"Medium",platform:"Zapier",why:"No-code automation. Connects Gmail, schedules, and summaries without writing code.",prompt:"Create a Zap that summarizes my top 5 emails each Monday at 8am and sends me a digest.",proof:"Did the test run trigger? Did the email arrive? Is the summary useful?"},
+{goal:"Research whether solar panels are worth it for a Minnesota home",stage:"Idea",risk:"Medium",platform:"Perplexity Pro",why:"Real-time data on incentives, payback periods, and local installers.",prompt:"Research solar panel ROI for a home in Minneapolis, MN. Include current incentives, average cost, and payback time.",proof:"Are sources cited? Does it account for Minnesota climate? Is the data recent?"},
+{goal:"Write 5 social media posts for my business launch",stage:"Prototype",risk:"Low",platform:"ChatGPT-4o",why:"Fast, varied creative writing. Generates multiple options in one pass.",prompt:"Write 5 social media posts announcing my business launch. Tone: confident and approachable. Include a call to action.",proof:"Do they sound authentic? Is the tone consistent? Do they have a clear CTA?"}
+];
+window.ai4uShowExample=function(i){
+var e=ai4uExamples[i];
+document.querySelectorAll('.example-btn').forEach(function(b,j){b.classList.toggle('active',j===i);});
+document.getElementById('ai4u-result-panel').innerHTML='<div class="result-card"><div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap"><span class="platform-tag">'+e.platform+'</span><span class="stage-pill">'+e.stage+'</span><span class="stage-pill">Risk: '+e.risk+'</span></div><div style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:6px;font-style:italic">&ldquo;'+e.goal+'&rdquo;</div><div style="font-size:12px;color:rgba(16,185,129,0.9);font-weight:500;margin-bottom:4px">Why '+e.platform+'?</div><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:10px">'+e.why+'</div><div style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:500;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Paste this prompt</div><div style="font-size:12px;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.05);border-radius:8px;padding:8px 10px;margin-bottom:10px;line-height:1.5">'+e.prompt+'</div><div style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:500;margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em">Check your result</div><div style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.5">'+e.proof+'</div></div>';
+};
+ai4uShowExample(0);
+})();
+</script>
+
     <div class="hero-ctas">
       <a href="https://ai4utech.com" target="_blank" rel="noopener" class="btn btn-gold">Visit AI4Utech.com →</a>
       <button class="btn btn-primary" onclick="showPanel('router')">Start a Route →</button>
