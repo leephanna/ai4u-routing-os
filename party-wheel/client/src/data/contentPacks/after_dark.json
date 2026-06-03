@@ -1,0 +1,545 @@
+{
+  "pack": "after_dark",
+  "intensity": "spicy",
+  "version": "1.0.0",
+  "content": {
+    "braincell_check": [
+      {
+        "q": "In 'Sex and the City', what is the name of the columnist main character?",
+        "a": "Carrie Bradshaw",
+        "options": [
+          "Charlotte York",
+          "Miranda Hobbes",
+          "Carrie Bradshaw",
+          "Samantha Jones"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What year did the first Playboy magazine publish?",
+        "a": "1953",
+        "options": [
+          "1948",
+          "1953",
+          "1957",
+          "1962"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Which of these is NOT a real cocktail?",
+        "a": "Whispering Rabbit",
+        "options": [
+          "Sex on the Beach",
+          "Slippery Nipple",
+          "Whispering Rabbit",
+          "Blow Job"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "In the movie 'Grease', what is the name of the risqu\u00e9 group Sandy joins?",
+        "a": "Pink Ladies",
+        "options": [
+          "The Scorpions",
+          "Pink Ladies",
+          "The T-Birds",
+          "Cha-Cha's Crew"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the bestselling erotic novel series of all time?",
+        "a": "Fifty Shades of Grey",
+        "options": [
+          "Story of O",
+          "Delta of Venus",
+          "Fifty Shades of Grey",
+          "Lady Chatterley's Lover"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which ancient Roman holiday involved lots of debauchery and role reversal between social classes?",
+        "a": "Saturnalia",
+        "options": [
+          "Lupercalia",
+          "Saturnalia",
+          "Bacchanalia",
+          "Floralia"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What does the French phrase 'joie de vivre' literally translate to?",
+        "a": "Joy of living",
+        "options": [
+          "Love of danger",
+          "Joy of living",
+          "Taste of life",
+          "Pleasure of the moment"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "In the TV show 'Friends', how many times did Ross get divorced?",
+        "a": "3",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which city is famously known as 'the city that never sleeps' and has the reputation for its nightlife?",
+        "a": "New York City",
+        "options": [
+          "Las Vegas",
+          "Miami",
+          "New York City",
+          "New Orleans"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What is the name of the famous burlesque nightclub in Paris?",
+        "a": "Moulin Rouge",
+        "options": [
+          "Lido de Paris",
+          "Moulin Rouge",
+          "Folies Berg\u00e8re",
+          "Crazy Horse"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "In psychology, 'the forbidden fruit effect' refers to what phenomenon?",
+        "a": "Wanting things more when they're restricted",
+        "options": [
+          "Feeling guilty after indulging",
+          "Wanting things more when they're restricted",
+          "Preference for natural foods",
+          "Attraction to danger"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Which Jane Austen novel features a passionate love story often described as more intense than her others?",
+        "a": "Persuasion",
+        "options": [
+          "Emma",
+          "Sense and Sensibility",
+          "Persuasion",
+          "Northanger Abbey"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What is 'The Notebook' actor Ryan Gosling's real middle name?",
+        "a": "Thomas",
+        "options": [
+          "James",
+          "William",
+          "Thomas",
+          "Alexander"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which of these is a real scent classification in perfumery?",
+        "a": "Foug\u00e8re",
+        "options": [
+          "Torpeur",
+          "Foug\u00e8re",
+          "S\u00e9duction",
+          "Volupt\u00e9"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What percentage of people, according to a 2023 study, have matched with someone they already know on a dating app?",
+        "a": "About 50%",
+        "options": [
+          "About 15%",
+          "About 30%",
+          "About 50%",
+          "About 70%"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which Shakespeare play features one of the most famous romantic balcony scenes in literary history?",
+        "a": "Romeo and Juliet",
+        "options": [
+          "A Midsummer Night's Dream",
+          "Romeo and Juliet",
+          "Othello",
+          "Much Ado About Nothing"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the world's most expensive perfume ingredient, sourced from sperm whales?",
+        "a": "Ambergris",
+        "options": [
+          "Musk",
+          "Ambergris",
+          "Civet",
+          "Castoreum"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Which decade saw the invention of the waterbed?",
+        "a": "1960s",
+        "options": [
+          "1950s",
+          "1960s",
+          "1970s",
+          "1980s"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "In Rihanna's famous lyric, she sings 'come here, rude boy, boy can you get it up?' \u2014 what album is this from?",
+        "a": "Rated R",
+        "options": [
+          "Good Girl Gone Bad",
+          "Rated R",
+          "Loud",
+          "Talk That Talk"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the term for the phenomenon where people find strangers more attractive after a scary experience together?",
+        "a": "Misattribution of arousal",
+        "options": [
+          "Proximity effect",
+          "Misattribution of arousal",
+          "Fear bonding",
+          "Adrenaline attraction"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Which city is considered the honeymoon capital of North America?",
+        "a": "Niagara Falls",
+        "options": [
+          "Hawaii (Maui)",
+          "Niagara Falls",
+          "Cancun",
+          "Paris, Ontario"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What does 'DTR' mean in modern dating slang?",
+        "a": "Define the Relationship",
+        "options": [
+          "Down to Romance",
+          "Define the Relationship",
+          "Dating Through Reality",
+          "Ditch Then Run"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Which musician said 'I'd rather have a bottle in front of me than a frontal lobotomy'?",
+        "a": "Tom Waits (attributed)",
+        "options": [
+          "Frank Zappa",
+          "Tom Waits (attributed)",
+          "Dean Martin",
+          "W.C. Fields"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the name of the red light district in Amsterdam?",
+        "a": "De Wallen",
+        "options": [
+          "Rembrandtplein",
+          "De Wallen",
+          "Leidseplein",
+          "Jordaan"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "In the original Dirty Dancing movie, what is the name of Baby's love interest?",
+        "a": "Johnny Castle",
+        "options": [
+          "Jake Houseman",
+          "Johnny Castle",
+          "Robbie Gould",
+          "Neil Kellerman"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What psychological principle explains why playing hard to get sometimes increases attraction?",
+        "a": "Scarcity principle",
+        "options": [
+          "Reciprocity bias",
+          "Scarcity principle",
+          "Commitment bias",
+          "Availability heuristic"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the Italian word for 'sweet doing nothing' \u2014 the pleasure of doing absolutely nothing?",
+        "a": "Dolce far niente",
+        "options": [
+          "La dolce vita",
+          "Dolce far niente",
+          "Bella figura",
+          "Sprezzatura"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How many positions are illustrated in the original Kama Sutra text?",
+        "a": "About 64 arts / not just positions",
+        "options": [
+          "8",
+          "36",
+          "64",
+          "About 64 arts / not just positions"
+        ],
+        "correct": 3
+      },
+      {
+        "q": "What is the name of Beyonc\u00e9's album that was considered her most intimate and personal confession?",
+        "a": "Lemonade",
+        "options": [
+          "Dangerously in Love",
+          "I Am... Sasha Fierce",
+          "Lemonade",
+          "4"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "In which country did the tradition of 'bundling boards' exist \u2014 where courting couples would share a bed with a board between them?",
+        "a": "Various (Colonial America, Wales, Netherlands)",
+        "options": [
+          "France",
+          "Spain",
+          "Various (Colonial America, Wales, Netherlands)",
+          "Scandinavia"
+        ],
+        "correct": 2
+      }
+    ],
+    "truth_cache": [
+      "What is the most forward thing you've ever done to get someone's attention, and did it actually work?",
+      "Describe your ideal flirtatious text exchange \u2014 what opener would actually get you to respond every time?",
+      "Have you ever had feelings for someone you absolutely weren't supposed to? You don't have to name names, but describe who.",
+      "What's the most romantic thing someone has ever done for you that you've never told anyone about?",
+      "When were you last genuinely jealous because of someone in this room or someone connected to this room? Be honest.",
+      "What's the most flattering lie someone has told you that you absolutely knew was a lie but chose to believe anyway?",
+      "Describe the most unexpectedly attractive quality you've noticed in a stranger recently \u2014 and be specific.",
+      "What's something you do to feel attractive that you've never admitted to anyone?",
+      "Have you ever caught yourself composing a message you never sent? What did it say and who was it for?",
+      "What's the most dramatic thing you've done after a breakup that you're either proud or ashamed of?",
+      "What is something a past partner did that you wish a current person in your life would do?",
+      "Have you ever had a 'situationship' that you still haven't fully processed? Describe without names.",
+      "What's your most embarrassing story involving attraction, a moment you wanted to be smooth and spectacularly weren't?",
+      "Describe the most uncomfortable crush you've ever had \u2014 someone you really shouldn't have been into.",
+      "What's something you find physically attractive in people that you've never admitted out loud?",
+      "Tell us about a time you did something completely out of character to impress someone romantically. Did it work?",
+      "Have you ever misread a signal so badly that you cringe every time you think about it? Tell the story.",
+      "What is the most romantic moment of your life to date? Be embarrassingly detailed.",
+      "What's a relationship red flag that you absolutely ignored until it became a full emergency?",
+      "Have you ever kept dating someone longer than you should have because the physical chemistry was too good to quit?",
+      "What's the most transparent excuse you've ever used to spend more time with someone you were interested in?",
+      "Describe your most chaotic 'almost' \u2014 the relationship that nearly happened and still makes you wonder 'what if'.",
+      "What's something you've said in the heat of the moment that surprised even yourself?",
+      "What do you consider your most attractive quality that you think most people in this room haven't noticed yet?",
+      "Have you ever been the reason for a 'we need to talk' conversation? What happened?",
+      "What's the longest you've maintained a flirtatious tension with someone without acting on it, and how did it resolve?",
+      "Describe a moment when someone's confidence completely won you over \u2014 what were they doing?",
+      "What's a bold thing you've wanted to do or say to someone in this room tonight but haven't acted on?",
+      "When was the last time you were genuinely starstruck \u2014 not by a celebrity but by someone you actually know?",
+      "What compliment would make you absolutely melt right now, and who in this room is most likely to mean it if they said it?"
+    ],
+    "glitch_dare": [
+      "Lock eyes with the person to your right without blinking or looking away for 30 full seconds. Maintain a completely neutral expression.",
+      "Write a genuinely flirtatious compliment about someone in the room on a piece of paper, seal it, and hand it to them. They open it later.",
+      "Demonstrate your best 'I'm interested in you' smile at whoever the group points at. Hold it for 10 seconds.",
+      "Slow dance by yourself to whatever song is currently playing, as if you're at the most romantic moment of your life.",
+      "Whisper something genuinely sweet to the person on your left \u2014 loud enough that only they can hear. They can choose whether to share.",
+      "Do your most convincing impression of someone passionately in love \u2014 recite a dramatic declaration to a houseplant.",
+      "Describe, in uncomfortably specific detail, your ideal date night from start to finish. You have 60 seconds.",
+      "Initiate a completely unannounced and enthusiastic group hug. You have 5 seconds to convince everyone to participate.",
+      "Give the person across from you three genuine, specific compliments \u2014 none of them can be about physical appearance.",
+      "Let one player choose a romantic movie scene \u2014 you act out the lead character's role with a pillow as your co-star.",
+      "Put on a song and lip-sync to it directed entirely at one person in the room. They have to maintain eye contact.",
+      "Write a three-line flirtatious poem about the person who is sitting the farthest away from you. Read it aloud.",
+      "Do a 45-second impression of someone deeply, overwhelmingly in love. Pick your method \u2014 speech, movement, expression.",
+      "Propose a fictional toast that is sincerely romantic but aimed at the group generally. Make people feel something.",
+      "Hold hands with whoever is sitting next to you for the next full round. No letting go unless a game event forces it.",
+      "Describe in two sentences why the person to your left is genuinely, objectively attractive. Be specific and sincere.",
+      "Give someone in the room a shoulder massage for 30 seconds. They pick who does it \u2014 you just have to accept.",
+      "Tell the group about a moment you felt genuinely desired \u2014 be vague enough to keep your dignity, specific enough to be interesting.",
+      "Do a 60-second confident walk around the room making meaningful eye contact with every single person.",
+      "Send a voice message to someone not at this party saying 'I miss you more than is probably healthy.' Read it aloud before sending.",
+      "Choose someone in the room and describe them using only food metaphors for 30 seconds straight.",
+      "Reenact the most romantic scene from any movie using only props available in the room right now.",
+      "Give a sincere, detailed answer to: 'What would a perfect morning after a perfect date with you look like?'",
+      "Tell the person to your right one thing about them that you noticed tonight that you didn't notice before.",
+      "Attempt to teach the group a slow dance move. Everyone must try it. The worst dancer gets to lead next round.",
+      "Describe your 'type' in embarrassing, specific detail for 60 seconds. Hold nothing back.",
+      "Send a completely genuine 'you looked really good the last time I saw you' text to someone outside this party. Read their reply out loud.",
+      "Do the most dramatic 'running toward someone in slow motion' scene across the room. Pick your imaginary target and commit fully.",
+      "Tell the group the most genuinely romantic song lyric you know and explain why it hits you so hard.",
+      "Describe a completely fictional but deeply romantic meet-cute story set in this exact room tonight. Make it believable."
+    ],
+    "prompt_duel": [
+      "Flirt-off: both players have 45 seconds to flirt with a houseplant as convincingly as possible. Group votes who's more convincing.",
+      "Write the most persuasive 'please respond to my text' follow-up message. Group picks the best one.",
+      "Both players deliver a 30-second confessional about the other player as if narrating a dating show. Group picks the spicier narration.",
+      "Eye contact challenge: both players stare at each other for 30 seconds while the group narrates a dramatic scene around them.",
+      "Both improvise a 'we just met at a party' opener to the same third person in the room. Group votes on who gets the number.",
+      "Speed compliment battle: players alternate compliments. First to repeat a compliment type or go silent for 3 seconds loses.",
+      "Both write opening lines for a dating profile about the other player. The subject says which one they'd swipe right on.",
+      "Charisma test: both players have 30 seconds to convince the group they're 'the interesting one' at a dinner party.",
+      "Both players confess their most transparent 'I was clearly into you' behavior from a past situation. Group votes whose was more obvious.",
+      "Describe the same person (someone famous, agreed on in advance) as both terrifyingly attractive and deeply annoying. Who makes the better case?",
+      "Both players have 60 seconds to plan the most impressive first date on zero dollars. Group votes on the better date.",
+      "Red flag or green flag: both players defend the same controversial relationship behavior from opposite sides. Group votes on who's right.",
+      "Both players must convince the group they have better taste in music for someone's romantic playlist. Each names 3 songs \u2014 group votes.",
+      "Describe your ideal partner's morning routine \u2014 but make it sound like a dating app prompt. More appealing description wins.",
+      "Both players do a 30-second impression of the other player trying to flirt. The subject rates their own impression.",
+      "Confessional speed round: who can list more small romantic mishaps in 45 seconds?",
+      "Both explain 'what makes a great kisser' without being explicit. Most convincing explanation wins.",
+      "Both players write a 'missed connection' post about someone in the room without naming them. Group guesses who it's about.",
+      "Describe your most charismatic quality and least charismatic quality simultaneously. Who gives the more self-aware answer?",
+      "Both players tell the same story \u2014 a romantic success \u2014 from their own perspective. Group votes on whose version sounds better.",
+      "Comfort level challenge: both reveal something mildly personal they've never told the group. Whoever goes more vulnerable wins.",
+      "Both players pitch a movie about a couple who met at this exact party tonight. Most compelling pitch wins.",
+      "Both describe what they consider the single most attractive non-physical quality in a partner. Group debates who has higher standards.",
+      "Both players do a dramatic reading of the same pre-written clich\u00e9 love letter with completely opposite emotional deliveries.",
+      "Most awkward first date story: whoever's story gets the bigger collective wince wins.",
+      "Both players have 30 seconds to describe the plot of a romance novel they just made up. Group picks which one they'd actually read.",
+      "Who has the better answer to: 'What's the most underrated quality in a romantic partner?'",
+      "Both write a text they wish they'd sent in a past situation but didn't. Group decides whose situation was more interesting.",
+      "Both players describe the perfect apology after forgetting a significant date. Group votes on who's more convincing.",
+      "Describe yourself in three words as if you were writing a dating profile, then describe the other player in three words. Compare."
+    ],
+    "robot_slapdown": [
+      "Romantic override: you must speak exclusively in compliments for the next 2 full rounds \u2014 not just to one person, to everyone.",
+      "The AI has flagged excessive guardedness. Tell the group one thing about yourself that you rarely share at parties.",
+      "Seduction mode activated by mistake: you must dramatically wink at the next person who speaks to you, whatever the context.",
+      "System diagnosis: low vulnerability detected. Share something that genuinely made you smile this week, with full context.",
+      "Chaos flirt protocol: the group writes a flirtatious dare on your behalf and you must execute it within 2 minutes.",
+      "Embarrassment subroutine: describe, in slow motion narration, the most recent time you were flustered by someone.",
+      "Attention scan complete: you must give the last person who walked into the room a genuine 'you looked great tonight' compliment.",
+      "Overconfidence detected: you must ask someone in the room a genuine question you've been too polite to ask all night.",
+      "Romantic memory cache: share the single most swoon-worthy thing anyone has ever said or done for you. Spare no detail.",
+      "Glitch in the matrix: for the next round, you must describe everything you're experiencing as if narrating a romance novel.",
+      "Proximity error: you must sit directly next to whoever you've sat furthest from all night for the next 3 rounds.",
+      "Charisma drain detected: the group must collectively give you a pep talk before you can take your next turn.",
+      "Attraction algorithm misfired: confess which person outside this party you'd invite if you could add one more person tonight.",
+      "Mystery protocol: you may only respond to questions with questions for the next full round.",
+      "Pulse rate spike detected: describe in detail the last moment something made your heart actually race \u2014 any context counts.",
+      "Affection bandwidth exceeded: everyone you physically touch for the next round must receive a compliment within 3 seconds.",
+      "Nostalgia subroutine: share the most romantic song that always takes you back to a specific moment in your past.",
+      "Chemistry scan active: describe the specific combination of qualities you find most irresistibly attractive in a person.",
+      "Tension protocol: maintain unbroken eye contact with whoever is sitting diagonally from you every time you speak for the next round.",
+      "Vulnerability upload complete: share the last time you felt genuinely nervous around someone in the best possible way."
+    ],
+    "system_crash": [
+      "After dark protocol: the lights go off (or get dimmed) for exactly 60 seconds while someone reads a dramatic monologue from any romantic movie they know.",
+      "Everyone simultaneously admits one thing they find genuinely attractive about the person on their right \u2014 no filtering allowed.",
+      "Mass vote: who in this room has the most magnetic personality tonight? The winner must share their secret for at least 60 seconds.",
+      "Chaos confession round: everyone writes one mild secret about their romantic life on a paper \u2014 mix them up, read them anonymously.",
+      "Group conspiracy: everyone must pretend the person in the center of the room is the main character of a romance movie. Each person narrates one sentence of their story.",
+      "All phones out: everyone shares the last emoji they sent in a romantic or close-friendship context and explains the full situation.",
+      "The big question: everyone answers 'what's the most romantic city you've ever visited or want to visit, and why' \u2014 20 seconds each.",
+      "Synchronized vulnerability: everyone must stand up and state one thing they genuinely want right now \u2014 no game-related answers allowed.",
+      "Who in this room would be most likely to be pined after from afar? Group votes. The winner explains how they'd never even notice.",
+      "Lights-out challenge: everyone describes their ideal romantic atmosphere in exactly 5 words. Group votes on the most evocative description.",
+      "After midnight rule: for the next 5 minutes, everyone must speak 10% more slowly and make at least one second of eye contact with whoever they address.",
+      "Confession carousel: go around the room \u2014 everyone completes the sentence 'The most romantic thing about me is...' without irony.",
+      "Playlist takeover: the person with the most romantic music taste (group votes) controls the next 10 minutes of music. No skips allowed.",
+      "Synchronized truth: everyone must simultaneously say the name of the first person who made them feel butterflies. On three. Ready?",
+      "Group heatmap: everyone points at whoever they think is giving off the strongest 'good night energy' right now. That person gives a toast.",
+      "Double-blind compliment round: everyone writes a compliment about someone in the room, folds it, and places it in a pile. Each person draws one and reads it as if it's about them.",
+      "Memory lane: go around the room \u2014 everyone shares a 10-second version of their most cinematic real-life romantic moment.",
+      "Ambient drama: the group must collectively decide on the 'ships' in this room tonight (who's giving what energy). No one is exempted from the analysis.",
+      "After dark freeze: everyone freezes in place for 20 seconds. The person who moves first must answer whatever question the group invents.",
+      "Vibe check: everyone rates the current party atmosphere from 1-10 on one specific romantic metric they name. Discuss the results."
+    ],
+    "crowd_override": [
+      "Group vote: who in this room would be most irresistible in a black-and-white 1950s movie? They must strike the pose.",
+      "The group collectively plans a 'perfect evening out' for two players they think should experience it together. They present the plan.",
+      "Everyone anonymously votes for who they think is secretly the most romantic person in the room. Reveal and debate.",
+      "Group decision: what era of dating would each person in the room thrive in? Everyone gets assigned their era and must argue for it.",
+      "Crowd rates everyone's 'walking into a room' energy from 1-10 based on how they entered tonight. Be honest.",
+      "Everyone in the group assigns each player their 'rom-com archetype' (the hopeless romantic, the commitment-phobe, the mysterious stranger, etc.).",
+      "Group decides: which two people in this room have the most undeniable chemistry as friends? They must take a photo together right now.",
+      "Vote: who in the room has the most interesting romantic history based purely on vibes? They share one chapter of it.",
+      "Crowd picks the most compelling opening line from tonight's game and decides who should actually use it this week on a real person.",
+      "Group assigns everyone a 'signature move' they must use once before the game ends \u2014 based on the group's read of their personality.",
+      "Everyone writes 'the vibe you're giving off tonight' about each player anonymously. Compile and read each player's results.",
+      "Group votes on who would survive longest on a romantic reality show like Love Island or The Bachelor. They must pitch themselves.",
+      "Crowd pick: everyone simultaneously points to who they'd want as their wingperson for a night out. Most selected person gives advice.",
+      "The group designs the perfect partner for each player in under 3 minutes. Each person hears their custom match profile.",
+      "Vote: whose style would the group most like to steal for a night? That person gives a 60-second styling consultation.",
+      "Group collaboratively writes a 5-sentence love story set at this exact party tonight using real first names. Read it aloud.",
+      "Everyone votes on who has the best advice for navigating awkward romantic situations. That person solves a scenario the group invents.",
+      "Group assigns each player a 'dating show' they'd win \u2014 The Bachelor, Love Is Blind, Too Hot to Handle, etc. Each player argues.",
+      "Crowd override: the group collectively rewrites the rules of one current social media dating behavior. Everyone must agree on the new rule.",
+      "Final crowd verdict: who had the best overall energy tonight? That person gives a 30-second closing speech about the evening."
+    ],
+    "holo_drama": [
+      "It's the season finale of your romantic reality show. Describe what the last episode has been building toward and deliver your final rose ceremony speech.",
+      "You're the mysterious new arrival at a glamorous party who everyone's been warned about. Introduce yourself as that character for the next 5 minutes.",
+      "The chemistry between you and someone in this room has finally reached a boiling point according to the show producers. Narrate the moment.",
+      "You're delivering the most iconic 'I almost let you go' speech in movie history. Deliver it. To whoever the group chooses.",
+      "You play the romantic lead who just realized the person they've been looking for has been in the room all along. React accordingly.",
+      "Describe the scene from the movie of your life where the soundtrack swells and everything clicks into place.",
+      "You are the romantic rival who is devastatingly charming and completely, infuriatingly likable. Introduce yourself.",
+      "The group has just voted that your energy tonight is 'the love interest.' Lean into it for 2 full minutes.",
+      "Narrate yourself walking into your own love story for the first time. Give us the internal monologue, the details, the whole scene.",
+      "You're on the last night of a trip where you met someone unforgettable. Describe the conversation happening on this fictional rooftop.",
+      "Deliver the apology speech your character owes someone \u2014 real or fictional. Make it sincere, make it count.",
+      "You're the best friend in a rom-com who gives the protagonist the speech that changes everything. Who are they? What do you say?",
+      "Your character just got the text they've been waiting three months for. React. In full, without explaining.",
+      "Describe in cinematic detail the first moment your character genuinely realized they were falling for someone \u2014 anyone, real or fictional.",
+      "You're the charming stranger at a bar who says exactly the right thing and then disappears. What do you say in your one scene?",
+      "It's the mid-movie crisis. Your character has made a terrible decision in the name of self-protection. Monologue your way through it.",
+      "You've just discovered you've been the villain in someone else's love story. Have the self-aware reckoning out loud.",
+      "The climactic airport scene. You're running. Describe who you're running toward, why, and what you say when you get there.",
+      "You are the slow burn. Describe in detail what it looks like when your character finally stops holding back.",
+      "It's the epilogue. Five years later. Describe where your character ended up and who, if anyone, they're with."
+    ],
+    "firewall_bonus": [
+      "Desire card: you may direct the next truth question at any player of your choosing \u2014 and they must answer it honestly.",
+      "Charm immunity: the next time the group votes against you, your charm automatically flips one vote in your favor.",
+      "Whisper privilege: you receive one whispered secret from the person of your choosing \u2014 they must tell you something they haven't told the group.",
+      "Veto power: play this to cancel any dare or truth directed at you and substitute one of your own invention.",
+      "Plot armor activated: skip the next punishment or consequence completely, no questions asked.",
+      "Wildcard: invent a new category not in the game and challenge one player to complete it \u2014 rules must be fair.",
+      "Rewrite history: change your answer to any previous question tonight retroactively. The new answer stands.",
+      "Audience bonus: the entire group owes you exactly one genuine, specific compliment before the next round begins.",
+      "Double take: any truth or dare you complete in the next round earns you double consideration for bonus events.",
+      "Safe passage: if someone sends a dare your way this round, you may redirect exactly half of it back at them.",
+      "Inner circle: for the next 3 rounds, you are immune to crowd votes \u2014 only direct challenges can affect you.",
+      "Story time: the group must listen in complete respectful silence while you share a genuine memory of your choice \u2014 two minutes, no interruptions.",
+      "Golden answer: your next truth response is accepted without any follow-up questions, regardless of how vague you are.",
+      "Pivot play: you may swap your current dare mid-execution if you announce 'actually, I choose...' and complete something harder.",
+      "Mood setter: you control the music for the next 5 full minutes. Total authority. No vetoes.",
+      "Shield generator: you may protect one other player from the next negative event in the game.",
+      "Time extension: you have twice as long to complete any challenge for the rest of this round.",
+      "Oracle mode: the group must ask you for advice on any relationship or social scenario they name \u2014 your answer is binding for the evening.",
+      "Full pardon: any previous embarrassing moment from tonight is officially forgiven and may not be referenced again.",
+      "Encore reward: you completed something so well the group demands a repeat \u2014 but this time you choose the format entirely."
+    ]
+  }
+}

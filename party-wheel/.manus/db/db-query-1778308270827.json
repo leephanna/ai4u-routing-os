@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE rooms ADD COLUMN lastSpinResultJson JSON;\nALTER TABLE rooms ADD COLUMN lastSpinVelocity FLOAT;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3FbaZk1xReQNtZ9.686a19e568c0 --database ZMnvJNTTjnmfJ7Sacrr6SU --execute ALTER TABLE rooms ADD COLUMN lastSpinResultJson JSON;\nALTER TABLE rooms ADD COLUMN lastSpinVelocity FLOAT;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1284
+}

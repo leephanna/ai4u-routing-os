@@ -1,0 +1,9 @@
+{
+  "query": "\nDELETE v1 FROM votes v1\nINNER JOIN votes v2\nWHERE v1.gameEventId = v2.gameEventId\n  AND v1.playerId = v2.playerId\n  AND v1.id < v2.id;\n\nALTER TABLE votes ADD UNIQUE INDEX unique_vote (gameEventId, playerId);\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3FbaZk1xReQNtZ9.686a19e568c0 --database ZMnvJNTTjnmfJ7Sacrr6SU --execute \nDELETE v1 FROM votes v1\nINNER JOIN votes v2\nWHERE v1.gameEventId = v2.gameEventId\n  AND v1.playerId = v2.playerId\n  AND v1.id < v2.id;\n\nALTER TABLE votes ADD UNIQUE INDEX unique_vote (gameEventId, playerId);\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 625
+}

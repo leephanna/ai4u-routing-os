@@ -1,0 +1,2 @@
+ALTER TABLE rooms ADD COLUMN currentEventId INT;
+ALTER TABLE rooms ADD COLUMN currentPhase VARCHAR(32) NOT NULL DEFAULT 'waiting';

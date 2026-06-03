@@ -1,0 +1,545 @@
+{
+  "pack": "house_party",
+  "intensity": "mild-spicy",
+  "version": "1.0.0",
+  "content": {
+    "braincell_check": [
+      {
+        "q": "In the TV show 'The Office', what is the name of the paper company where everyone works?",
+        "a": "Dunder Mifflin",
+        "options": [
+          "Initech",
+          "Dunder Mifflin",
+          "Vandalay Industries",
+          "Prestige Worldwide"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How many sides does a heptagon have?",
+        "a": "Seven",
+        "options": [
+          "Five",
+          "Six",
+          "Seven",
+          "Eight"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which planet in our solar system has the most moons?",
+        "a": "Saturn",
+        "options": [
+          "Jupiter",
+          "Saturn",
+          "Uranus",
+          "Neptune"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the most streamed song on Spotify of all time (as of 2024)?",
+        "a": "Blinding Lights by The Weeknd",
+        "options": [
+          "Shape of You by Ed Sheeran",
+          "Blinding Lights by The Weeknd",
+          "Dance Monkey by Tones and I",
+          "Sunflower by Post Malone"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "In what year was the first iPhone released?",
+        "a": "2007",
+        "options": [
+          "2005",
+          "2006",
+          "2007",
+          "2008"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What country drinks the most coffee per capita in the world?",
+        "a": "Finland",
+        "options": [
+          "Sweden",
+          "Italy",
+          "Finland",
+          "USA"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which element has the chemical symbol 'Au'?",
+        "a": "Gold",
+        "options": [
+          "Silver",
+          "Aluminum",
+          "Gold",
+          "Argon"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "How many bones are in the adult human body?",
+        "a": "206",
+        "options": [
+          "196",
+          "206",
+          "216",
+          "226"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the capital city of Australia?",
+        "a": "Canberra",
+        "options": [
+          "Sydney",
+          "Melbourne",
+          "Brisbane",
+          "Canberra"
+        ],
+        "correct": 3
+      },
+      {
+        "q": "Which rapper's real name is Aubrey Graham?",
+        "a": "Drake",
+        "options": [
+          "Kendrick Lamar",
+          "Drake",
+          "J. Cole",
+          "Travis Scott"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What does 'HTTP' stand for?",
+        "a": "HyperText Transfer Protocol",
+        "options": [
+          "Hyperlink Text Transfer Program",
+          "HyperText Transfer Protocol",
+          "High Transfer Technology Protocol",
+          "Hypertext Transmission and Transfer Process"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How many fluid ounces are in a standard US pint?",
+        "a": "16",
+        "options": [
+          "12",
+          "14",
+          "16",
+          "20"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "In Monopoly, what color are the cheapest properties?",
+        "a": "Purple/Dark Purple",
+        "options": [
+          "Orange",
+          "Light Blue",
+          "Purple/Dark Purple",
+          "Brown"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What is the name of Thor's hammer in Norse mythology?",
+        "a": "Mjolnir",
+        "options": [
+          "Gungnir",
+          "Mjolnir",
+          "Excalibur",
+          "Durendal"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Which country invented champagne?",
+        "a": "France",
+        "options": [
+          "Italy",
+          "Spain",
+          "Germany",
+          "France"
+        ],
+        "correct": 3
+      },
+      {
+        "q": "How long does it take light from the Sun to reach Earth?",
+        "a": "About 8 minutes",
+        "options": [
+          "About 2 minutes",
+          "About 8 minutes",
+          "About 24 minutes",
+          "About 1 hour"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What was the first video game to be inducted into the World Video Game Hall of Fame?",
+        "a": "Pong",
+        "options": [
+          "Tetris",
+          "Super Mario Bros.",
+          "Pong",
+          "Space Invaders"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which US state has the most breweries per capita?",
+        "a": "Vermont",
+        "options": [
+          "Colorado",
+          "Oregon",
+          "Vermont",
+          "Montana"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "In what decade was the bikini swimsuit invented?",
+        "a": "1940s",
+        "options": [
+          "1930s",
+          "1940s",
+          "1950s",
+          "1960s"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the longest-running American animated TV series?",
+        "a": "The Simpsons",
+        "options": [
+          "Family Guy",
+          "The Simpsons",
+          "South Park",
+          "Futurama"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "Which social media platform was originally called 'Twttr'?",
+        "a": "Twitter/X",
+        "options": [
+          "Instagram",
+          "Snapchat",
+          "Twitter/X",
+          "TikTok"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What is the fear of long words technically called?",
+        "a": "Hippopotomonstrosesquippedaliophobia",
+        "options": [
+          "Logophobia",
+          "Verbophobia",
+          "Hippopotomonstrosesquippedaliophobia",
+          "Lexicophobia"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "In which city is the famous 'Bean' sculpture located?",
+        "a": "Chicago",
+        "options": [
+          "New York",
+          "Chicago",
+          "Los Angeles",
+          "Seattle"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the most popular pizza topping in the United States?",
+        "a": "Pepperoni",
+        "options": [
+          "Cheese",
+          "Sausage",
+          "Pepperoni",
+          "Mushrooms"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What is the name of the fictional African country in the Marvel movie Black Panther?",
+        "a": "Wakanda",
+        "options": [
+          "Zamunda",
+          "Wakanda",
+          "Latveria",
+          "Genosha"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "How many strings does a standard guitar have?",
+        "a": "6",
+        "options": [
+          "4",
+          "5",
+          "6",
+          "7"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "What year did Facebook launch to the general public (beyond colleges)?",
+        "a": "2006",
+        "options": [
+          "2004",
+          "2005",
+          "2006",
+          "2007"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which celebrity couple coined the nickname 'Bennifer'?",
+        "a": "Ben Affleck and Jennifer Lopez",
+        "options": [
+          "Ben Stiller and Jennifer Aniston",
+          "Ben Affleck and Jennifer Lopez",
+          "Ben Affleck and Jennifer Garner",
+          "Bradley Cooper and Jennifer Lawrence"
+        ],
+        "correct": 1
+      },
+      {
+        "q": "What is the name of the fictional town in the TV show 'Schitt's Creek'?",
+        "a": "Schitt's Creek",
+        "options": [
+          "Blairstown",
+          "Pawnee",
+          "Schitt's Creek",
+          "Eagleton"
+        ],
+        "correct": 2
+      },
+      {
+        "q": "Which country has won the most FIFA World Cup titles?",
+        "a": "Brazil",
+        "options": [
+          "Germany",
+          "Italy",
+          "Brazil",
+          "Argentina"
+        ],
+        "correct": 2
+      }
+    ],
+    "truth_cache": [
+      "What's the most embarrassing text message you've accidentally sent to the wrong person?",
+      "What's one thing you do when you're home alone that you'd be mortified if someone walked in on?",
+      "What is the longest you've gone without showering, and what was your excuse?",
+      "Have you ever pretended to be sick to avoid hanging out with someone in this room? Confess everything.",
+      "What's the most desperate thing you've ever done to impress a crush?",
+      "What's a purchase you've made that you've hidden from family or close friends?",
+      "Have you ever ghosted someone, and did they ever figure out it was intentional?",
+      "What's the most embarrassing song that you know every single word to?",
+      "Have you ever walked out of a date early? What was your excuse?",
+      "What's something you've lied about on a resume or dating profile?",
+      "What's the most juvenile thing you still do as an adult?",
+      "Tell us about a time you laughed at the absolute worst possible moment.",
+      "What's the pettiest thing you've ever done to get back at someone?",
+      "Have you ever accidentally called a teacher 'Mom' or 'Dad'? What happened next?",
+      "What's the most embarrassing thing you've done while tipsy that someone in this room doesn't know about?",
+      "What's your most unexpectedly shameful Netflix binge?",
+      "Have you ever been caught snooping through someone else's phone? What were you looking for?",
+      "What's the biggest white lie you tell on a regular basis to keep the peace?",
+      "What's something you find attractive that you'd be embarrassed to admit out loud?",
+      "What's the most money you've ever wasted on something completely useless?",
+      "Have you ever faked being asleep to avoid a conversation? Who was it with?",
+      "What's the worst fashion choice you made in your early 20s that you thought was cool?",
+      "What's something you've Googled that you immediately regretted having in your browser history?",
+      "What's the most embarrassing nickname you've ever had, and who gave it to you?",
+      "Have you ever stolen something small? What was it and do you still have it?",
+      "What is the most embarrassing thing that has ever happened to you on a date?",
+      "What's a weird talent or skill you have that you've never shown anyone here?",
+      "What was the last thing you cried about that wasn't a movie or a show?",
+      "What's the most ridiculous reason you've ever ended a friendship or relationship?",
+      "What's something you've always wanted to tell someone in this room but never had the guts to say?"
+    ],
+    "glitch_dare": [
+      "Do your best impression of a dramatic soap opera actor getting dumped \u2014 make it a full 30-second scene.",
+      "Text someone not in this room: 'I have something really important to tell you...' then wait for their reply and read it out loud.",
+      "Let the group pick one contact in your phone to send a compliment to \u2014 you must send whatever they decide.",
+      "Do your best catwalk strut across the room while the group scores you out of 10.",
+      "Speak in a dramatic British accent for the next three rounds, no matter what.",
+      "Let someone in the group go through your camera roll for 30 seconds \u2014 they can show one photo to everyone.",
+      "Call someone you haven't spoken to in over a year and tell them you were just thinking about them. Keep a straight face.",
+      "Act out the last movie you watched without using any words. Group has to guess.",
+      "Take a selfie making the ugliest possible face and post it to your main Instagram story right now.",
+      "Do a 30-second stand-up comedy bit about the person to your left. Make it funny, not mean.",
+      "Let the group write a text to your most recent contact \u2014 you must send it unedited.",
+      "Serenade the person of the group's choosing with 30 seconds of a love song \u2014 acapella only.",
+      "Let everyone smell your phone. Yes, really. React to their reactions.",
+      "Change your phone lock screen to a photo the group chooses right now and keep it for a week.",
+      "Put your phone on speaker and call any contact \u2014 open with 'I need to confess something.'",
+      "Do your best impression of the person to your right for a full minute. They can't say anything.",
+      "Share your most recent GIF or meme you sent in a chat. Read the conversation context around it.",
+      "Switch phones with the person to your left for the next 5 minutes. They handle all incoming notifications.",
+      "Let someone in the group pick any status to post on your behalf to one social platform right now.",
+      "Stand up and tell a 60-second lie so believable the group has to vote on whether it's true.",
+      "Read out your most recent voice memo or note from your phone notes app. All of it.",
+      "Let the group do a 10-second phone audit \u2014 they pick an app on your home screen to scroll through.",
+      "Do your best runway walk while describing your 'outfit' as if it costs $10,000.",
+      "Reveal the last 5 songs in your most recently played list on whatever music app you use.",
+      "Do a dramatic reading of your most recent text conversation using two very different character voices.",
+      "Let someone in the group change your Instagram bio for exactly one week \u2014 effective right now.",
+      "Reveal the contents of your purse, bag, or pockets and explain every single item like you're on a shopping show.",
+      "Send a voice note to someone saying 'I've been thinking about you a lot lately' \u2014 group picks the recipient.",
+      "Impersonate any celebrity for a full 2-minute improvised press conference answering the group's questions.",
+      "Reenact your most embarrassing moment in slow motion, complete with sound effects."
+    ],
+    "prompt_duel": [
+      "First person to make the other laugh wins \u2014 stare into each other's eyes in silence. Go.",
+      "Thumb war. Loser has to reveal their screen time from this week.",
+      "Both players must improvise a 30-second sales pitch for a terrible product. The group votes on the better pitch.",
+      "Rock Paper Scissors best of 3, but you have to trash talk in between every throw.",
+      "Both players freestyle rap for 20 seconds about the person across from them. Group votes who won.",
+      "Both players simultaneously roast each other for 30 seconds. Neither can respond until both are done. Vote for the harsher roast.",
+      "First one to successfully get a laugh from someone NOT involved in the duel wins.",
+      "Who can hold a dramatic villain monologue longer without cracking up?",
+      "Both players have 60 seconds to create the worst pickup line possible. Group votes on the most cringe.",
+      "Synchronized dance-off: both players must freestyle to the same song for 15 seconds. Group picks the winner.",
+      "Speed round: first player to correctly answer 3 trivia questions from the braincell_check wins.",
+      "Both players write a haiku about the other person. Group votes for which is more accurate.",
+      "Staring contest. First one to blink or look away has to give the winner one genuine compliment.",
+      "Both must do impressions of each other. Group votes whose is more accurate.",
+      "Who can list the most Taylor Swift songs in 30 seconds?",
+      "Both players must talk continuously for 60 seconds \u2014 no silence allowed. First to pause loses.",
+      "Compliment battle: both players trade increasingly over-the-top compliments until someone runs out.",
+      "Both players act out the same movie scene simultaneously without discussing it first. Most in-sync wins.",
+      "Both freestyle 15 seconds of a motivational speech for the other player as if they're their life coach.",
+      "Arm wrestling. Winner gets to give the loser a silly task for the rest of the game.",
+      "Both players translate a popular song into a completely different genre on the spot. Group picks the better cover.",
+      "First to identify 5 songs from 3-second clips hummed by the group wins.",
+      "Both players must describe their day using only words starting with the same letter. Who holds out longer?",
+      "Mirror challenge: one player leads movements, the other mirrors exactly. Roles switch halfway. Best mirror wins.",
+      "Both players must explain a complex topic (group decides) as simply as possible. Best explanation wins.",
+      "Speed name game: alternating celebrity names where next name starts with the last letter. First to repeat or pause loses.",
+      "Both players must write a one-sentence story together, alternating one word at a time. Group rates the result.",
+      "Charades head-to-head \u2014 same prompt, each acts it out simultaneously. Who gets theirs guessed first?",
+      "Both players have 45 seconds to get the most people in the room laughing. Whoever gets more laughs wins.",
+      "Phone-free trivia: both players answer questions read aloud. First to 3 correct answers wins."
+    ],
+    "robot_slapdown": [
+      "The AI has judged your dancing and assigned you a mandatory 30-second encore. The group choreographs it.",
+      "MALFUNCTION DETECTED: You must speak in rhyming couplets for the next two full rounds.",
+      "System alert \u2014 you have been muted. You cannot speak for the next 90 seconds. React only in mime.",
+      "Error code 404: Your dignity not found. Stand up and take a bow while everyone slow claps.",
+      "The robot has determined you need attitude recalibration. Give genuine compliments to all 3 people nearest you.",
+      "OVERHEATING: You must fan yourself and act dramatically overwhelmed for the next full minute.",
+      "Warning: low charisma detected. You must narrate everything you do in third person for the next 2 rounds.",
+      "System breach: your most recent photo has been flagged. Show it to the whole group and explain it.",
+      "Critical update required: You must use an accent chosen by the group for the remainder of this round.",
+      "The AI has docked you points for hesitation. You must now perform a 20-second confidence pose while someone counts down.",
+      "Rebooting your social skills \u2014 you must introduce yourself as a completely different person and stay in character for 3 minutes.",
+      "Error: excessive seriousness detected. You must end every sentence with 'and honestly, I have no regrets' for the next round.",
+      "Auto-roast engaged: every player writes one (nice-ish) roast line about you, and you have to say 'fair enough' after each one.",
+      "You have been flagged for suspicious behavior. Confess something small to the group right now.",
+      "GLITCH: the robot is making you act like you just won a Grammy for the next 60 seconds. Speech included.",
+      "Download initiated: you must teach the group a dance move in the next 90 seconds whether you know one or not.",
+      "Signal lost: you can only communicate by pointing and using sound effects for the next full round.",
+      "Firewall breach: the group now controls what drink you take next \u2014 they vote, you comply.",
+      "Virus detected: your phone wallpaper must be changed to something the group chooses right now for 24 hours.",
+      "System override: you must stand next to the person you'd most like to swap lives with and explain why."
+    ],
+    "system_crash": [
+      "PARTY FREEZE: Everyone must stop moving and hold their exact position for 10 full seconds. Last to freeze takes a penalty.",
+      "Mass chaos: everyone simultaneously whispers their biggest secret to the person on their left. Nobody repeats what they heard.",
+      "Group vote: the two most competitive players in the room must compete in an immediate thumb war. Stakes: they swap seats for the rest of the game.",
+      "Everyone check their most-used emoji right now. The person with the least interesting one performs a dare chosen by the group.",
+      "Surprise round: everyone has 60 seconds to find the funniest thing on their phone to share. Group votes on best one.",
+      "System overload: all phones face-down for the next 10 minutes. First person to check gets roasted by the whole group.",
+      "EMERGENCY PROTOCOL: Everyone must confess one thing they've lied about this week. Keep it light, keep it real.",
+      "Flash challenge: who can do the best celebrity impression RIGHT NOW? No prep. Group votes instantly.",
+      "Network disruption: the group must nominate the person most likely to be on a reality show, and that person must perform their audition tape in 60 seconds.",
+      "Critical error: everyone writes down one thing about the person to their right. Fold the papers and pass them to the subject. They read them out loud.",
+      "Rogue AI activated: the group now runs the party for the next 3 minutes. The host must do whatever the majority votes for.",
+      "Mass download: everyone teaches the group one completely useless skill they have. No prep \u2014 just do it.",
+      "Party crash: the two people who have known each other longest must reveal one thing the other doesn't know about them.",
+      "Chaos vote: the group picks one person to have their ringtone changed to something hilarious for the rest of the night. First incoming call plays on speaker.",
+      "System reboot: everyone stands up, switches seats, and cannot sit next to anyone they were next to before.",
+      "ALERT: The group votes on who looks the most awake \u2014 they become Game Master for the next 2 rounds with extra powers.",
+      "Power surge: everyone simultaneously texts the same message (group decides the message) to someone outside the party.",
+      "Loop error: the last person who spoke must repeat everything they said but in a completely different tone \u2014 whisper, scream, or deadpan.",
+      "Collective override: the group must collectively decide on a group photo pose, take the photo, and post it to at least one group chat.",
+      "System restore: roll back to the beginning \u2014 everyone shares the best thing that happened to them this week in 10 words or less."
+    ],
+    "crowd_override": [
+      "The group votes: who in the room would make the best reality TV villain? The winner must give a villain monologue.",
+      "Everyone write down who they think would survive longest in a zombie apocalypse. Compare answers and debate the results for 2 minutes.",
+      "Group vote: who has the most chaotic energy right now? That person must take the next dare.",
+      "Everyone ranks the people in the room by who they'd want as their lawyer. The lowest-ranked person explains why they'd actually be great.",
+      "Group decision: pick the two most opposite personalities in the room. They must agree on the best movie ever made in under 3 minutes.",
+      "Vote on the person most likely to accidentally become famous. They must write an acceptance speech in 60 seconds.",
+      "Group creates a group chat name for this exact gathering right now. Best suggestion wins \u2014 everyone must save it.",
+      "Everyone silently rates how good the current playlist is from 1-10. Compare ratings. The lowest rater must improve it immediately.",
+      "Group vote: who would be least likely to survive alone in the wilderness? That person argues their survival case for 60 seconds.",
+      "The whole group decides the single most important rule for the rest of the game. It becomes law until the game ends.",
+      "Vote: who in this room would be the best talk show host? They must interview another player for 90 seconds.",
+      "Group assigns everyone a spirit animal based on tonight's vibes. The person who disagrees with theirs the most argues back.",
+      "The group votes on the funniest person in the room. That person must tell a joke. It must be original.",
+      "Everyone simultaneously points at the person they think takes the best selfies. That person now owes the group a group photo.",
+      "Group decision: create a nickname for every single player based on something that happened tonight. Nicknames stick for the rest of the game.",
+      "Vote for the person most likely to accidentally start a drama. They must predict what tonight's drama will be about.",
+      "Group picks a movie genre and assigns each player a role in a film in that genre. Everyone improvises their character intro.",
+      "Everyone names one skill they think the person across from them secretly has. Each person reacts to their secret skill.",
+      "Group vote: who seems like they'd be the most different one-on-one versus in a group? That person explains if it's true.",
+      "The group collectively writes the title and one-line synopsis of the movie about this party. Best version wins a bonus point."
+    ],
+    "holo_drama": [
+      "You are the main character and everything happening at this party is part of your hero's journey. Deliver your motivational inner monologue to the group right now.",
+      "Pretend the whole party is being filmed for a documentary. Give your confessional camera piece about something that happened tonight.",
+      "You just found out you've been voted 'Most Likely to Become Famous' by this group. Accept the award and thank everyone by name.",
+      "The drama has peaked. Two people in the room are 'in a situation' according to group gossip (you choose who). Narrate the love story arc.",
+      "It's the season finale and everything comes to a head tonight. Describe the dramatic cliffhanger your character is about to deliver.",
+      "You're the party's social media influencer. Do a 60-second 'get ready with me / party vlog' to your imaginary camera right now.",
+      "You've just discovered your origin story. Tell the room in 90 seconds how you became the legend you are today.",
+      "Dramatic reveal: announce an 'unexpected plot twist' about yourself that makes the rest of the group react. It can be real or invented.",
+      "You've been cast in a reality show about this exact night. Describe the episode title and what the promo trailer says about you.",
+      "It's the moment in the rom-com where the protagonist realizes what they really want. Give the speech. Make it emotional.",
+      "Narrate a high-stakes sports commentary over whatever mundane action the person next to you is currently doing.",
+      "You're accepting a lifetime achievement award for 'being you.' Write and deliver the speech in under 90 seconds.",
+      "Describe the greatest plot twist that could happen at this exact party right now. The group votes if it would actually make good TV.",
+      "You're the character in a heist movie who explains the whole plan. What is tonight's 'heist' and how does it go down?",
+      "You're getting a spin-off show based on your life. Pitch the concept and first episode to the group like you're in a writers' room.",
+      "Do the end-of-season dramatic monologue where your character finally says everything they've been holding back all season.",
+      "It's your character's big transformation moment. Describe the 'before' and 'after' version of yourself tonight.",
+      "You're the unreliable narrator of tonight's events. Tell the story of what 'really happened' this evening from your perspective.",
+      "Deliver the villain origin story speech \u2014 explain the series of events that led you to become the party's chaotic energy this evening.",
+      "It's the closing scene of the movie. Everyone's at the airport or on a rooftop. What does your character say in their final monologue?"
+    ],
+    "firewall_bonus": [
+      "You've earned immunity! Skip the next punishment card with no penalty. Bank it for later or use it now.",
+      "Double points round: any trivia you answer correctly this round counts for double. Name your category and go.",
+      "Golden ticket: you get to reassign any incoming dare or truth to another player of your choosing. One-time use.",
+      "Crowd pleaser bonus: the group votes you the MVP of the last round. You get to add one house rule that lasts for the next 5 minutes.",
+      "You're on a roll \u2014 ask any player to complete a dare of your invention. It must be within game rules.",
+      "Power-up unlocked: you get to look at any other player's current hand or held cards and use that info however you like.",
+      "Free pass: submit one of your own questions to the truth_cache for someone else to answer. Must be related to tonight's events.",
+      "Wildcard: spin the wheel again immediately and combine both results for a double challenge. You get double reward if completed.",
+      "Respawn: you were eliminated or penalized in a previous round \u2014 this card restores you to full standing.",
+      "Hero moment: name any challenge you've been avoiding all game. Complete it now for triple points and full forgiveness.",
+      "Crowd override veto: if the group is about to vote against you, play this card to block the vote and substitute a challenge of your choice.",
+      "Sneak peek: read the top card of any stack before the next spin and decide if you want it to land there \u2014 switch it out if you want.",
+      "Timestamp bonus: this reward is yours to hold until it becomes the best possible moment to play it \u2014 your call entirely.",
+      "Charm offense: the group must give you one genuine compliment each before the next round begins.",
+      "Secret mission completed: invent a secret mission you secretly 'completed' tonight and announce it with full dramatic fanfare.",
+      "Multiplier activated: any bonus you earn in the next 3 rounds is doubled automatically \u2014 no extra effort required.",
+      "Trade up: swap any punishment you have pending with any reward another player is holding.",
+      "Soft landing: you can answer the next truth question with 'hypothetically' attached to everything you say, with full immunity.",
+      "Rewind: go back to any earlier moment in tonight's game and change your answer. Dramatic reenactment required.",
+      "Victory lap: walk around the entire room receiving high-fives while narrating your own highlight reel from tonight."
+    ]
+  }
+}

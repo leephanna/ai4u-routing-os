@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE rooms ADD COLUMN currentEventId INT; ALTER TABLE rooms ADD COLUMN currentPhase VARCHAR(32) NOT NULL DEFAULT 'waiting';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3FbaZk1xReQNtZ9.686a19e568c0 --database ZMnvJNTTjnmfJ7Sacrr6SU --execute ALTER TABLE rooms ADD COLUMN currentEventId INT; ALTER TABLE rooms ADD COLUMN currentPhase VARCHAR(32) NOT NULL DEFAULT 'waiting';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1171
+}

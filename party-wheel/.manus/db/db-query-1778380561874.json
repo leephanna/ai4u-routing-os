@@ -1,0 +1,9 @@
+{
+  "query": "ALTER TABLE `players` ADD COLUMN IF NOT EXISTS `guestSessionId` varchar(64);\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `spinId` varchar(36);\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `spinStartedAt` timestamp NULL;\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `spinDurationMs` int;\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `finalAngle` float;\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `segmentIndex` int;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3FbaZk1xReQNtZ9.686a19e568c0 --database ZMnvJNTTjnmfJ7Sacrr6SU --execute ALTER TABLE `players` ADD COLUMN IF NOT EXISTS `guestSessionId` varchar(64);\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `spinId` varchar(36);\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `spinStartedAt` timestamp NULL;\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `spinDurationMs` int;\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `finalAngle` float;\nALTER TABLE `rooms` ADD COLUMN IF NOT EXISTS `segmentIndex` int;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 2174
+}

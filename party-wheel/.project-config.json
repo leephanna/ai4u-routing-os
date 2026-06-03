@@ -1,0 +1,40 @@
+{
+  "build_command": "pnpm run build",
+  "capabilities": ["db", "server", "user"],
+  "dev_command": "pnpm run dev",
+  "env_vars": {
+    "DATABASE_URL": "mysql://<user>:<password>@<host>:4000/<db>?ssl={\"rejectUnauthorized\":true}"
+  },
+  "experiments": ["no_db_push"],
+  "git_remote": {
+    "repo_url": "<REDACTED>",
+    "access_key_id": "<REDACTED>",
+    "secret_access_key": "<REDACTED>",
+    "session_token": "<REDACTED>",
+    "expiration": "<REDACTED>"
+  },
+  "name": "ai4u-party-wheel",
+  "path": "/home/ubuntu/ai4u-party-wheel",
+  "port": 3000,
+  "secrets": {
+    "BUILT_IN_FORGE_API_KEY": "<REDACTED>",
+    "BUILT_IN_FORGE_API_URL": "<REDACTED>",
+    "JWT_SECRET": "<REDACTED>",
+    "OAUTH_SERVER_URL": "<REDACTED>",
+    "OWNER_NAME": "Lee Hanna",
+    "OWNER_OPEN_ID": "<REDACTED>",
+    "VITE_ANALYTICS_ENDPOINT": "<REDACTED>",
+    "VITE_ANALYTICS_WEBSITE_ID": "<REDACTED>",
+    "VITE_APP_ID": "<REDACTED>",
+    "VITE_APP_LOGO": "<REDACTED>",
+    "VITE_APP_TITLE": "AI4U Party Wheel: Glitch After Dark",
+    "VITE_FRONTEND_FORGE_API_KEY": "<REDACTED>",
+    "VITE_FRONTEND_FORGE_API_URL": "<REDACTED>",
+    "VITE_GIPHY_API_KEY": "<REDACTED>",
+    "VITE_OAUTH_PORTAL_URL": "<REDACTED>",
+    "VITE_SUPABASE_ANON_KEY": "<REDACTED>",
+    "VITE_SUPABASE_URL": "<REDACTED>"
+  },
+  "template_id": "web-db-user",
+  "test_command": "pnpm test"
+}

@@ -1,0 +1,15 @@
+{
+  "query": "SELECT gameEventId, playerId, COUNT(*) as cnt FROM votes GROUP BY gameEventId, playerId HAVING cnt > 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3FbaZk1xReQNtZ9.686a19e568c0 --database ZMnvJNTTjnmfJ7Sacrr6SU --execute SELECT gameEventId, playerId, COUNT(*) as cnt FROM votes GROUP BY gameEventId, playerId HAVING cnt > 1;",
+  "rows": [
+    {
+      "gameEventId": "60008",
+      "playerId": "120003",
+      "cnt": "3"
+    }
+  ],
+  "messages": [],
+  "stdout": "gameEventId\tplayerId\tcnt\n60008\t120003\t3\n",
+  "stderr": "",
+  "execution_time_ms": 260
+}

@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS `challenge_responses` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `roomId` int NOT NULL,\n  `gameEventId` int NOT NULL,\n  `playerId` int NOT NULL,\n  `segmentType` varchar(32) NOT NULL,\n  `responseType` varchar(32) NOT NULL,\n  `textResponse` text,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `challenge_responses_id` PRIMARY KEY(`id`),\n  CONSTRAINT `unique_challenge_response` UNIQUE(`gameEventId`,`playerId`)\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 3FbaZk1xReQNtZ9.686a19e568c0 --database ZMnvJNTTjnmfJ7Sacrr6SU --execute CREATE TABLE IF NOT EXISTS `challenge_responses` (\n  `id` int AUTO_INCREMENT NOT NULL,\n  `roomId` int NOT NULL,\n  `gameEventId` int NOT NULL,\n  `playerId` int NOT NULL,\n  `segmentType` varchar(32) NOT NULL,\n  `responseType` varchar(32) NOT NULL,\n  `textResponse` text,\n  `createdAt` timestamp NOT NULL DEFAULT (now()),\n  CONSTRAINT `challenge_responses_id` PRIMARY KEY(`id`),\n  CONSTRAINT `unique_challenge_response` UNIQUE(`gameEventId`,`playerId`)\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 1072
+}
