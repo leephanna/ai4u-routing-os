@@ -317,4 +317,45 @@ This means passive players never receive the spin trigger via Realtime. They dep
 
 ---
 
-*Decision Ledger maintained. All entries status: ACCEPTED. New decisions in future sessions should be appended as DL-009, DL-010, etc.*
+---
+
+## DL-009 — Repository Separation: Party Wheel → Dedicated Repo
+
+| Field | Value |
+|-------|-------|
+| **Decision ID** | DL-009 |
+| **Date** | 2026-06-03 |
+| **Decision** | Separate AI4U Party Wheel from AI4U Router into the dedicated repo `leephanna/AI4U-PARTY-WHEEL` |
+| **Status** | ACCEPTED |
+
+**Context:** The V2 Rescue Pass was developed inside `leephanna/ai4u-routing-os` under the `party-wheel/` subdirectory. The owner has created a blank dedicated repo at `leephanna/AI4U-PARTY-WHEEL` and specified that Party Wheel must not be intermingled with the fully functional AI4U Router. The GPT governance doc had originally recommended "Best destination: GitHub repo named: ai4u-party-wheel." This decision formalizes the separation.
+
+**Options Considered:**
+
+- **Option A — Continue inside `ai4u-routing-os`.** Low immediate friction. Couples two unrelated products. Router's CI/CD, deployments, and env vars would be at risk of Party Wheel contamination. Owner explicitly rejected this.
+- **Option B — Monorepo subdirectory, still in `ai4u-routing-os`.** Cleaner than Option A but still shares the same git remote, same deployment root, same Vercel project. Owner explicitly rejected this.
+- **Option C — Dedicated `leephanna/AI4U-PARTY-WHEEL` repo (CHOSEN).** Each product owns its deployment, its secrets, its CI/CD, its Vercel project, and its Daedalus Gate records. No runtime coupling.
+
+**Chosen Option:** C — dedicated repo.
+
+**Reason:** Protects the fully functional AI4U Router from Party Wheel churn. Gives Party Wheel a clean deploy path with its own Vercel project. Prevents accidental sharing of production env vars. Improves proof-and-ownership clarity (each Daedalus Gate receipt lives in exactly one repo).
+
+**Files Affected:**
+- `docs/architecture/REPO_SEPARATION_CONTRACT.md` — created (this session)
+- `docs/proof/DAEDALUS_GATE_RECEIPT_REPO_SEPARATION.md` — created (this session)
+- `README.md` — created (this session)
+- `.gitignore` — created (this session)
+- All source files migrated to new repo root
+
+**Proof Required:**
+- GitHub remote points to `leephanna/AI4U-PARTY-WHEEL`
+- Contamination scan shows zero router references in source
+- `pnpm check` passes in new repo
+- `pnpm content` passes in new repo
+- `pnpm build` passes in new repo
+- Branch pushed to new repo
+- Status: VERIFIED_SEPARATED after user completes local push
+
+---
+
+*Decision Ledger maintained. All entries status: ACCEPTED.*
