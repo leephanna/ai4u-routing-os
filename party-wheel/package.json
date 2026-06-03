@@ -10,11 +10,12 @@
     "check": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
-    "compliance": "pnpm check && pnpm test",
-    "eval:live": "pnpm test -- --reporter=verbose",
-    "db:push": "drizzle-kit generate && drizzle-kit migrate",
     "content": "tsx scripts/validate-content.ts",
-    "e2e": "echo 'E2E requires live server — see artifacts/e2e/v2-rescue/ for proof artifacts'"
+    "compliance": "pnpm check && pnpm test",
+    "eval": "pnpm test -- --reporter=verbose",
+    "eval:live": "pnpm test -- --reporter=verbose",
+    "e2e": "echo 'E2E requires live server - see artifacts/e2e/v2-rescue/ for manual proof'",
+    "db:push": "drizzle-kit generate && drizzle-kit migrate"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.693.0",

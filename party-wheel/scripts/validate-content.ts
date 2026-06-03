@@ -38,6 +38,14 @@ const BANNED_PHRASES = [
   "underage",
   "illegal",
   "murder",
+  // explicit body parts / graphic content
+  "penis",
+  "vagina",
+  "genitals",
+  "nude",
+  "naked body",
+  "masturbat",
+  "pornograph",
 ];
 
 interface TriviaQuestion {
