@@ -1,0 +1,69 @@
+name: Build AI4U Android test APK
+on:
+  push:
+    branches: [feature/android-play-store-capacitor-v1]
+    paths:
+      - 'mobile/**'
+      - '.github/workflows/mobile-android-apk.yml'
+      - 'index.html'
+      - 'supabase-persistence.js'
+      - 'ai4u-badge.png'
+  workflow_dispatch:
+jobs:
+  build-debug-apk:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out Android branch
+        uses: actions/checkout@v4
+      - name: Install Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Prepare Android SDK and API 36
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+      - name: Install JavaScript dependencies
+        working-directory: mobile
+        run: npm install
+      - name: Bundle local Router web assets
+        working-directory: mobile
+        run: npm run build:web
+      - name: Create Capacitor Android project
+        working-directory: mobile
+        run: npx cap add android
+      - name: Sync packaged assets
+        working-directory: mobile
+        run: npx cap sync android
+      - name: Assemble unsigned-for-release, debug-signed APK
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+      - name: Verify APK exists and record SHA-256
+        run: |
+          test -s mobile/android/app/build/outputs/apk/debug/app-debug.apk
+          sha256sum mobile/android/app/build/outputs/apk/debug/app-debug.apk | tee mobile/android/apk-sha256.txt
+      - name: Upload Android debug APK
+        uses: actions/upload-artifact@v7
+        with:
+          name: AI4U-Router-Android-Test
+          path: mobile/android/app/build/outputs/apk/debug/app-debug.apk
+          archive: false
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload checksum receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: AI4U-Router-Android-Build-Receipt
+          path: mobile/android/apk-sha256.txt
+          if-no-files-found: error
+          retention-days: 30
