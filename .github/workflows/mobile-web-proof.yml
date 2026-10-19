@@ -1,0 +1,24 @@
+name: Android web-bundle validation
+on:
+  push:
+    branches: [feature/android-play-store-capacitor-v1]
+    paths: ['mobile/**','.github/workflows/mobile-web-proof.yml','index.html','supabase-persistence.js','ai4u-badge.png']
+  workflow_dispatch:
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install
+      - run: npm run build:web
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai4u-router-android-web-assets
+          path: mobile/www/
+          retention-days: 30
