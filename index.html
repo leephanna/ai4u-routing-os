@@ -3070,9 +3070,9 @@ function inferTaskRoute(goal,stage){
   const g=String(goal||'').toLowerCase();
   if(/\b(check whether|fact[- ]check|verify (?:a )?(?:claim|fact)|is this true|claim verification|evidence check)\b/i.test(g)) return 'research';
   if(/\b(research|compare|comparison|product|prices?|reviews?|statistics|market trends|competitors?|source links)\b/i.test(g)) return 'research';
+  if(/\b(images?|illustrations?|logos?|graphics?|videos?|thumbnails?|visuals?|posters?|flyers?|creative concept)\b/i.test(g)) return 'visual';
   if(/\b(linkedin|instagram|social media|marketing|campaign|content calendar|brand voice|business posts)\b/i.test(g)) return 'marketing';
   if(/\b(email|resume|cv|cover letter|write|draft|rewrite|proofread|blog|article|proposal|letter)\b/i.test(g)) return 'writing';
-  if(/\b(images?|illustrations?|logos?|graphics?|videos?|thumbnails?|visuals?|posters?|flyers?|creative concept)\b/i.test(g)) return 'visual';
   if(/\b(explain|understand|learn|teach|study|summarize|simplify|translate|knowledge check)\b/i.test(g)) return 'learning';
   if(/\b(organize|organise|plan|roadmap|outline|brainstorm|project plan|prioritize|prioritise|next actions)\b/i.test(g)) return 'planning';
   return null;
