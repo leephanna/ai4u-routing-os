@@ -115,11 +115,30 @@ A task quote is held for 30 minutes. If a customer completes checkout after the 
 - Webhook event IDs are stored for idempotent processing.
 - The app never trusts a browser-only paid flag.
 - The legacy $0.99/month Router Stripe price is preserved and is not silently replaced.
-- The Stripe account currently connected to the Router integration is live mode. Live Payment Links are created only after tax treatment is confirmed.
+- The Stripe account is in live mode. Router products, prices, and Payment Links have now been created; the legacy $0.99/month Router price remains preserved.
 
 ## Tax and fee caveat
 
 Prices above are before any applicable sales tax, VAT, or GST. If Stripe Tax Basic is enabled for Payment Links/Checkout, its current no-code transaction fee must also be included in the margin calculation. Tax collected from customers is not revenue and should be remitted as required.
+
+## Production release record — 2026-11-10
+
+**Deployment**
+- GitHub PR #5 (pricing and secure billing) merged at `56e98e4d68723ba50c7fbd0c4e639244a5d5ba56`.
+- GitHub PR #6 (tax wording) merged at `5b774c11bddf604e29bcbafc0b42486765e91ece`.
+- Vercel production deployment: `dpl_4vD6rYzufbZK16jSFxqNvVpCwSyc`; READY; custom domain alias `routing.ai4utech.com`.
+
+**Stripe live resources**
+- Membership product: `prod_VbLKktIpcmZrYG`; monthly price `price_1Ua8e3ApPidFq8Rl4OxY7Z41` ($4.99/month); annual price `price_1Ua8eLApPidFq8RlLBj2xVjL` ($49.99/year).
+- Task-pass product: `prod_VbLKYJFt0lAIaw`; Basic `price_1Ua8eCApPidFq8RlOCaMFBiy` ($1.99); Standard `price_1Ua8eOApPidFq8RloTOrZecT` ($2.99); Advanced `price_1Ua8ePApPidFq8RlJXDmgNXN` ($4.99).
+- Five active Payment Links were created for these prices. Their IDs are stored in the Vercel environment; the app appends its server-issued `client_reference_id`. Do not share or use the raw links outside the app flow.
+- Live webhook endpoint: `we_1Ua8evApPidFq8RlffQqvVTb`, targeting `https://routing.ai4utech.com/api/stripe/webhook`. Its signing secret is stored in Vercel and must never be committed to source control.
+
+**Tax and activation**
+- Stripe automatic tax is disabled on all five Payment Links. No sales tax is currently added at checkout, per the owner's current collection status. Reassess legal obligations and enable collection before it becomes required.
+- Vercel production environment variables for the five links and webhook secret are configured.
+- `AI4U_ROUTER_BILLING_ENABLED=false` remains in place until the production database health endpoint is verified. Do not enable checkout before that check passes.
+- The existing legacy $0.99/month Router product and price were not modified.
 
 ## Implementation acceptance criteria
 
