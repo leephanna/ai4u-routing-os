@@ -77,9 +77,8 @@
     return state.currentTaskAccess;
   }
   function sameTask(goal) {
-    if (state.subscriptionActive) return true;
     const access = readAccess();
-    return !!(access && access.goal && String(access.goal).trim() === String(goal || "").trim());
+    return !!(access && access.mode === "task" && access.goal && String(access.goal).trim() === String(goal || "").trim());
   }
   function taskFromRoute() {
     return {
