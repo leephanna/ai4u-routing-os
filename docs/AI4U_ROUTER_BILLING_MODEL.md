@@ -25,7 +25,6 @@ A new verified account receives one free task only when all of these conditions 
 
 - Complexity score is 2 or lower.
 - Risk is Low or Medium.
-- Task stage is Idea/Vision, Prototype, or Proof/Evaluation.
 - The account has not previously claimed its free task.
 
 The complexity score is calculated server-side:
@@ -45,7 +44,7 @@ The complexity score is calculated server-side:
 | Multi-step / integration / migration / deployment / debugging indicators | +1 |
 | More than two requested output items | +1 |
 
-A high-risk or mission-critical task is never free. A complex first task receives its quote immediately; the free allowance remains available for a later eligible task.
+A high-risk or mission-critical task is never free. Technical stages receive higher complexity points, so involved repair, deployment, automation, and agent work will normally receive a paid quote. A complex first task receives its quote immediately; the free allowance remains available for a later eligible task.
 
 ## Unit-economics assumptions
 
