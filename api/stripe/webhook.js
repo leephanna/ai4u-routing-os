@@ -36,6 +36,7 @@ function dateFromUnix(value) {
 }
 
 async function activateSubscriptionPass(session) {
+  if (session.payment_status !== "paid" && session.payment_status !== "no_payment_required") return;
   const passId = String(session.client_reference_id || "");
   if (!passId) return;
   const subscriptionId = idOf(session.subscription);
@@ -67,7 +68,7 @@ async function activateTaskQuote(session) {
     "UPDATE ai4u_private.router_task_quotes SET status='paid',stripe_session_id=$2," +
     "stripe_customer_id=$3,paid_at=COALESCE(paid_at,now()),updated_at=now() " +
     "WHERE id=$1 AND amount_cents=$4 AND currency=$5 AND status IN ('quoted','expired')",
-    [quoteId, session.id, idOf(session.customer), Number(session.amount_total || 0), String(session.currency || "usd").toLowerCase()]
+    [quoteId, session.id, idOf(session.customer), Number((session.amount_subtotal == null ? session.amount_total : session.amount_subtotal) || 0), String(session.currency || "usd").toLowerCase()]
   );
 }
 
