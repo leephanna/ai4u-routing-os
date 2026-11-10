@@ -3984,17 +3984,7 @@ function toggleGlossary(trigger){
     if(body) body.classList.add('open');
   }
 }
-  const body = trigger.nextElementSibling;
-  const isOpen = trigger.classList.contains('open');
-  document.querySelectorAll('.glossary-trigger.open').forEach(function(t){
-    t.classList.remove('open');
-    if(t.nextElementSibling) t.nextElementSibling.classList.remove('open');
-  });
-  if(!isOpen){
-    trigger.classList.add('open');
-    if(body) body.classList.add('open');
-  }
-}
+
 
 async function refreshIntelligence(){
   let stats;
