@@ -1,4 +1,4 @@
-const { send } = require("../_lib/http");
+const { send } = require("../../lib/billing/http");
 module.exports = function (req, res) {
   send(res, 200, {
     enabled: process.env.AI4U_ROUTER_BILLING_ENABLED === "true",
