@@ -1,5 +1,5 @@
-const db = require("../_lib/db");
-const { send } = require("../_lib/http");
+const db = require("../../lib/billing/db");
+const { send } = require("../../lib/billing/http");
 module.exports = async function (req, res) {
   if (req.method !== "GET") return send(res, 405, { error: "Method not allowed" });
   const configured = !!(process.env.POSTGRES_HOST && process.env.POSTGRES_USER &&
