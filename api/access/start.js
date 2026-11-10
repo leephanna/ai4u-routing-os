@@ -14,6 +14,12 @@ module.exports = async function (req, res) {
       [user.id]
     );
     if (active.rows.length) return send(res, 200, { already_active: true, plan_code: active.rows[0].plan_code });
+    if (process.env.AI4U_ROUTER_BILLING_ENABLED !== "true") return send(res, 503, { error: "Checkout is not active yet." });
+    await db.query(
+      "INSERT INTO ai4u_private.router_users (user_id,email) VALUES ($1,$2) " +
+      "ON CONFLICT (user_id) DO UPDATE SET email=EXCLUDED.email, updated_at=now()",
+      [user.id, user.email]
+    );
     const link = plan === "annual" ? process.env.AI4U_ROUTER_LINK_ANNUAL : process.env.AI4U_ROUTER_LINK_MONTHLY;
     if (!link) return send(res, 503, { error: "Checkout is not configured yet." });
     const pass = await db.query(
