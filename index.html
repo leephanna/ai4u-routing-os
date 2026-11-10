@@ -1000,6 +1000,39 @@ canvas{max-width:100%;height:auto}
   #guide-card{right:10px;bottom:10px;width:calc(100vw - 20px);padding:16px}
 }
 
+
+/* ── AI4U billing and pricing ───────────────────────────── */
+.billing-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}
+.billing-card{position:relative;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:14px;min-width:0}
+.billing-card.featured{border-color:rgba(139,92,246,.55);box-shadow:0 0 30px rgba(139,92,246,.12),var(--shadow-card)}
+.billing-card-kicker{font-family:var(--font-head);font-size:10px;letter-spacing:2px;color:var(--cyan);text-transform:uppercase}
+.billing-card h3{font-family:var(--font-head);font-size:16px;letter-spacing:.4px;color:var(--white1)}
+.billing-price{font-family:var(--font-head);font-size:34px;font-weight:800;line-height:1.15;color:var(--white1);text-shadow:0 0 22px rgba(0,212,255,.16)}
+.billing-price small{font-family:var(--font-body);font-size:13px;font-weight:500;color:var(--white3);text-shadow:none}
+.billing-card p,.billing-card li{font-size:13px;color:var(--white2);line-height:1.65}
+.billing-card ul{padding-left:18px;display:grid;gap:7px;flex:1}
+.billing-card .btn{width:100%;margin-top:auto}
+.billing-pill{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(139,92,246,.4);background:rgba(139,92,246,.12);color:#c4b5fd;border-radius:99px;padding:5px 10px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;width:max-content}
+.billing-savings{color:var(--green);font-size:12px;font-weight:700}
+.billing-status{margin-top:18px;padding:12px 15px;border:1px solid var(--border);border-radius:10px;background:rgba(0,212,255,.05);color:var(--white2);font-size:12px}
+.billing-explainer{margin-top:22px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.billing-explainer .card{height:100%}
+.billing-fineprint{margin-top:18px;font-size:11px;line-height:1.7;color:var(--white3)}
+.billing-modal-backdrop{position:fixed;inset:0;z-index:10020;background:rgba(2,5,14,.82);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:18px}
+.billing-modal{width:min(540px,100%);max-height:90vh;overflow:auto;background:linear-gradient(145deg,rgba(16,24,47,.99),rgba(7,12,27,.99));border:1px solid rgba(139,92,246,.5);border-radius:18px;padding:26px;box-shadow:0 24px 90px rgba(0,0,0,.65),0 0 35px rgba(139,92,246,.13)}
+.billing-modal-kicker{font-family:var(--font-head);font-size:10px;letter-spacing:2px;color:var(--gold);margin-bottom:9px}
+.billing-modal h2{font-family:var(--font-head);font-size:19px;line-height:1.4;margin-bottom:12px;color:var(--white1)}
+.billing-modal p{font-size:13px;line-height:1.65;color:var(--white2);margin:10px 0}
+.billing-quote-price{font-family:var(--font-head);font-size:42px;font-weight:800;color:var(--white1);margin:8px 0 14px}
+.billing-quote-row{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px;color:var(--white2)}
+.billing-quote-row strong{color:var(--white1);text-align:right}
+.billing-modal-note{margin-top:14px;padding:12px;border:1px solid rgba(240,180,41,.2);border-radius:9px;background:rgba(240,180,41,.06);font-size:11px;line-height:1.65;color:var(--white2)}
+.billing-modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.billing-modal-actions .btn{flex:1;min-width:145px}
+.billing-field-label{display:block;margin:16px 0 7px;font-size:11px;font-weight:700;color:var(--white2);letter-spacing:.5px}
+.billing-email-input{width:100%}
+@media(max-width:900px){.billing-grid{grid-template-columns:1fr}.billing-explainer{grid-template-columns:1fr}.billing-card{padding:20px}}
+
 </style>
 </head>
 <body>
@@ -1024,6 +1057,7 @@ canvas{max-width:100%;height:auto}
     <button class="nav-btn" onclick="showPanel('ledger')">Ledger</button>
     <button class="nav-btn" onclick="showPanel('roadmap')">Roadmap</button>
     <button class="nav-btn" onclick="showPanel('settings')">Settings</button>
+    <button class="nav-btn" onclick="showPanel('pricing')">Pricing</button>
   </div>
   <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
     <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M1 1h16M1 7h16M1 13h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -1040,6 +1074,7 @@ canvas{max-width:100%;height:auto}
   <button class="nav-btn" onclick="showPanel('ledger');toggleMenu()">Ledger</button>
   <button class="nav-btn" onclick="showPanel('roadmap');toggleMenu()">Roadmap</button>
   <button class="nav-btn" onclick="showPanel('settings');toggleMenu()">Settings</button>
+  <button class="nav-btn" onclick="showPanel('pricing');toggleMenu()">Pricing</button>
 </div>
 
 <main id="main">
@@ -2765,7 +2800,86 @@ The output will include:
   </div>
 </div><!-- /panel-settings -->
 
+
+<!-- ═══════════════════════════════════════════════════════
+     PANEL: PRICING
+═══════════════════════════════════════════════════════ -->
+<div class="panel" id="panel-pricing">
+  <div class="section">
+    <div class="section-title">AI4U ACCESS</div>
+    <div class="section-heading">Choose how you want to use AI4U Router</div>
+    <p style="color:var(--white2);font-size:14px;max-width:760px;margin-top:10px">Start with one eligible free task. After that, choose a monthly membership, save with an annual membership, or pay only when you need a task routed.</p>
+    <div class="info-banner" style="margin-top:18px">
+      <div class="info-banner-icon">✦</div>
+      <div><strong>One free starter task for each new account.</strong> Simple, low-complexity tasks qualify. Higher-risk or more involved work receives a price estimate before you proceed. No charge is made unless you choose Pay &amp; Continue.</div>
+    </div>
+    <div id="billing-account-status" class="billing-status">Sign in when you are ready to use your free task or purchase access.</div>
+
+    <div class="billing-grid">
+      <article class="billing-card">
+        <div class="billing-card-kicker">MONTHLY MEMBERSHIP</div>
+        <h3>Stay Flexible</h3>
+        <div class="billing-price">$4.99 <small>/ month</small></div>
+        <p>For people who use AI4U regularly and want predictable monthly access.</p>
+        <ul>
+          <li>Unlimited task routing</li>
+          <li>Unlimited prompt generation</li>
+          <li>Task-specific verification guidance</li>
+          <li>Secure Stripe-hosted recurring billing</li>
+        </ul>
+        <button class="btn btn-primary" onclick="AI4UBilling.startSubscription('monthly')">Choose Monthly</button>
+      </article>
+
+      <article class="billing-card featured">
+        <div class="billing-pill">BEST ANNUAL VALUE</div>
+        <div class="billing-card-kicker">YEARLY MEMBERSHIP</div>
+        <h3>Save With Annual</h3>
+        <div class="billing-price">$49.99 <small>/ year</small></div>
+        <div class="billing-savings">Save $9.89 — about 17% vs. monthly</div>
+        <p>For regular users who want the lowest effective monthly price.</p>
+        <ul>
+          <li>Everything in Monthly</li>
+          <li>Unlimited task routing</li>
+          <li>Unlimited prompt generation</li>
+          <li>One annual payment</li>
+        </ul>
+        <button class="btn btn-primary" onclick="AI4UBilling.startSubscription('annual')">Choose Yearly</button>
+      </article>
+
+      <article class="billing-card">
+        <div class="billing-card-kicker">PAY BY TASK</div>
+        <h3>Only Pay When You Need It</h3>
+        <div class="billing-price">From $1.99 <small>/ task</small></div>
+        <p>Enter your task first. AI4U estimates the fee based on task complexity before you decide.</p>
+        <ul>
+          <li>Basic task: $1.99</li>
+          <li>Standard task: $2.99</li>
+          <li>Advanced task: $4.99</li>
+          <li>One route and prompt package per payment</li>
+        </ul>
+        <button class="btn btn-ghost" onclick="showPanel('router')">Enter a Task for an Estimate</button>
+      </article>
+    </div>
+
+    <div class="billing-explainer">
+      <div class="card">
+        <div class="card-title">What Your AI4U Access Covers</div>
+        <p style="font-size:13px;color:var(--white2);line-height:1.7;margin-top:10px">AI4U identifies a suitable tool, prepares task-specific instructions, and provides a checklist for reviewing the result. A pay-per-task purchase unlocks one task package. A membership unlocks ongoing routing and prompt generation.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">How Task Estimates Work</div>
+        <p style="font-size:13px;color:var(--white2);line-height:1.7;margin-top:10px">The estimate considers task stage, risk, length, and multi-step indicators. The quoted AI4U fee is fixed for that task. You can pay and continue or cancel without being charged.</p>
+      </div>
+    </div>
+    <p class="billing-fineprint">AI4U Router does not execute the task inside third-party AI platforms. Any subscription, credit, or usage charges from the AI platform you choose are separate and are paid directly to that provider. Prices are in USD; applicable taxes, if any, are shown by Stripe at checkout.</p>
+  </div>
+</div><!-- /panel-pricing -->
+
 </main><!-- /main -->
+
+<div id="billing-modal" class="billing-modal-backdrop" style="display:none" aria-hidden="true">
+  <section class="billing-modal" role="dialog" aria-modal="true" aria-labelledby="billing-modal-title"><div id="billing-modal-content"></div></section>
+</div>
 
 <!-- FOOTER -->
 <footer id="footer">
@@ -2774,6 +2888,7 @@ The output will include:
   <div class="footer-links">
     <a href="https://ai4utech.com" target="_blank" rel="noopener">AI4Utech.com</a>
     <a href="https://routing.ai4utech.com" target="_blank" rel="noopener">routing.ai4utech.com</a>
+    <a href="#" onclick="showPanel('pricing');return false">Pricing</a>
     <a href="https://github.com/leephanna/ai4u-routing-os" target="_blank" rel="noopener">GitHub</a>
     <a href="mailto:lee@ai4utech.com">lee@ai4utech.com</a>
   </div>
@@ -2805,6 +2920,8 @@ The output will include:
 <script src="supabase-config.js" onerror="void 0"></script>
 <!-- Supabase persistence layer — defines window.AI4U_SB -->
 <script src="supabase-persistence.js" onerror="window.AI4U_SB=null"></script>
+<script src="billing-config.js" onerror="window.AI4U_BILLING_CONFIG=null"></script>
+<script src="billing.js" onerror="window.AI4UBilling=null"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
@@ -2877,6 +2994,7 @@ function showPanel(id){
   if(id==='matrix') buildMatrix();
   if(id==='ledger') refreshLedger();
   if(id==='settings') loadSettingsUI();
+  if(id==='pricing' && window.AI4UBilling) AI4UBilling.refreshPricing();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -3101,7 +3219,24 @@ const CHECKLISTS = {
   business:   ['Test with real data (not dummy data)','Verify auth flows work end-to-end','Confirm data persists across sessions','Test the failure and recovery paths']
 };
 
-function runRouter(){
+async function runRouter(){
+  if(state.guideDemoActive){ runRouterCore(); return; }
+  const task = {
+    goal: (document.getElementById('r-goal')?.value || '').trim(),
+    stage: document.getElementById('r-stage')?.value || 'idea',
+    risk: document.getElementById('r-risk')?.value || 'medium',
+    asset: (document.getElementById('r-asset')?.value || '').trim(),
+    failure: (document.getElementById('r-failure')?.value || '').trim(),
+    output: (document.getElementById('r-output')?.value || '').trim()
+  };
+  if(window.AI4UBilling && typeof AI4UBilling.requestTaskAccess === 'function'){
+    const allowed = await AI4UBilling.requestTaskAccess(task, 'route');
+    if(!allowed) return;
+  }
+  runRouterCore();
+}
+
+function runRouterCore(){
   const stage   = document.getElementById('r-stage').value;
   const risk    = document.getElementById('r-risk').value;
   const goal    = document.getElementById('r-goal').value.trim();
@@ -3268,7 +3403,23 @@ function loadTemplate(key){
   showToast('✓ Template loaded — click Generate Prompt');
 }
 
-function generatePrompt(){
+async function generatePrompt(){
+  if(state.guideDemoActive){ generatePromptCore(); return; }
+  const task = {
+    goal: (document.getElementById('p-goal')?.value || '').trim(),
+    stage: document.getElementById('r-stage')?.value || 'idea',
+    risk: document.getElementById('r-risk')?.value || 'medium',
+    asset: '', failure: '',
+    output: (document.getElementById('p-format')?.value || '').trim()
+  };
+  if(window.AI4UBilling && typeof AI4UBilling.requestTaskAccess === 'function'){
+    const allowed = await AI4UBilling.requestTaskAccess(task, 'prompt');
+    if(!allowed) return;
+  }
+  generatePromptCore();
+}
+
+function generatePromptCore(){
   const platform    = document.getElementById('p-platform').value;
   const goal        = document.getElementById('p-goal').value.trim();
   const audience    = document.getElementById('p-audience').value.trim();
@@ -3583,6 +3734,7 @@ const GUIDE_STEPS = [
 ];
 
 function startGuidedTour(forceRestart){
+  state.guideDemoActive=true;
   const saved=JSON.parse(localStorage.getItem('ai4u_howto_progress')||'{}');
   state.guideStep=(!forceRestart && saved && !saved.completed) ? Math.min(Number(saved.lastStep)||0,GUIDE_STEPS.length-1) : 0;
   const overlay=document.getElementById('guide-overlay');
@@ -3642,6 +3794,7 @@ function moveGuide(direction){
 }
 
 function endGuidedTour(completed){
+  state.guideDemoActive=false;
   document.querySelectorAll('.guide-focus').forEach(function(el){el.classList.remove('guide-focus');});
   const overlay=document.getElementById('guide-overlay');
   if(overlay){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');}
@@ -3714,6 +3867,7 @@ document.addEventListener('DOMContentLoaded',()=>{
       if(AI4U_SB.canSync()) refreshIntelligence();
     });
   }
+  if(window.AI4UBilling && typeof AI4UBilling.init === 'function') AI4UBilling.init();
 });
 
 // Close mobile menu on outside click
