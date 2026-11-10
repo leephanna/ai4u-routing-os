@@ -478,6 +478,7 @@ body::after{
   font-family:var(--font-head);font-size:18px;font-weight:800;
   color:var(--cyan);
 }
+.route-note{font-size:9px;line-height:1.45;color:var(--white3);margin-top:3px;max-width:280px}
 .route-confidence{
   font-family:var(--font-mono);font-size:12px;
   color:var(--green);
@@ -870,7 +871,7 @@ canvas{max-width:100%;height:auto}
 .howto-hero-copy{max-width:690px;color:var(--white2);font-size:clamp(15px,1.7vw,18px);line-height:1.8;margin-bottom:26px}
 .howto-hero-ctas{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .howto-proofline{display:flex;gap:14px 22px;flex-wrap:wrap;margin-top:22px;color:var(--white3);font-size:11px}
-.howto-proofline span: first-letter{color:var(--green)}
+.howto-proofline span::first-letter{color:var(--green)}
 .howto-honesty{max-width:720px;margin-top:22px;padding:14px 16px;border-left:3px solid var(--violet);background:rgba(139,92,246,.07);border-radius:0 10px 10px 0;color:var(--white2);font-size:12px;line-height:1.7}
 .howto-honesty strong{color:var(--white1)}
 .howto-hero-visual{min-height:310px;display:flex;align-items:center;justify-content:center;position:relative;isolation:isolate}
@@ -3071,7 +3072,7 @@ function inferTaskRoute(goal,stage){
   if(/\b(research|compare|comparison|product|prices?|reviews?|statistics|market trends|competitors?|source links)\b/i.test(g)) return 'research';
   if(/\b(linkedin|instagram|social media|marketing|campaign|content calendar|brand voice|business posts)\b/i.test(g)) return 'marketing';
   if(/\b(email|resume|cv|cover letter|write|draft|rewrite|proofread|blog|article|proposal|letter)\b/i.test(g)) return 'writing';
-  if(/\b(image|illustration|logo|graphic|video|thumbnail|visual|poster|flyer|creative concept)\b/i.test(g)) return 'visual';
+  if(/\b(images?|illustrations?|logos?|graphics?|videos?|thumbnails?|visuals?|posters?|flyers?|creative concept)\b/i.test(g)) return 'visual';
   if(/\b(explain|understand|learn|teach|study|summarize|simplify|translate|knowledge check)\b/i.test(g)) return 'learning';
   if(/\b(organize|organise|plan|roadmap|outline|brainstorm|project plan|prioritize|prioritise|next actions)\b/i.test(g)) return 'planning';
   return null;
@@ -3118,7 +3119,7 @@ function runRouter(){
   const routeCategory = taskRouteKey ? TASK_ROUTE_PROFILES[taskRouteKey].label : ({idea:'New idea / first draft',prototype:'First working version',broken:'Repair / troubleshooting',production:'Launch / deployment',automation:'Automation',agent:'AI agent or widget',proof:'Testing / evaluation',business:'Business system'}[stage] || 'General task');
   const routeSource = taskRouteKey ? 'Task-specific match' : 'Stage-based starting point';
   const promptPlatform = route.promptPlatform || ({'Manus Agent':'manus','Replit Agent':'replit','Claude Code':'claude-code','Vercel':'claude','Trigger.dev':'claude','promptfoo':'claude','Supabase':'claude'}[route.platform] || 'chatgpt');
-  const fallback = route.fallback || (stage==='production'?'Cloudflare Pages':stage==='broken'?'Claude Code':stage==='automation'?'Zapier':stage==='proof'?'LangSmith':'Claude Sonnet');
+  const fallback = route.fallback || (stage==='production'?'Cloudflare Pages':stage==='broken'?'Manus Agent':stage==='automation'?'Zapier':stage==='proof'?'LangSmith':'Claude Sonnet');
   const checklist = CHECKLISTS[stage] || CHECKLISTS['idea'];
   const riskNote = RISK_NOTES[risk] || '';
 
