@@ -49,14 +49,17 @@ async function activateSubscriptionPass(session) {
   );
   if (!updated.rows.length) return;
   const pass = updated.rows[0];
+  const userRecord = await db.query("SELECT email FROM ai4u_private.router_users WHERE user_id=$1 LIMIT 1", [pass.user_id]);
+  const email = userRecord.rows[0] ? userRecord.rows[0].email : null;
   await db.query(
     "INSERT INTO ai4u_private.router_entitlements " +
-    "(user_id,stripe_customer_id,stripe_subscription_id,plan_code,status) " +
-    "VALUES ($1,$2,$3,$4,'active') " +
-    "ON CONFLICT (user_id) DO UPDATE SET stripe_customer_id=EXCLUDED.stripe_customer_id," +
+    "(user_id,email,stripe_customer_id,stripe_subscription_id,plan_code,status) " +
+    "VALUES ($1,$2,$3,$4,$5,'active') " +
+    "ON CONFLICT (user_id) DO UPDATE SET email=EXCLUDED.email," +
+    "stripe_customer_id=EXCLUDED.stripe_customer_id," +
     "stripe_subscription_id=EXCLUDED.stripe_subscription_id,plan_code=EXCLUDED.plan_code," +
     "status='active',current_period_end=NULL,cancel_at_period_end=false,updated_at=now()",
-    [pass.user_id, customerId, subscriptionId, pass.plan_code]
+    [pass.user_id, email, customerId, subscriptionId, pass.plan_code]
   );
 }
 
