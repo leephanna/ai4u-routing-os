@@ -140,6 +140,17 @@ Prices above are before any applicable sales tax, VAT, or GST. If Stripe Tax Bas
 - `AI4U_ROUTER_BILLING_ENABLED=false` remains in place until the production database health endpoint is verified. Do not enable checkout before that check passes.
 - The existing legacy $0.99/month Router product and price were not modified.
 
+## Database connectivity correction — 2026-11-10
+
+The first production health check reported `database_configured: true` but `database_connected: false`. Review found that the initial billing database client assembled a direct connection from `POSTGRES_HOST`, `POSTGRES_USER`, and related variables, while the Vercel/Supabase integration also supplied pooled connection URLs that the client did not use.
+
+The client now prefers `POSTGRES_URL`, then `POSTGRES_PRISMA_URL`, and falls back to the explicit host variables only if pooled URLs are absent. The per-instance pool is capped at one connection, consistent with Supabase guidance for serverless workloads. The health endpoint now initializes and verifies the private billing schema and returns a safe error code on failure.
+
+- Fix merged to main: `739891aa7ed91cc51db4cc38dbde465d123773b9`.
+- Production deployment: `dpl_u2UmqXkTGCyy86FCGiw2uZjweyaE`, READY, alias `routing.ai4utech.com`.
+- Verification after this correction: pending owner refresh of `/api/billing/health`.
+- Billing remains disabled until the health response confirms database connectivity and schema readiness.
+
 ## Implementation acceptance criteria
 
 - [ ] Pricing page shows Free, Monthly, Annual, and Pay-per-task choices.
