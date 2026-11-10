@@ -6,7 +6,7 @@ module.exports = async function (req, res) {
     process.env.POSTGRES_PASSWORD && process.env.POSTGRES_DATABASE);
   if (!configured) return send(res, 503, { ok: false, database_configured: false });
   try {
-    await db.query("SELECT 1");
+    await db.getPool().query("SELECT 1");
     return send(res, 200, {
       ok: true,
       database_configured: true,
