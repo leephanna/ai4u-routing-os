@@ -168,3 +168,21 @@ The client now prefers `POSTGRES_URL`, then `POSTGRES_PRISMA_URL`, and falls bac
 ---
 
 AI4U, LLC · Lee Hanna © 2026 AI4U, LLC. All rights reserved.
+
+## PostgreSQL SSL compatibility fix and health verification — 2026-11-10
+
+The production health check after the pooled-connection change returned `SELF_SIGNED_CERT_IN_CHAIN`. The Router uses `pg@8.16.3`. The node-postgres documentation explains that SSL-related URL parameters (`sslmode`, `sslrootcert`, `sslcert`, `sslkey`, and related flags) can replace the explicit `ssl` object passed to `Pool`. This can cause the connection-string settings to override the application's intended TLS configuration.
+
+The connection client now normalizes the pooled connection URL by removing those SSL-specific query parameters while preserving all non-SSL parameters, then applies the existing explicit TLS configuration. The schema initializer was also corrected to separate SQL statements with actual newline characters.
+
+**Production proof**
+- GitHub PR #10 merged to main: `edf82fdb85c171880859505776b555275bf9e815`.
+- Vercel production deployment: `dpl_MJjaFsijJvdJdmqnQP8Pe8ZASqbu`, state READY, alias `routing.ai4utech.com`.
+- Live `GET /api/billing/health` returned: `ok=true`, `database_configured=true`, `database_connected=true`, `database_schema_ready=true`, `connection_mode=supabase-pooled`, `webhook_configured=true`, `billing_enabled=false`.
+- Live `GET /api/billing/config` returned `enabled=false` and the expected price configuration.
+
+**TLS security caveat and next gate**
+
+The current compatibility configuration keeps the PostgreSQL connection encrypted, but uses `rejectUnauthorized: false`; it does not authenticate the database server's certificate chain or hostname. This is not the desired final production security posture. Supabase documents `verify-full` with the project's CA certificate as the strongest verification mode. Before activating live checkout, obtain the Supabase CA certificate from the project's Database Settings → SSL Configuration, add it as a protected Vercel production environment value (for example, `SUPABASE_DB_SSL_CA`), update the client to use `ssl: { ca: process.env.SUPABASE_DB_SSL_CA, rejectUnauthorized: true }`, remove any URL SSL parameters, and rerun the health check. Keep `AI4U_ROUTER_BILLING_ENABLED=false` until that verification and the remaining customer subscription-management gate are complete.
+
+No database passwords, Stripe secrets, payment links, or other credentials were changed or added to source control.
