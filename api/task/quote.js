@@ -32,6 +32,12 @@ module.exports = async function (req, res) {
       "ON CONFLICT (user_id) DO UPDATE SET email=EXCLUDED.email, updated_at=now()",
       [user.id, user.email]
     );
+    const recentQuotes = await db.query(
+      "SELECT COUNT(*)::int AS count FROM ai4u_private.router_task_quotes " +
+      "WHERE user_id=$1 AND created_at > now() - interval '10 minutes'",
+      [user.id]
+    );
+    if (recentQuotes.rows[0].count >= 10) return send(res, 429, { error: "Too many estimates in a short time. Please wait a few minutes and try again." });
     const usage = await db.query("SELECT free_task_used_at FROM ai4u_private.router_users WHERE user_id=$1", [user.id]);
     const freeAvailable = !usage.rows[0].free_task_used_at;
     const quote = computeTaskQuote(task, freeAvailable);
