@@ -62,7 +62,7 @@
   }
   function clearPending() {
     state.pendingTask = null;
-    try { sessionStorage.removeItem(STORAGE_TASK); } catch (error) {}
+    try { sessionStorage.removeItem(STORAGE_TASK); sessionStorage.removeItem("ai4u_router_pending_quote"); } catch (error) {}
   }
   function saveAccess(access) {
     state.currentTaskAccess = access;
@@ -123,7 +123,7 @@
   function showAuthModal() {
     showModal(
       '<div class="billing-modal-kicker">AI4U ACCOUNT</div>' +
-      '<h2>Claim your free starter task</h2>' +
+      '<h2 id="billing-modal-title">Claim your free starter task</h2>' +
       '<p>Sign in with your email to claim your one free eligible task and keep your access connected to your account.</p>' +
       '<label class="billing-field-label" for="billing-email">Email address</label>' +
       '<input class="form-input billing-email-input" id="billing-email" type="email" autocomplete="email" placeholder="you@example.com">' +
@@ -208,7 +208,7 @@
       if (quote.amount_cents === 0 && quote.free_eligible) {
         showModal(
           '<div class="billing-modal-kicker">YOUR FIRST TASK</div>' +
-          '<h2>Your starter task is free</h2>' +
+          '<h2 id="billing-modal-title">Your starter task is free</h2>' +
           '<div class="billing-quote-price">' + money(0) + '</div>' +
           '<p>This task is below the free-task complexity limit. You can use one eligible starter task per account.</p>' +
           '<div class="billing-quote-row"><span>Complexity score</span><strong>' + quote.complexity_score + ' / 2</strong></div>' +
@@ -221,7 +221,7 @@
         const amount = money(quote.amount_cents);
         showModal(
           '<div class="billing-modal-kicker">TASK COST ESTIMATE</div>' +
-          '<h2>Review your task price</h2>' +
+          '<h2 id="billing-modal-title">Review your task price</h2>' +
           '<div class="billing-quote-price">' + amount + '</div>' +
           '<div class="billing-quote-row"><span>Complexity category</span><strong>' + tierLabel + '</strong></div>' +
           '<div class="billing-quote-row"><span>Complexity score</span><strong>' + quote.complexity_score + '</strong></div>' +
@@ -359,15 +359,16 @@
     const params = new URLSearchParams(global.location.search);
     const sessionId = params.get("session_id");
     if (params.get("checkout") === "success" && sessionId) {
-      await confirmPaymentReturn(sessionId);
-      global.history.replaceState({}, "", global.location.pathname);
+      const confirmed = await confirmPaymentReturn(sessionId);
+      if (confirmed) global.history.replaceState({}, "", global.location.pathname);
       return;
     }
     if (params.get("billing_auth") === "1") {
       const pending = readPending();
       if (pending && pending.task) {
         restoreTask(pending.task);
-        await requestTaskAccess(pending.task, pending.purpose);
+        const allowed = await requestTaskAccess(pending.task, pending.purpose);
+        if (allowed) runAfterAccess(pending.purpose);
       }
       const plan = sessionStorage.getItem("ai4u_router_pending_plan");
       if (plan && token()) {
