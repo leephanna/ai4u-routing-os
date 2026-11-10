@@ -1,6 +1,6 @@
 const crypto = require("crypto");
-const db = require("../_lib/db");
-const { send } = require("../_lib/http");
+const db = require("../../lib/billing/db");
+const { send } = require("../../lib/billing/http");
 
 module.exports.config = { api: { bodyParser: false } };
 
