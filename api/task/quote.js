@@ -1,8 +1,8 @@
 const crypto = require("crypto");
-const db = require("../_lib/db");
-const { requireUser } = require("../_lib/auth");
-const { computeTaskQuote } = require("../_lib/quote");
-const { send, readJson, fail } = require("../_lib/http");
+const db = require("../../lib/billing/db");
+const { requireUser } = require("../../lib/billing/auth");
+const { computeTaskQuote } = require("../../lib/billing/quote");
+const { send, readJson, fail } = require("../../lib/billing/http");
 
 module.exports = async function (req, res) {
   if (req.method !== "POST") return send(res, 405, { error: "Method not allowed" });
