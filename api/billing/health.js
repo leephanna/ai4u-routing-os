@@ -4,6 +4,21 @@ const { send } = require("../../lib/billing/http");
 module.exports = async function (req, res) {
   if (req.method !== "GET") return send(res, 405, { error: "Method not allowed" });
 
+  if (req.query && req.query.baseline === "1") {
+    try {
+      const result = await db.query(
+        "SELECT baseline_id, report, created_at FROM ai4u_private.router_eval_baselines WHERE baseline_id=$1",
+        ["legacy-2026-11-11"]
+      );
+      if (!result.rows.length) return send(res, 404, { error: "Baseline not available" });
+      const row = result.rows[0];
+      return send(res, 200, { baseline_id: row.baseline_id, recorded_at: row.created_at, report: row.report });
+    } catch (error) {
+      console.error("Router baseline read failed", { code: error.code || "UNKNOWN" });
+      return send(res, 503, { error: "Baseline storage is temporarily unavailable" });
+    }
+  }
+
   const hasPooledUrl = !!(process.env.POSTGRES_URL || process.env.POSTGRES_PRISMA_URL);
   const hasDirectParts = !!(process.env.POSTGRES_HOST && process.env.POSTGRES_USER &&
     process.env.POSTGRES_PASSWORD && process.env.POSTGRES_DATABASE);
