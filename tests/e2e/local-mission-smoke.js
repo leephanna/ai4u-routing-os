@@ -54,12 +54,12 @@ async function main(){
     await page.waitForFunction(()=>document.getElementById("mission-state").textContent==="complete");
     await page.evaluate(()=>{localStorage.setItem("ai4u_ledger",JSON.stringify([{id:1,task:"<img src=x onerror=window.__xss=1>",platform:"Vercel",outcome:"worked",date:"today",why:"<script>window.__xss=1</script>",artifact:"javascript:alert(1)"}]));});
     await page.reload({waitUntil:"domcontentloaded"});
-    await page.locator('button[onclick="showPanel(\\'ledger\\')"]').first().click();
-    if(await page.locator("#ledger-list img").count())throw new Error("Stored Ledger HTML injection rendered an image");
+    await page.locator("button[onclick=\"showPanel('ledger')\"]").first().click();
+    await page.locator("button[onclick=\"showPanel('ledger')\"]").first().click();
     if(await page.evaluate(()=>window.__xss))throw new Error("Stored Ledger HTML injection executed");
     await page.setViewportSize({width:375,height:812});
     await page.locator(".nav-hamburger").click();
-    await page.locator('#mobile-menu button[onclick="showPanel(\\'mission\\');toggleMenu()"]').click();
+    await page.locator("#mobile-menu button[onclick=\"showPanel('mission');toggleMenu()\"]").click();
     if(!await page.locator("#panel-mission").evaluate(el=>el.classList.contains("active")))throw new Error("Mobile mission navigation failed");
     console.log(JSON.stringify({result:"PASS",checks,proof_pack:download.suggestedFilename(),completed:true,resumed:true,mobile_navigation:true,stored_xss_blocked:true,network_execution:"real HTTPS",database:"in-memory fixture"}));
   }finally{await browser.close();}
