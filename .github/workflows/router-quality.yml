@@ -25,14 +25,14 @@ jobs:
         run: npm test
       - name: Routing reference evaluation
         run: |
-          npm run eval:router > routing-evaluation.log
-          node -e 'const x=require("./evals/baseline-2026-11-11.json");if(x.cases!==30||x.error_count!==0)process.exit(1);'
+          node scripts/evaluate-routing.js > routing-evaluation.json
+          node -e 'const x=require("./routing-evaluation.json");if(x.cases!==30||x.error_count!==0||x.agreement_count<20)process.exit(1);'
       - name: Preserve quality proof
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: router-quality-proof
           path: |
-            routing-evaluation.log
+            routing-evaluation.json
             evals/baseline-2026-11-11.json
           retention-days: 90
