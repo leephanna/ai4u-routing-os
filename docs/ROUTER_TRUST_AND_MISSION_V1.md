@@ -53,5 +53,11 @@
 - Stripe live checkout remains OFF. Existing subscriptions and Customer Portal setup are outside this change.
 - Zapier workflows, if added later, must be saved/exported separately to preserve their configurations.
 
+## Observed browser smoke test (2026-11-11)
+- Chromium headless smoke: five real HTTPS checks, scoped Proof Pack download, user satisfaction gate, resume after refresh, mobile navigation at 375 px, and stored Ledger XSS regression all passed.
+- Browser test uses an in-memory mission API fixture; the HTTPS request is real. This does **not** verify live Supabase mission persistence or authenticated Vercel Preview HTTP responses.
+- Vercel Preview deployment builds successfully, but Vercel Authentication protects its URL and the project has Production-only database credentials. We did not weaken protection or expose Production credentials to Preview.
+- Proof record: `evals/browser-smoke-2026-11-11.json`.
+
 ## Manual usability pilot still needed
 Recruit 5 first-time users. Give each one a website URL without coaching; observe time to first completed audit, confusion, sign-in friction, recovery after a failed check, and ability to retrieve proof after refresh. Record actual measurements in a separate study, not in the current reference-routing score.
