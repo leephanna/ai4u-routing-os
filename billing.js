@@ -164,7 +164,11 @@
   }
   function updatePortalButton() {
     const button = byId("billing-manage-subscription");
-    if (button) button.hidden = !(state.hasPortal && state.portalAvailable);
+    if (button) {
+      const show = state.hasPortal && state.portalAvailable;
+      button.hidden = !show;
+      button.style.display = show ? "inline-flex" : "none";
+    }
   }
   async function refreshAccountStatus() {
     const status = byId("billing-account-status");
