@@ -41,8 +41,8 @@
 - This workflow **does not create, publish, or modify websites**. It is the first bounded execution capability.
 - HTTPS response checks do not establish browser rendering, image loading, accessibility, SEO quality, payment functionality, or overall site readiness.
 - A failed check is not a full security diagnosis. No data from the target HTML is returned to the browser except a bounded page title and network metadata.
-- Missions require account authentication and are rate-limited (20 new missions/hour; 10 attempts/mission).
-- Public targets only; IP literals, private/reserved addresses, custom ports, URL credentials, and query parameters are blocked to reduce SSRF risk.
+- Missions require account authentication and are rate-limited (5 new missions/hour; 5 attempts/mission).
+- Public targets only; IP literals, private/reserved addresses, custom ports, URL credentials, query parameters, and non-root paths are blocked to reduce SSRF risk.
 - The browser download is a copy; the owner-scoped mission and its proof remain in the private database.
 
 ## Proof & persistence
