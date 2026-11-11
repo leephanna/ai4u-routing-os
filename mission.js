@@ -45,7 +45,7 @@
     markStep("mission-step-2",checks.length>0);
     markStep("mission-step-3",checks.length>0);
     markStep("mission-step-4",mission.status==="complete");
-    byId("mission-retry").disabled=busy||mission.attempts>=10;
+    byId("mission-retry").disabled=busy||mission.attempts>=5;
     byId("mission-accept").disabled=busy||!verified||mission.status==="complete";
     byId("mission-download").disabled=checks.length===0;
     byId("mission-attempts").textContent=String(mission.attempts);
