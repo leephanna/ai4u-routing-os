@@ -66,7 +66,7 @@
       render(mission);
       await run();
     }catch(e){setMessage(e.message);}
-    finally{busy=false;byId("mission-start").disabled=false;}
+    finally{busy=false;byId("mission-start").disabled=false; if(current){const checks=Array.isArray(current.checks)?current.checks:[];byId("mission-accept").disabled=!(checks.length&&checks.every(c=>c.status==="pass")&&current.status==="verified");}}
   }
   async function run(){
     if(!current)return;
@@ -74,7 +74,7 @@
     setMessage("Executing HTTPS, response, title, and viewport checks. Please wait...");
     try{const mission=await request("POST",{action:"run",mission_id:current.id});render(mission);}
     catch(e){setMessage(e.message+" The mission is preserved; select Resume then Retry.");}
-    finally{byId("mission-retry").disabled=false;}
+    finally{byId("mission-retry").disabled=!!(current&&current.attempts>=5);}
   }
   async function resume(){
     let id;try{id=localStorage.getItem(KEY);}catch(_){}
