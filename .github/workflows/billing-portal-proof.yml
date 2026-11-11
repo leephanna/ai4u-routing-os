@@ -1,0 +1,41 @@
+name: Router Billing & Portal Proof
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  no-charge-billing-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Use Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Syntax checks
+        run: |
+          node --check billing.js
+          node --check api/billing/portal.js
+          node --check lib/billing/stripe-portal.js
+      - name: Billing and portal tests (mock Stripe; no charges)
+        run: |
+          mkdir -p proof
+          set -o pipefail
+          npm run test:billing 2>&1 | tee proof/billing-tests.log
+      - name: Preserve test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: router-billing-portal-proof
+          path: proof/billing-tests.log
+          if-no-files-found: ignore
+          retention-days: 90

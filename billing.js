@@ -3,6 +3,7 @@
   const cfg = global.AI4U_BILLING_CONFIG || {};
   const state = {
     client: null, session: null, enabled: false, subscriptionActive: false,
+    hasPortal: false, portalAvailable: false,
     currentTaskAccess: null, pendingTask: null, handlingReturn: false
   };
   const STORAGE_TASK = "ai4u_router_pending_task";
@@ -119,11 +120,12 @@
       global.runRouterCore();
     }
   }
-  function showAuthModal() {
+  function showAuthModal(purpose) {
+    const forPortal = purpose === "portal";
     showModal(
       '<div class="billing-modal-kicker">AI4U ACCOUNT</div>' +
-      '<h2 id="billing-modal-title">Claim your free starter task</h2>' +
-      '<p>Sign in with your email to claim your one free eligible task and keep your access connected to your account.</p>' +
+      '<h2 id="billing-modal-title">' + (forPortal ? 'Manage your Router membership' : 'Claim your free starter task') + '</h2>' +
+      '<p>' + (forPortal ? 'Sign in with the email associated with your Router membership to securely manage billing.' : 'Sign in with your email to claim your one free eligible task and keep your access connected to your account.') + '</p>' +
       '<label class="billing-field-label" for="billing-email">Email address</label>' +
       '<input class="form-input billing-email-input" id="billing-email" type="email" autocomplete="email" placeholder="you@example.com">' +
       '<div id="billing-auth-message" class="billing-modal-note">We will email you a secure sign-in link. No password required.</div>' +
@@ -134,7 +136,7 @@
   async function ensureSignedIn(task, purpose) {
     if (token()) return true;
     if (task) savePending(task, purpose);
-    showAuthModal();
+    showAuthModal(purpose);
     return false;
   }
   async function sendMagicLink() {
@@ -160,23 +162,49 @@
     if (message) message.textContent = "Sign-in link sent. Open the email on this device, click the link, then return here. Your task will be waiting.";
     notify("Secure sign-in link sent. Check your email.", 5000);
   }
+  function updatePortalButton() {
+    const button = byId("billing-manage-subscription");
+    if (button) {
+      const show = state.hasPortal && state.portalAvailable;
+      button.hidden = !show;
+      button.style.display = show ? "inline-flex" : "none";
+    }
+  }
   async function refreshAccountStatus() {
     const status = byId("billing-account-status");
-    if (!state.enabled) {
-      if (status) status.textContent = "Payments are being prepared. The free experience remains available.";
-      return;
-    }
     if (!token()) {
-      if (status) status.textContent = "Sign in when you are ready to use your free task or purchase access.";
+      state.subscriptionActive = false;
+      state.hasPortal = false;
+      updatePortalButton();
+      if (status) status.textContent = state.enabled ?
+        "Sign in when you are ready to use your free task or purchase access." :
+        "Payments are being prepared. The free experience remains available.";
       return;
     }
     try {
       const access = await api("/api/access/check", { method: "GET" });
       state.subscriptionActive = !!access.subscription_active;
-      if (status) status.textContent = access.subscription_active ?
-        "Active " + (access.plan_code === "annual" ? "annual" : "monthly") + " membership" :
-        "Signed in as " + (access.email || "your account") + ". One free eligible task is available if you have not used it.";
+      state.hasPortal = !!access.has_portal;
+      updatePortalButton();
+      if (status) {
+        if (access.subscription_active) {
+          status.textContent = "Active " + (access.plan_code === "annual" ? "annual" : "monthly") +
+            " membership" + (access.cancel_at_period_end ? " · Scheduled to end at the billing period's close." : ".");
+        } else if (state.hasPortal) {
+          status.textContent = "Signed in as " + (access.email || "your account") +
+            ". Your previous membership billing records are available.";
+        } else {
+          status.textContent = "Signed in as " + (access.email || "your account") +
+            (state.enabled ? ". One free eligible task is available if you have not used it." :
+              ". Checkout is being prepared; the free experience remains available.");
+        }
+        if (state.hasPortal && !state.portalAvailable) {
+          status.textContent += " Self-service billing setup is being finalized.";
+        }
+      }
     } catch (error) {
+      state.hasPortal = false;
+      updatePortalButton();
       if (status) status.textContent = "Account status could not be checked right now.";
     }
   }
@@ -278,6 +306,27 @@
     clearPending();
     closeModal();
   }
+  async function openPortal() {
+    if (!token()) {
+      try { sessionStorage.setItem("ai4u_router_pending_portal", "1"); } catch (error) {}
+      showAuthModal("portal");
+      return;
+    }
+    if (!state.portalAvailable) {
+      notify("Subscription management is being configured. Please try again later.", 5000);
+      return;
+    }
+    try {
+      const result = await api("/api/billing/portal", { method: "POST", body: "{}" });
+      const url = new URL(result.url);
+      if (url.protocol !== "https:" || url.hostname !== "billing.stripe.com") {
+        throw new Error("Stripe returned an unexpected portal destination.");
+      }
+      global.location.assign(url.toString());
+    } catch (error) {
+      notify(error.message || "Subscription management is temporarily unavailable.", 5000);
+    }
+  }
   async function startSubscription(plan) {
     if (!state.enabled) {
       notify("Checkout is not active yet. Please try again later.");
@@ -362,6 +411,11 @@
       if (confirmed) global.history.replaceState({}, "", global.location.pathname);
       return;
     }
+    if (params.get("portal") === "return") {
+      await refreshAccountStatus();
+      global.history.replaceState({}, "", global.location.pathname);
+      return;
+    }
     if (params.get("billing_auth") === "1") {
       const pending = readPending();
       if (pending && pending.task) {
@@ -374,6 +428,10 @@
         sessionStorage.removeItem("ai4u_router_pending_plan");
         await startSubscription(plan);
       }
+      if (token() && sessionStorage.getItem("ai4u_router_pending_portal") === "1") {
+        sessionStorage.removeItem("ai4u_router_pending_portal");
+        await openPortal();
+      }
       global.history.replaceState({}, "", global.location.pathname);
     }
   }
@@ -384,6 +442,7 @@
     try {
       const config = await fetch("/api/billing/config", { cache: "no-store" }).then(function (r) { return r.json(); });
       state.enabled = !!config.enabled;
+      state.portalAvailable = !!config.portal_available;
     } catch (error) { state.enabled = false; }
     if (global.supabase && typeof global.supabase.createClient === "function" && cfg.supabaseUrl && cfg.supabasePublishableKey) {
       state.client = global.supabase.createClient(cfg.supabaseUrl, cfg.supabasePublishableKey, {
@@ -409,6 +468,7 @@
     init: init,
     requestTaskAccess: requestTaskAccess,
     startSubscription: startSubscription,
+    openPortal: openPortal,
     refreshPricing: refreshPricing,
     sendMagicLink: sendMagicLink,
     closeModal: closeModal,
