@@ -1050,6 +1050,7 @@ canvas{max-width:100%;height:auto}
   <div class="nav-links">
     <button class="nav-btn active" onclick="showPanel('dashboard')">Mission</button>
     <button class="nav-btn" onclick="showPanel('howto')">How To Use</button>
+    <button class="nav-btn" onclick="showPanel('mission')">Mission Runner</button>
     <button class="nav-btn" onclick="showPanel('router')">Route Engine</button>
     <button class="nav-btn" onclick="showPanel('matrix')">Platform Matrix</button>
     <button class="nav-btn" onclick="showPanel('prompt')">Prompt Gen</button>
@@ -1067,6 +1068,7 @@ canvas{max-width:100%;height:auto}
 <div id="mobile-menu">
   <button class="nav-btn" onclick="showPanel('dashboard');toggleMenu()">Mission Control</button>
   <button class="nav-btn" onclick="showPanel('howto');toggleMenu()">How To Use</button>
+  <button class="nav-btn" onclick="showPanel('mission');toggleMenu()">Mission Runner</button>
   <button class="nav-btn" onclick="showPanel('router');toggleMenu()">Route Engine</button>
   <button class="nav-btn" onclick="showPanel('matrix');toggleMenu()">Platform Matrix</button>
   <button class="nav-btn" onclick="showPanel('prompt');toggleMenu()">Prompt Gen</button>
@@ -1237,7 +1239,8 @@ ai4uShowExample(0);
 
     <div class="hero-ctas">
       <a href="https://ai4utech.com" target="_blank" rel="noopener" class="btn btn-gold">Visit AI4Utech.com →</a>
-      <button class="btn btn-primary" onclick="showPanel('router')">Start a Route →</button>
+      <button class="btn btn-primary" onclick="showPanel('mission')">Start a Mission →</button>
+      <button class="btn btn-ghost" onclick="showPanel('router')">Explore Route Engine</button>
       <button class="btn btn-ghost" onclick="showPanel('proof')">View Proof Protocol</button>
       <a href="https://github.com/leephanna/ai4u-routing-os" target="_blank" rel="noopener" class="btn btn-ghost">Open GitHub Repo</a>
     </div>
@@ -2760,6 +2763,50 @@ The output will include:
 
 
 <!-- ═══════════════════════════════════════════════════════
+     FIRST END-TO-END MISSION: WEBSITE READINESS
+═══════════════════════════════════════════════════════ -->
+<div class="panel" id="panel-mission">
+  <div class="section">
+    <div class="section-title">Mission Runner · Working Pilot</div>
+    <div class="section-heading">Website Launch Readiness</div>
+    <p class="section-sub">This first executable workflow checks a public HTTPS homepage, records actual network evidence, supports retry/resume, and creates a downloadable Proof Pack. It does not build or publish a website, simulate a browser, or test payments.</p>
+    <div class="card" style="margin-top:22px;max-width:860px">
+      <div class="card-title">DO THIS NEXT · Enter the website to check</div>
+      <div class="form-group" style="margin-top:16px">
+        <label class="form-label" for="mission-url">Public HTTPS homepage URL (no query parameters)</label>
+        <input class="form-input" id="mission-url" type="url" placeholder="https://your-website.com/" autocomplete="url" maxlength="2048">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="mission-start" class="btn btn-primary" type="button" onclick="AI4UMission.start()">Start &amp; Run Website Checks</button>
+        <button class="btn btn-ghost" type="button" onclick="AI4UMission.resume()">Resume Last Mission</button>
+        <button class="btn btn-ghost" type="button" onclick="showPanel('settings')">Account Sign-In</button>
+      </div>
+      <p id="mission-message" style="font-size:12px;color:var(--white2);margin-top:14px" role="status" aria-live="polite">Sign in to save the mission to your account. No payment is required while checkout is disabled.</p>
+    </div>
+    <div id="mission-result" hidden style="max-width:860px">
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Live Mission Progress</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px">
+          <div><strong id="mission-step-1">○</strong> Saved to database</div>
+          <div><strong id="mission-step-2">○</strong> Executed checks</div>
+          <div><strong id="mission-step-3">○</strong> Proof recorded</div>
+          <div><strong id="mission-step-4">○</strong> User satisfied</div>
+        </div>
+        <p style="font-size:12px;color:var(--white3);margin-top:12px">Mission ID: <span id="mission-id"></span></p>
+        <p style="font-size:12px;color:var(--white3)">URL: <span id="mission-target"></span></p>
+        <p style="font-size:12px;color:var(--white3)">Status: <strong id="mission-state"></strong> · Attempts: <span id="mission-attempts">0</span> · Last checked: <span id="mission-checked">—</span></p>
+        <div id="mission-checks" style="margin-top:12px"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+          <button id="mission-retry" class="btn btn-ghost" onclick="AI4UMission.run()" type="button">Retry Checks</button>
+          <button id="mission-download" class="btn btn-ghost" onclick="AI4UMission.download()" type="button">Download Proof Pack (JSON)</button>
+          <button id="mission-accept" class="btn btn-primary" onclick="AI4UMission.accept()" type="button">I'm Satisfied — Complete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /panel-mission -->
+
+<!-- ═══════════════════════════════════════════════════════
      PANEL: PRICING
 ═══════════════════════════════════════════════════════ -->
 <div class="panel" id="panel-pricing">
@@ -2884,6 +2931,7 @@ The output will include:
 <script src="supabase-persistence.js" onerror="window.AI4U_SB=null"></script>
 <script src="billing-config.js" onerror="window.AI4U_BILLING_CONFIG=null"></script>
 <script src="billing.js" onerror="window.AI4UBilling=null"></script>
+<script src="mission.js" onerror="window.AI4UMission=null"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
