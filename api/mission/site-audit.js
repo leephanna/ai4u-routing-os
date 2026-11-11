@@ -18,7 +18,7 @@ module.exports=async function(req,res){
     if(action==="start"){
       const target=validateTarget(body.target_url).href;
       const quota=await db.query("SELECT count(*)::int AS n FROM ai4u_private.router_missions WHERE user_id=$1 AND created_at>now()-interval '1 hour'",[user.id]);
-      if(Number(quota.rows[0].n)>=20)return send(res,429,{error:"Hourly mission limit reached. Please try again later."});
+      if(Number(quota.rows[0].n)>=5)return send(res,429,{error:"Hourly mission limit reached. Please try again later."});
       const result=await db.query("INSERT INTO ai4u_private.router_missions(user_id,target_url,status) VALUES($1,$2,'draft') RETURNING *",[user.id,target]);
       return send(res,201,{mission:publicMission(result.rows[0])});
     }
@@ -33,7 +33,7 @@ module.exports=async function(req,res){
       return send(res,200,{mission:publicMission(result.rows[0])});
     }
     if(action!=="run")return send(res,400,{error:"Unknown mission action."});
-    if(mission.attempts>=10)return send(res,429,{error:"This mission has reached its ten-attempt limit. Start a new mission."});
+    if(mission.attempts>=5)return send(res,429,{error:"This mission has reached its five-attempt limit. Start a new mission."});
     await db.query("UPDATE ai4u_private.router_missions SET status='running',attempts=attempts+1,last_error=NULL,updated_at=now() WHERE id=$1 AND user_id=$2",[id,user.id]);
     const report=await auditSite(mission.target_url);
     const saved=await db.query("UPDATE ai4u_private.router_missions SET status=$3,checks=$4::jsonb,evidence=$5::jsonb,checked_at=now(),updated_at=now() WHERE id=$1 AND user_id=$2 RETURNING *",[id,user.id,report.status,JSON.stringify(report.checks),JSON.stringify(report.evidence)]);
