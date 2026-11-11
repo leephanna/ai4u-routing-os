@@ -190,7 +190,7 @@ No database passwords, Stripe secrets, payment links, or other credentials were 
 
 ## Strict PostgreSQL TLS verification and production proof — 2026-11-11
 
-The Supabase Root 2021 CA certificate was supplied and validated as a PEM X.509 certificate. Its subject is `CN=Supabase Root 2021 CA`, its validity ends on 2021-04-28 10:56:53 UTC through 2031-04-26 10:56:53 UTC, and its SHA-256 fingerprint is `80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA`.
+The Supabase Root 2021 CA certificate was supplied and validated as a PEM X.509 certificate. Its subject is `CN=Supabase Root 2021 CA`, it is valid from 2021-04-28 10:56:53 UTC until 2031-04-26 10:56:53 UTC, and its SHA-256 fingerprint is `80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA`.
 
 The certificate is stored in Vercel as the sensitive, Production-only environment variable `SUPABASE_DB_SSL_CA`. The certificate is not committed to GitHub. The database client now:
 - Requires the configured CA certificate and fails closed if it is missing or malformed.
