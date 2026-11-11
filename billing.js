@@ -466,6 +466,7 @@
 
   global.AI4UBilling = {
     init: init,
+    getAccessToken: token,
     requestTaskAccess: requestTaskAccess,
     startSubscription: startSubscription,
     openPortal: openPortal,

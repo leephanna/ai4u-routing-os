@@ -1050,6 +1050,7 @@ canvas{max-width:100%;height:auto}
   <div class="nav-links">
     <button class="nav-btn active" onclick="showPanel('dashboard')">Mission</button>
     <button class="nav-btn" onclick="showPanel('howto')">How To Use</button>
+    <button class="nav-btn" onclick="showPanel('mission')">Mission Runner</button>
     <button class="nav-btn" onclick="showPanel('router')">Route Engine</button>
     <button class="nav-btn" onclick="showPanel('matrix')">Platform Matrix</button>
     <button class="nav-btn" onclick="showPanel('prompt')">Prompt Gen</button>
@@ -1067,6 +1068,7 @@ canvas{max-width:100%;height:auto}
 <div id="mobile-menu">
   <button class="nav-btn" onclick="showPanel('dashboard');toggleMenu()">Mission Control</button>
   <button class="nav-btn" onclick="showPanel('howto');toggleMenu()">How To Use</button>
+  <button class="nav-btn" onclick="showPanel('mission');toggleMenu()">Mission Runner</button>
   <button class="nav-btn" onclick="showPanel('router');toggleMenu()">Route Engine</button>
   <button class="nav-btn" onclick="showPanel('matrix');toggleMenu()">Platform Matrix</button>
   <button class="nav-btn" onclick="showPanel('prompt');toggleMenu()">Prompt Gen</button>
@@ -1094,7 +1096,7 @@ canvas{max-width:100%;height:auto}
     <div class="hero-eyebrow">AI4U LLC &nbsp;·&nbsp; AI4UTECH.COM &nbsp;·&nbsp; ROUTING OS v3.0</div>
     <h1 class="hero-h1">AI4U Right-Tool<br>Routing OS</h1>
     <h2 class="hero-h2">Route every task to the right AI. Prove the result.<br>Preserve the artifact. Learn from every win or failure.</h2>
-    <p class="hero-sub">The world's first AI operating system for consultants, builders, and operators who refuse to guess which AI to use.</p>
+    <p class="hero-sub">A practical workspace for choosing AI tools, reviewing outcomes, and preserving your work.</p>
 
     <!-- See it in action -->
     <style>
@@ -1224,7 +1226,7 @@ var ai4uExamples=[
 {goal:"My automation workflow stopped working and I don&#39;t know why",stage:"Broken Codebase",risk:"High",platform:"Claude Code",why:"Reads full context and applies surgical fixes without breaking other things.",prompt:"Diagnose why this workflow broke. Explain the cause in plain English before making any changes.",proof:"Did it explain the cause? Is the fix working? Did anything else break?"},
 {goal:"Send me a weekly summary of my top emails every Monday",stage:"Automation",risk:"Medium",platform:"Zapier",why:"No-code automation. Connects Gmail, schedules, and summaries without writing code.",prompt:"Create a Zap that summarizes my top 5 emails each Monday at 8am and sends me a digest.",proof:"Did the test run trigger? Did the email arrive? Is the summary useful?"},
 {goal:"Research whether solar panels are worth it for a Minnesota home",stage:"Idea",risk:"Medium",platform:"Perplexity Pro",why:"Real-time data on incentives, payback periods, and local installers.",prompt:"Research solar panel ROI for a home in Minneapolis, MN. Include current incentives, average cost, and payback time.",proof:"Are sources cited? Does it account for Minnesota climate? Is the data recent?"},
-{goal:"Write 5 social media posts for my business launch",stage:"Prototype",risk:"Low",platform:"ChatGPT-4o",why:"Fast, varied creative writing. Generates multiple options in one pass.",prompt:"Write 5 social media posts announcing my business launch. Tone: confident and approachable. Include a call to action.",proof:"Do they sound authentic? Is the tone consistent? Do they have a clear CTA?"}
+{goal:"Write 5 social media posts for my business launch",stage:"Prototype",risk:"Low",platform:"ChatGPT",why:"Fast, varied creative writing. Generates multiple options in one pass.",prompt:"Write 5 social media posts announcing my business launch. Tone: confident and approachable. Include a call to action.",proof:"Do they sound authentic? Is the tone consistent? Do they have a clear CTA?"}
 ];
 window.ai4uShowExample=function(i){
 var e=ai4uExamples[i];
@@ -1237,7 +1239,8 @@ ai4uShowExample(0);
 
     <div class="hero-ctas">
       <a href="https://ai4utech.com" target="_blank" rel="noopener" class="btn btn-gold">Visit AI4Utech.com →</a>
-      <button class="btn btn-primary" onclick="showPanel('router')">Start a Route →</button>
+      <button class="btn btn-primary" onclick="showPanel('mission')">Start a Mission →</button>
+      <button class="btn btn-ghost" onclick="showPanel('router')">Explore Route Engine</button>
       <button class="btn btn-ghost" onclick="showPanel('proof')">View Proof Protocol</button>
       <a href="https://github.com/leephanna/ai4u-routing-os" target="_blank" rel="noopener" class="btn btn-ghost">Open GitHub Repo</a>
     </div>
@@ -1245,8 +1248,8 @@ ai4uShowExample(0);
       <div class="hero-stat"><div class="hero-stat-num">14</div><div class="hero-stat-label">Platforms Mapped</div></div>
       <div class="hero-stat"><div class="hero-stat-num">8</div><div class="hero-stat-label">Task Stages</div></div>
       <div class="hero-stat"><div class="hero-stat-num gold">4</div><div class="hero-stat-label">Risk Levels</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">∞</div><div class="hero-stat-label">Routing Rules</div></div>
-      <div class="hero-stat"><div class="hero-stat-num gold">100%</div><div class="hero-stat-label">Free to Use</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">Rules</div><div class="hero-stat-label">Routing Method</div></div>
+      <div class="hero-stat"><div class="hero-stat-num gold">Free</div><div class="hero-stat-label">Starter Access</div></div>
     </div>
   </section>
 
@@ -1264,56 +1267,14 @@ ai4uShowExample(0);
     </div>
   </div>
 
-  <!-- CHARTS ROW -->
-  <div class="section">
-    <div class="section-title">Live Intelligence</div>
-    <div class="section-heading">Toolchain Confidence Map</div>
-    <div class="grid-2" style="gap:20px;margin-top:24px">
-      <div class="chart-wrap">
-        <div class="chart-title">Platform Confidence Scores</div>
-        <div id="chart-confidence-fallback" style="display:none">
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Manus Agent</span><span>96%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:96%;background:linear-gradient(90deg,var(--cyan),var(--violet))"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Claude Code</span><span>94%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:94%;background:linear-gradient(90deg,var(--cyan),var(--violet))"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Perplexity</span><span>91%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:91%;background:linear-gradient(90deg,var(--cyan),var(--violet))"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Replit Agent</span><span>88%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:88%;background:linear-gradient(90deg,var(--cyan),var(--violet))"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Vercel</span><span>99%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:99%;background:linear-gradient(90deg,var(--gold),var(--cyan))"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Supabase</span><span>92%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:92%;background:linear-gradient(90deg,var(--gold),var(--cyan))"></div></div></div>
-        </div>
-        <canvas id="chart-confidence" height="220"></canvas>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">Proof Maturity Score</div>
-        <div id="chart-proof-fallback" style="display:none">
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Browser Proof</span><span>✓ Pass</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:100%;background:var(--green)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Build Proof</span><span>✓ Pass</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:100%;background:var(--green)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Link Proof</span><span>✓ Pass</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:100%;background:var(--green)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Data Persistence</span><span>⏳ V2</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:40%;background:var(--gold)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Automation Proof</span><span>⏳ V3</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:20%;background:var(--violet)"></div></div></div>
-        </div>
-        <canvas id="chart-proof" height="220"></canvas>
-      </div>
-    </div>
+  <!-- MEASURED BASELINE — NO SYNTHETIC METRICS -->
+  <div class="section" id="measured-baseline">
+    <div class="section-title">Evidence, Not Estimates</div>
+    <div class="section-heading">Routing Baseline</div>
+    <p class="section-sub">30 curated reference tasks were run through the original rule-based engine. Agreement with editorial reference choices is not the same as real-world task success.</p>
     <div class="grid-2" style="gap:20px;margin-top:20px">
-      <div class="chart-wrap">
-        <div class="chart-title">Route Success by Task Stage</div>
-        <canvas id="chart-stage" height="200"></canvas>
-        <div id="chart-stage-fallback" style="display:none">
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Idea/Vision</span><span>87%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:87%;background:var(--cyan)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Prototype</span><span>91%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:91%;background:var(--cyan)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Production Deploy</span><span>96%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:96%;background:var(--gold)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>Automation</span><span>82%</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:82%;background:var(--violet)"></div></div></div>
-        </div>
-      </div>
-      <div class="chart-wrap">
-        <div class="chart-title">V1 → V6 Roadmap Progress</div>
-        <canvas id="chart-roadmap" height="200"></canvas>
-        <div id="chart-roadmap-fallback" style="display:none">
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>V1 Static Command Center</span><span>✓ Live</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:100%;background:var(--green)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>V2 Supabase Ledger</span><span>Next</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:5%;background:var(--gold)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>V3 GitHub Actions Proof</span><span>Planned</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:0%;background:var(--violet)"></div></div></div>
-          <div class="score-bar-wrap"><div class="score-bar-label"><span>V4 AI Routing Assist</span><span>Planned</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:0%;background:var(--violet)"></div></div></div>
-        </div>
-      </div>
+      <div class="card"><div class="card-title">Reference-route agreement</div><div style="font-size:28px;font-weight:700;color:var(--cyan)">20 / 30</div><p style="font-size:12px;color:var(--white2)">10 disagreements; 0 execution errors in the deterministic baseline. No claim of measured user satisfaction.</p></div>
+      <div class="card"><div class="card-title">What remains unmeasured</div><p style="font-size:13px;color:var(--white2)">Real-world task completion, user time saved, browser usability, and platform reliability have not yet been benchmarked.</p><a href="https://github.com/leephanna/ai4u-routing-os/blob/main/evals/baseline-2026-11-11.json" target="_blank" rel="noopener">Review baseline evidence</a></div>
     </div>
   </div>
 
@@ -2053,7 +2014,7 @@ ai4uShowExample(0);
     <!-- DECISION MATRIX TABLE -->
     <div class="divider"></div>
     <div class="section-title">Decision Matrix</div>
-    <div class="section-heading">Platform × Task Stage</div>
+    <div class="section-heading">Platform × Task Stage</div><p class="section-sub">Illustrative editorial suitability rankings, not measured benchmark scores. Check current tool availability and pricing before choosing.</p>
     <div style="overflow-x:auto;margin-top:20px">
       <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:700px">
         <thead>
@@ -2096,11 +2057,11 @@ ai4uShowExample(0);
               <option value="manus">Manus Agent</option>
               <option value="claude">Claude (Sonnet / Opus)</option>
               <option value="claude-code">Claude Code</option>
-              <option value="chatgpt">ChatGPT-4o</option>
+              <option value="chatgpt">ChatGPT</option>
               <option value="codex">Codex CLI</option>
               <option value="replit">Replit Agent</option>
               <option value="perplexity">Perplexity Pro</option>
-              <option value="gemini">Gemini Ultra / Vertex AI</option>
+              <option value="gemini">Gemini / Vertex AI</option>
             </select>
           </div>
           <div class="form-group">
@@ -2231,23 +2192,23 @@ The output will include:
         <table class="proof-table">
           <thead><tr><th>#</th><th>Check</th><th>Status</th></tr></thead>
           <tbody>
-            <tr><td>1</td><td>routing.ai4utech.com loads</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>2</td><td>ai4u-routing-os.vercel.app loads</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>3</td><td>HTML renders without console errors</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>4</td><td>AI4U badge displays and spins</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>5</td><td>Desktop navigation works</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>6</td><td>Mobile hamburger menu works</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>7</td><td>Route engine changes output</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>8</td><td>Prompt generator creates prompt</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>9</td><td>Copy button works</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>10</td><td>Ledger add/save works (localStorage)</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>11</td><td>Slideshow controls work</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>12</td><td>Charts display</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>13</td><td>All links work</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>14</td><td>Image assets served correctly (not HTML)</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>15</td><td>Static deploy compatible</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>16</td><td>No secrets in code</td><td class="check-pass">✓ PASS</td></tr>
-            <tr><td>17</td><td>GitHub repo clean</td><td class="check-pass">✓ PASS</td></tr>
+            <tr><td>1</td><td>routing.ai4utech.com loads</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>2</td><td>ai4u-routing-os.vercel.app loads</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>3</td><td>HTML renders without console errors</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>4</td><td>AI4U badge displays and spins</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>5</td><td>Desktop navigation works</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>6</td><td>Mobile hamburger menu works</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>7</td><td>Route engine changes output</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>8</td><td>Prompt generator creates prompt</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>9</td><td>Copy button works</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>10</td><td>Ledger add/save works (localStorage)</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>11</td><td>Slideshow controls work</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>12</td><td>Charts display</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>13</td><td>All links work</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>14</td><td>Image assets served correctly (not HTML)</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>15</td><td>Static deploy compatible</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>16</td><td>No secrets in code</td><td class="check-pending">NOT TESTED</td></tr>
+            <tr><td>17</td><td>GitHub repo clean</td><td class="check-pending">NOT TESTED</td></tr>
           </tbody>
         </table>
       </div>
@@ -2291,8 +2252,8 @@ The output will include:
           <div class="form-group">
             <label class="form-label">Status</label>
             <select class="form-select" id="pr-status">
-              <option value="verified">✓ Verified</option>
-              <option value="pending">⏳ Pending</option>
+              <option value="user_attested">User-attested (not independently verified)</option>
+              <option value="pending" selected>⏳ Pending review</option>
               <option value="failed">✗ Failed</option>
             </select>
           </div>
@@ -2312,7 +2273,7 @@ The output will include:
           <div class="proof-link-content">
             <div class="proof-link-title">Browser Proof</div>
             <div class="proof-link-desc">The output loads in a real browser at a real URL. Screenshot the live page. Verify HTTP 200. Test in incognito mode. Record the URL and timestamp.</div>
-            <div class="proof-link-status pass">✓ Verified</div>
+            <div class="proof-link-status pending">Not independently tested</div>
           </div>
         </div>
         <div class="proof-link">
@@ -2320,7 +2281,7 @@ The output will include:
           <div class="proof-link-content">
             <div class="proof-link-title">Build Proof</div>
             <div class="proof-link-desc">The deployment pipeline completed without errors. Vercel shows "Ready" status. GitHub shows the commit SHA. Build logs are clean.</div>
-            <div class="proof-link-status pass">✓ Verified</div>
+            <div class="proof-link-status pending">Not independently tested</div>
           </div>
         </div>
         <div class="proof-link">
@@ -2328,7 +2289,7 @@ The output will include:
           <div class="proof-link-content">
             <div class="proof-link-title">Link Proof</div>
             <div class="proof-link-desc">All internal and external links resolve correctly. No 404s. Custom domain points to the correct deployment. CDN assets load.</div>
-            <div class="proof-link-status pass">✓ Verified</div>
+            <div class="proof-link-status pending">Not independently tested</div>
           </div>
         </div>
         <div class="proof-link">
@@ -2336,7 +2297,7 @@ The output will include:
           <div class="proof-link-content">
             <div class="proof-link-title">Data Persistence Proof</div>
             <div class="proof-link-desc">Data survives a page refresh. localStorage entries persist. (V2: Supabase records survive a session end and return on re-login.)</div>
-            <div class="proof-link-status pending">⏳ V2 — Supabase Upgrade</div>
+            <div class="proof-link-status pending">Sync requires verification</div>
           </div>
         </div>
         <div class="proof-link">
@@ -2344,7 +2305,7 @@ The output will include:
           <div class="proof-link-content">
             <div class="proof-link-title">Email / Automation Proof</div>
             <div class="proof-link-desc">Automated workflows trigger correctly. Emails arrive. Webhooks fire. (V3: GitHub Actions proof receipts on every deploy.)</div>
-            <div class="proof-link-status pending">⏳ V3 — GitHub Actions</div>
+            <div class="proof-link-status pending">CI evidence must be linked</div>
           </div>
         </div>
         <div class="proof-link">
@@ -2352,7 +2313,7 @@ The output will include:
           <div class="proof-link-content">
             <div class="proof-link-title">Screenshot / Log Proof</div>
             <div class="proof-link-desc">Visual evidence exists. Screenshots are timestamped. Console logs are clean. Error monitoring shows no critical alerts.</div>
-            <div class="proof-link-status pass">✓ Verified</div>
+            <div class="proof-link-status pending">Not independently tested</div>
           </div>
         </div>
         <div class="proof-link">
@@ -2360,7 +2321,7 @@ The output will include:
           <div class="proof-link-content">
             <div class="proof-link-title">Failure Fallback Proof</div>
             <div class="proof-link-desc">A documented fallback platform exists if the primary fails. The fallback has been tested. Escalation rules are defined and recorded.</div>
-            <div class="proof-link-status pass">✓ Documented</div>
+            <div class="proof-link-status pending">Documented, not tested</div>
           </div>
         </div>
       </div>
@@ -2396,11 +2357,11 @@ The output will include:
             <option>Claude Code</option>
             <option>Claude Sonnet</option>
             <option>Claude Opus</option>
-            <option>ChatGPT-4o</option>
+            <option>ChatGPT</option>
             <option>Codex CLI</option>
             <option>Replit Agent</option>
             <option>Perplexity Pro</option>
-            <option>Gemini Ultra</option>
+            <option>Gemini</option>
             <option>Vercel</option>
             <option>Supabase</option>
             <option>GitHub Actions</option>
@@ -2512,7 +2473,7 @@ The output will include:
           <div class="roadmap-item">
             <div class="roadmap-dot current">V1</div>
             <div class="roadmap-content">
-              <div class="roadmap-version">V1 — LIVE NOW</div>
+              <div class="roadmap-version">Core features — deployed</div>
               <div class="roadmap-title">Static Public Command Center</div>
               <div class="roadmap-desc">Route engine, prompt generator, proof chain, localStorage ledger, platform matrix, slideshow, charts. Deployed on Vercel with custom domain.</div>
               <span class="badge badge-green" style="margin-top:8px">✓ Deployed</span>
@@ -2521,25 +2482,25 @@ The output will include:
           <div class="roadmap-item">
             <div class="roadmap-dot future">V2</div>
             <div class="roadmap-content">
-              <div class="roadmap-version future">V2 — NEXT</div>
+              <div class="roadmap-version future">Persistence — partially deployed</div>
               <div class="roadmap-title">Supabase Persistent Ledger</div>
-              <div class="roadmap-desc">Replace localStorage with Supabase Postgres. Ledger entries survive browser clears. User auth. Cross-device sync. Team sharing.</div>
+              <div class="roadmap-desc">Supabase-backed records and local fallback exist; full cross-device sync, reconciliation, and team sharing still require proof and implementation.</div>
               <span class="badge badge-gold" style="margin-top:8px">⏳ Planned</span>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="roadmap-dot future">V3</div>
             <div class="roadmap-content">
-              <div class="roadmap-version future">V3 — PLANNED</div>
+              <div class="roadmap-version future">CI proof — partially deployed</div>
               <div class="roadmap-title">GitHub Actions Proof Automation</div>
-              <div class="roadmap-desc">Automated proof receipts on every deploy. CI pipeline generates proof artifacts. Proof chain becomes fully automated and auditable.</div>
+              <div class="roadmap-desc">Billing CI checks exist. General routing, browser, deployment and evidence-chain verification are still being developed.</div>
               <span class="badge badge-violet" style="margin-top:8px">⏳ Planned</span>
             </div>
           </div>
           <div class="roadmap-item">
             <div class="roadmap-dot future">V4</div>
             <div class="roadmap-content">
-              <div class="roadmap-version future">V4 — FUTURE</div>
+              <div class="roadmap-version future">Adaptive routing — planned</div>
               <div class="roadmap-title">AI-Assisted Routing Recommendations</div>
               <div class="roadmap-desc">LLM-powered routing engine that learns from your ledger. Personalized recommendations based on your historical success rates.</div>
               <span class="badge" style="margin-top:8px;background:rgba(255,255,255,0.05);color:var(--white3);border:1px solid var(--border)">🔮 Future</span>
@@ -2548,7 +2509,7 @@ The output will include:
           <div class="roadmap-item">
             <div class="roadmap-dot future">V5</div>
             <div class="roadmap-content">
-              <div class="roadmap-version future">V5 — FUTURE</div>
+              <div class="roadmap-version future">Cross-platform outcomes — planned</div>
               <div class="roadmap-title">Cross-Platform Outcome Intelligence</div>
               <div class="roadmap-desc">Aggregate routing outcomes across all AI4U clients. Community-powered routing intelligence. Pattern library shared across the ecosystem.</div>
               <span class="badge" style="margin-top:8px;background:rgba(255,255,255,0.05);color:var(--white3);border:1px solid var(--border)">🔮 Future</span>
@@ -2557,7 +2518,7 @@ The output will include:
           <div class="roadmap-item">
             <div class="roadmap-dot future">V6</div>
             <div class="roadmap-content">
-              <div class="roadmap-version future">V6 — VISION</div>
+              <div class="roadmap-version future">Client edition — vision</div>
               <div class="roadmap-title">AI4U Client-Facing Version</div>
               <div class="roadmap-desc">White-labeled routing OS for AI4U consulting clients. Custom branding, private ledgers, team dashboards, and AI4U consulting integration.</div>
               <span class="badge" style="margin-top:8px;background:rgba(255,255,255,0.05);color:var(--white3);border:1px solid var(--border)">🚀 Vision</span>
@@ -2633,7 +2594,7 @@ The output will include:
             <option value="">Auto</option>
             <option value="manus">Manus Agent</option>
             <option value="claude">Claude</option>
-            <option value="chatgpt">ChatGPT-4o</option>
+            <option value="chatgpt">ChatGPT</option>
             <option value="perplexity">Perplexity</option>
           </select>
         </div>
@@ -2802,6 +2763,50 @@ The output will include:
 
 
 <!-- ═══════════════════════════════════════════════════════
+     FIRST END-TO-END MISSION: WEBSITE READINESS
+═══════════════════════════════════════════════════════ -->
+<div class="panel" id="panel-mission">
+  <div class="section">
+    <div class="section-title">Mission Runner · Working Pilot</div>
+    <div class="section-heading">Website Launch Readiness</div>
+    <p class="section-sub">This first executable workflow checks a public HTTPS homepage, records actual network evidence, supports retry/resume, and creates a downloadable Proof Pack. It does not build or publish a website, simulate a browser, or test payments.</p>
+    <div class="card" style="margin-top:22px;max-width:860px">
+      <div class="card-title">DO THIS NEXT · Enter the website to check</div>
+      <div class="form-group" style="margin-top:16px">
+        <label class="form-label" for="mission-url">Public HTTPS homepage URL (no query parameters)</label>
+        <input class="form-input" id="mission-url" type="url" placeholder="https://your-website.com/" autocomplete="url" maxlength="2048">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button id="mission-start" class="btn btn-primary" type="button" onclick="AI4UMission.start()">Start &amp; Run Website Checks</button>
+        <button class="btn btn-ghost" type="button" onclick="AI4UMission.resume()">Resume Last Mission</button>
+        <button class="btn btn-ghost" type="button" onclick="showPanel('settings')">Account Sign-In</button>
+      </div>
+      <p id="mission-message" style="font-size:12px;color:var(--white2);margin-top:14px" role="status" aria-live="polite">Sign in to save the mission to your account. No payment is required while checkout is disabled.</p>
+    </div>
+    <div id="mission-result" hidden style="max-width:860px">
+      <div class="card" style="margin-top:16px">
+        <div class="card-title">Live Mission Progress</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:12px">
+          <div><strong id="mission-step-1">○</strong> Saved to database</div>
+          <div><strong id="mission-step-2">○</strong> Executed checks</div>
+          <div><strong id="mission-step-3">○</strong> Proof recorded</div>
+          <div><strong id="mission-step-4">○</strong> User satisfied</div>
+        </div>
+        <p style="font-size:12px;color:var(--white3);margin-top:12px">Mission ID: <span id="mission-id"></span></p>
+        <p style="font-size:12px;color:var(--white3)">URL: <span id="mission-target"></span></p>
+        <p style="font-size:12px;color:var(--white3)">Status: <strong id="mission-state"></strong> · Attempts: <span id="mission-attempts">0</span> · Last checked: <span id="mission-checked">—</span></p>
+        <div id="mission-checks" style="margin-top:12px"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+          <button id="mission-retry" class="btn btn-ghost" onclick="AI4UMission.run()" type="button">Retry Checks</button>
+          <button id="mission-download" class="btn btn-ghost" onclick="AI4UMission.download()" type="button">Download Proof Pack (JSON)</button>
+          <button id="mission-accept" class="btn btn-primary" onclick="AI4UMission.accept()" type="button">I'm Satisfied — Complete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /panel-mission -->
+
+<!-- ═══════════════════════════════════════════════════════
      PANEL: PRICING
 ═══════════════════════════════════════════════════════ -->
 <div class="panel" id="panel-pricing">
@@ -2926,6 +2931,7 @@ The output will include:
 <script src="supabase-persistence.js" onerror="window.AI4U_SB=null"></script>
 <script src="billing-config.js" onerror="window.AI4U_BILLING_CONFIG=null"></script>
 <script src="billing.js" onerror="window.AI4UBilling=null"></script>
+<script src="mission.js" onerror="window.AI4UMission=null"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
@@ -3020,112 +3026,7 @@ function showToast(msg, dur=2800){
 /* ═══════════════════════════════════════════════════════
    CHARTS
 ═══════════════════════════════════════════════════════ */
-let chartsInited = false;
-function initDashboardCharts(){
-  if(chartsInited) return;
-  chartsInited = true;
-  if(window.chartJsFailed || typeof Chart === 'undefined'){
-    document.getElementById('chart-confidence-fallback').style.display='block';
-    document.getElementById('chart-proof-fallback').style.display='block';
-    document.getElementById('chart-stage-fallback').style.display='block';
-    document.getElementById('chart-roadmap-fallback').style.display='block';
-    ['chart-confidence','chart-proof','chart-stage','chart-roadmap'].forEach(id=>{
-      const el=document.getElementById(id);
-      if(el) el.style.display='none';
-    });
-    return;
-  }
-  const chartDefaults = {
-    responsive:true,
-    plugins:{legend:{labels:{color:'#a8b8d8',font:{family:'Inter',size:11}}}},
-    scales:{
-      x:{ticks:{color:'#5a6a8a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},
-      y:{ticks:{color:'#5a6a8a',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}}
-    }
-  };
-
-  // Confidence Chart
-  try {
-    new Chart(document.getElementById('chart-confidence'),{
-      type:'bar',
-      data:{
-        labels:['Manus','Claude Code','Perplexity','Replit','Vercel','Supabase','GitHub','Zapier'],
-        datasets:[{
-          label:'Confidence %',
-          data:[96,94,91,88,99,92,98,78],
-          backgroundColor:['rgba(0,212,255,0.6)','rgba(0,212,255,0.5)','rgba(139,92,246,0.6)','rgba(0,212,255,0.4)','rgba(240,180,41,0.7)','rgba(16,185,129,0.6)','rgba(240,180,41,0.5)','rgba(139,92,246,0.4)'],
-          borderColor:['#00d4ff','#00d4ff','#8b5cf6','#00d4ff','#f0b429','#10b981','#f0b429','#8b5cf6'],
-          borderWidth:1,borderRadius:4
-        }]
-      },
-      options:{...chartDefaults,plugins:{legend:{display:false}}}
-    });
-  } catch(e){ document.getElementById('chart-confidence-fallback').style.display='block'; }
-
-  // Proof Radar
-  try {
-    new Chart(document.getElementById('chart-proof'),{
-      type:'radar',
-      data:{
-        labels:['Browser Proof','Build Proof','Link Proof','Data Persist','Automation','Screenshot'],
-        datasets:[{
-          label:'Proof Maturity',
-          data:[100,100,100,40,20,90],
-          backgroundColor:'rgba(0,212,255,0.1)',
-          borderColor:'#00d4ff',
-          pointBackgroundColor:'#00d4ff',
-          pointRadius:4,borderWidth:2
-        }]
-      },
-      options:{
-        responsive:true,
-        plugins:{legend:{labels:{color:'#a8b8d8',font:{size:11}}}},
-        scales:{r:{ticks:{color:'#5a6a8a',backdropColor:'transparent',font:{size:9}},grid:{color:'rgba(255,255,255,0.06)'},pointLabels:{color:'#a8b8d8',font:{size:10}}}}
-      }
-    });
-  } catch(e){ document.getElementById('chart-proof-fallback').style.display='block'; }
-
-  // Stage Success
-  try {
-    new Chart(document.getElementById('chart-stage'),{
-      type:'bar',
-      data:{
-        labels:['Idea','Proto','Repair','Deploy','Auto','Agent','Proof','Biz'],
-        datasets:[{
-          label:'Route Success %',
-          data:[87,91,85,96,82,79,94,88],
-          backgroundColor:'rgba(139,92,246,0.5)',
-          borderColor:'#8b5cf6',
-          borderWidth:1,borderRadius:4
-        }]
-      },
-      options:{...chartDefaults,plugins:{legend:{display:false}},indexAxis:'y'}
-    });
-  } catch(e){ document.getElementById('chart-stage-fallback').style.display='block'; }
-
-  // Roadmap Progress
-  try {
-    new Chart(document.getElementById('chart-roadmap'),{
-      type:'doughnut',
-      data:{
-        labels:['V1 Complete','V2–V6 Remaining'],
-        datasets:[{
-          data:[1,5],
-          backgroundColor:['rgba(16,185,129,0.7)','rgba(255,255,255,0.06)'],
-          borderColor:['#10b981','rgba(255,255,255,0.1)'],
-          borderWidth:2
-        }]
-      },
-      options:{
-        responsive:true,
-        plugins:{
-          legend:{labels:{color:'#a8b8d8',font:{size:11}}},
-          tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${ctx.raw === 1 ? 'Live' : 'Planned'}`}}
-        }
-      }
-    });
-  } catch(e){ document.getElementById('chart-roadmap-fallback').style.display='block'; }
-}
+function initDashboardCharts(){ /* No unverified or synthetic analytics. */ }
 
 /* ═══════════════════════════════════════════════════════
    PLATFORM MATRIX TABLE
@@ -3179,12 +3080,12 @@ const ROUTING_DB = {
 };
 
 const TASK_ROUTE_PROFILES = {
-  research:{label:'Research & comparison',platform:'Perplexity Pro',fallback:'ChatGPT-4o',promptPlatform:'perplexity',why:'For current or evidence-based questions, Perplexity is a useful starting point because it can search the web and surface source links. Open the original sources before relying on a summary.',avoid:'Do not accept a claim from a single search snippet. Check the source itself, publication date, and whether it supports the exact statement. High-stakes claims need independent review.',where:'Open Perplexity, enter the question, request current sources and direct links, then open the original documents.'},
-  writing:{label:'Writing & communication',platform:'Claude Sonnet',fallback:'ChatGPT-4o',promptPlatform:'claude',why:'Claude is a strong starting point for clear, structured writing and revision. Give it the audience, purpose, tone, and any wording that must stay unchanged.',avoid:'Do not treat the first draft as final. Check names, dates, factual claims, promises, and sensitive wording before sending or publishing.',where:'Open Claude, start a new chat, paste the prepared instructions, and add your draft or background when supported.'},
-  marketing:{label:'Business content',platform:'ChatGPT-4o',fallback:'Claude Sonnet',promptPlatform:'chatgpt',why:'ChatGPT is a practical starting point for generating campaign ideas, variations, and content adapted for different channels. Brand context and audience details improve the result.',avoid:'Review brand voice, offers, links, and factual claims. Do not publish automatically without checking the final content.',where:'Open ChatGPT, use its main chat or creation tools, paste the prepared brief, and ask for revisions until the content fits your brand.'},
-  visual:{label:'Images & creative work',platform:'ChatGPT-4o',fallback:'Gemini Ultra',promptPlatform:'chatgpt',why:'ChatGPT can help develop a visual brief and create or revise images when image creation is available in your account. A precise subject, style, composition, and aspect ratio help.',avoid:'Check dimensions, logos, visible text, brand details, and usage rights. Some video or specialist design tasks may need a dedicated tool.',where:'Open ChatGPT image creation, paste the visual brief, review the first result, and request specific revisions.'},
-  learning:{label:'Learning & explanation',platform:'ChatGPT-4o',fallback:'Claude Sonnet',promptPlatform:'chatgpt',why:'ChatGPT is a useful starting point for explaining complex subjects in plain language, adapting the level of detail, and creating examples or practice questions.',avoid:'Ask for sources when facts matter. Verify technical, current, or high-stakes information instead of relying on a confident-sounding explanation.',where:'Open ChatGPT, paste the instructions, and ask follow-up questions until the explanation makes sense.'},
-  planning:{label:'Planning & organization',platform:'ChatGPT-4o',fallback:'Claude Sonnet',promptPlatform:'chatgpt',why:'ChatGPT can turn scattered notes into a structured plan, priorities, milestones, dependencies, and a short list of next actions.',avoid:'Treat dates, cost estimates, and resource assumptions as drafts until you confirm them. Check owners and dependencies before committing.',where:'Open ChatGPT, paste your notes and the prepared instructions, then refine the plan around your actual time and resources.'}
+  research:{label:'Research & comparison',platform:'Perplexity Pro',fallback:'ChatGPT',promptPlatform:'perplexity',why:'For current or evidence-based questions, Perplexity is a useful starting point because it can search the web and surface source links. Open the original sources before relying on a summary.',avoid:'Do not accept a claim from a single search snippet. Check the source itself, publication date, and whether it supports the exact statement. High-stakes claims need independent review.',where:'Open Perplexity, enter the question, request current sources and direct links, then open the original documents.'},
+  writing:{label:'Writing & communication',platform:'Claude Sonnet',fallback:'ChatGPT',promptPlatform:'claude',why:'Claude is a strong starting point for clear, structured writing and revision. Give it the audience, purpose, tone, and any wording that must stay unchanged.',avoid:'Do not treat the first draft as final. Check names, dates, factual claims, promises, and sensitive wording before sending or publishing.',where:'Open Claude, start a new chat, paste the prepared instructions, and add your draft or background when supported.'},
+  marketing:{label:'Business content',platform:'ChatGPT',fallback:'Claude Sonnet',promptPlatform:'chatgpt',why:'ChatGPT is a practical starting point for generating campaign ideas, variations, and content adapted for different channels. Brand context and audience details improve the result.',avoid:'Review brand voice, offers, links, and factual claims. Do not publish automatically without checking the final content.',where:'Open ChatGPT, use its main chat or creation tools, paste the prepared brief, and ask for revisions until the content fits your brand.'},
+  visual:{label:'Images & creative work',platform:'ChatGPT',fallback:'Gemini',promptPlatform:'chatgpt',why:'ChatGPT can help develop a visual brief and create or revise images when image creation is available in your account. A precise subject, style, composition, and aspect ratio help.',avoid:'Check dimensions, logos, visible text, brand details, and usage rights. Some video or specialist design tasks may need a dedicated tool.',where:'Open ChatGPT image creation, paste the visual brief, review the first result, and request specific revisions.'},
+  learning:{label:'Learning & explanation',platform:'ChatGPT',fallback:'Claude Sonnet',promptPlatform:'chatgpt',why:'ChatGPT is a useful starting point for explaining complex subjects in plain language, adapting the level of detail, and creating examples or practice questions.',avoid:'Ask for sources when facts matter. Verify technical, current, or high-stakes information instead of relying on a confident-sounding explanation.',where:'Open ChatGPT, paste the instructions, and ask follow-up questions until the explanation makes sense.'},
+  planning:{label:'Planning & organization',platform:'ChatGPT',fallback:'Claude Sonnet',promptPlatform:'chatgpt',why:'ChatGPT can turn scattered notes into a structured plan, priorities, milestones, dependencies, and a short list of next actions.',avoid:'Treat dates, cost estimates, and resource assumptions as drafts until you confirm them. Check owners and dependencies before committing.',where:'Open ChatGPT, paste your notes and the prepared instructions, then refine the plan around your actual time and resources.'}
 };
 
 function inferTaskRoute(goal,stage){
@@ -3204,6 +3105,12 @@ function escapeHTML(value){
   return String(value==null?'':value).replace(/[&<>"']/g,function(ch){
     return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
   });
+}
+function safeExternalUrl(value){
+  try {
+    const u = new URL(String(value));
+    return (u.protocol === 'https:' || u.protocol === 'http:') && !u.username && !u.password ? u.href : null;
+  } catch (_) { return null; }
 }
 
 const RISK_NOTES = {
@@ -3248,8 +3155,8 @@ function runRouterCore(){
   const failure = document.getElementById('r-failure').value.trim();
   const output  = document.getElementById('r-output').value.trim();
 
-  if(!stage || !risk){
-    showToast('⚠️ Please select a Task Stage and Risk Level');
+  if(!stage || !risk || !goal){
+    showToast('⚠️ Enter your goal, task stage, and risk level');
     return;
   }
 
@@ -3262,7 +3169,7 @@ function runRouterCore(){
   const checklist = CHECKLISTS[stage] || CHECKLISTS['idea'];
   const riskNote = RISK_NOTES[risk] || '';
 
-  const confidence = risk==='critical' ? 91 : risk==='high' ? 94 : risk==='medium' ? 96 : 98;
+  const confidence = null; // Never fabricate a numerical success probability.
 
   state.lastRouteResult = {
     stage, risk, goal, asset, failure, output,
@@ -3274,7 +3181,7 @@ function runRouterCore(){
       <span style="font-size:24px">⚡</span>
       <div>
         <div class="route-platform-name">${route.platform}</div>
-        <div class="route-confidence">Routing guidance indicator: ${confidence}%</div><div class="route-note">Rule-based guidance only — not a measured success probability or a guarantee of accuracy.</div>
+        <div class="route-confidence">Rule-based starting point · not a measured success probability</div><div class="route-note">Compare alternatives and verify the result; no success rate is implied.</div>
       </div>
     </div>
     ${goal ? `<div class="route-section"><div class="route-section-label">Goal</div><div class="route-section-content">${escapeHTML(goal)}</div></div>` : ''}<div class="route-section"><div class="route-section-label">Routing Basis</div><div class="route-section-content">${routeCategory} · ${routeSource}</div></div>
@@ -3389,11 +3296,11 @@ const PLATFORM_INTROS = {
   manus:       'You are operating in Manus, an autonomous AI agent with full computer access. Execute this task end-to-end without stopping for confirmation unless you encounter a critical blocker.',
   claude:      'You are Claude, an expert AI assistant. Provide a thorough, well-structured response that demonstrates deep expertise.',
   'claude-code':'You are operating in Claude Code with full access to the repository. Read all relevant files before making changes. Apply surgical fixes only.',
-  chatgpt:     'You are GPT-4o. Provide a comprehensive, well-organized response with clear structure and actionable recommendations.',
+  chatgpt:     'You are ChatGPT. Provide a comprehensive, well-organized response with clear structure and actionable recommendations.',
   codex:       'You are Codex CLI. Execute the following code task precisely. Output only the code changes required, with no unnecessary modifications.',
   replit:      'You are the Replit AI Agent. Build a complete, runnable application in this Replit environment. Ensure it runs without errors.',
   perplexity:  'Search for the most current, credible information on this topic. Cite all sources. Prioritize recent publications and authoritative sources.',
-  gemini:      'You are Gemini Ultra with Google Search grounding enabled. Use real-time search to ground your response in current, verified information.'
+  gemini:      'You are Gemini with Google Search grounding enabled. Use real-time search to ground your response in current, verified information.'
 };
 
 function loadTemplate(key){
@@ -3619,7 +3526,9 @@ function refreshLedger(filter='all'){
   const outcomeColors = {worked:'var(--green)',partial:'var(--gold)',failed:'var(--red)'};
   const outcomeLabels = {worked:'✓ Worked','partial':'⚡ Partial',failed:'✗ Failed'};
 
-  list.innerHTML = entries.map(e=>{
+  list.innerHTML = entries.filter(e=>e && typeof e === 'object').map(e=>{
+    const safeId = Number.isSafeInteger(Number(e.id)) ? Number(e.id) : 0;
+    const artifactUrl = safeExternalUrl(e.artifact);
     const syncBadge = e.sync_status === 'synced'
       ? `<span class="badge badge-green" style="font-size:9px">✓ Synced</span>`
       : e.sync_status === 'sync_failed'
@@ -3628,21 +3537,21 @@ function refreshLedger(filter='all'){
           ? `<span class="badge" style="font-size:9px;background:rgba(255,255,255,0.05);color:var(--white3);border:1px solid var(--border)">Local Only</span>`
           : '';
     return `
-    <div class="ledger-entry" id="entry-${e.id}">
+    <div class="ledger-entry" id="entry-${safeId}">
       <div class="ledger-entry-header">
-        <div class="ledger-entry-task">${e.task}</div>
-        <button onclick="deleteEntry(${e.id})" style="background:transparent;border:none;color:var(--white3);font-size:16px;cursor:pointer;flex-shrink:0" title="Delete">×</button>
+        <div class="ledger-entry-task">${escapeHTML(e.task)}</div>
+        <button onclick="deleteEntry(${safeId})" style="background:transparent;border:none;color:var(--white3);font-size:16px;cursor:pointer;flex-shrink:0" title="Delete">×</button>
       </div>
       <div class="ledger-entry-meta">
-        <span class="badge badge-cyan">${e.platform}</span>
+        <span class="badge badge-cyan">${escapeHTML(e.platform)}</span>
         <span class="badge" style="background:${outcomeColors[e.outcome]}22;color:${outcomeColors[e.outcome]};border:1px solid ${outcomeColors[e.outcome]}44">${outcomeLabels[e.outcome]}</span>
         ${syncBadge}
-        <span style="font-size:10px;color:var(--white3)">${e.date}</span>
+        <span style="font-size:10px;color:var(--white3)">${escapeHTML(e.date)}</span>
       </div>
-      ${e.why ? `<div class="ledger-entry-detail"><strong style="color:var(--white2)">Why:</strong> ${e.why}</div>` : ''}
-      ${e.framework ? `<div class="ledger-entry-detail" style="margin-top:4px"><strong style="color:var(--white2)">Framework:</strong> ${e.framework}</div>` : ''}
-      ${e.artifact ? `<div style="margin-top:6px"><a href="${e.artifact}" target="_blank" rel="noopener" style="font-size:11px;color:var(--cyan)">View Artifact →</a></div>` : ''}
-      ${e.proof ? `<div style="margin-top:4px;font-size:11px;color:var(--white3)">Proof: ${e.proof}</div>` : ''}
+      ${e.why ? `<div class="ledger-entry-detail"><strong style="color:var(--white2)">Why:</strong> ${escapeHTML(e.why)}</div>` : ''}
+      ${e.framework ? `<div class="ledger-entry-detail" style="margin-top:4px"><strong style="color:var(--white2)">Framework:</strong> ${escapeHTML(e.framework)}</div>` : ''}
+      ${artifactUrl ? `<div style="margin-top:6px"><a href="${escapeHTML(artifactUrl)}" target="_blank" rel="noopener noreferrer" style="font-size:11px;color:var(--cyan)">View Artifact →</a></div>` : ''}
+      ${e.proof ? `<div style="margin-top:4px;font-size:11px;color:var(--white3)">Proof: ${escapeHTML(e.proof)}</div>` : ''}
     </div>
   `;}).join('');
 }
@@ -4031,7 +3940,7 @@ async function saveProofReceiptToSB(){
   const title = (document.getElementById('pr-title')?.value || '').trim();
   const url   = (document.getElementById('pr-url')?.value   || '').trim();
   const notes = (document.getElementById('pr-notes')?.value || '').trim();
-  const status= document.getElementById('pr-status')?.value || 'verified';
+  const status= document.getElementById('pr-status')?.value || 'pending';
 
   if(!type || !title){
     showToast('⚠️ Proof Type and Title are required');
@@ -4044,7 +3953,7 @@ async function saveProofReceiptToSB(){
     proof_url:   url   || null,
     proof_notes: notes || null,
     proof_status: status,
-    verified_at: status === 'verified' ? new Date().toISOString() : null
+    verified_at: null // Only machine verification can set a verified timestamp
   };
 
   if(typeof AI4U_SB !== 'undefined' && AI4U_SB && AI4U_SB.canSync()){
