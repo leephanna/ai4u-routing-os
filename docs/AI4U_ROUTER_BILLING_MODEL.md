@@ -214,3 +214,35 @@ The certificate is stored in Vercel as the sensitive, Production-only environmen
 4. Obtain explicit owner authorization before changing `AI4U_ROUTER_BILLING_ENABLED` from `false` to `true`.
 
 The earlier SSL caveat in the 2026-11-10 compatibility-fix section is historical and is superseded by this strict-TLS verification record. Billing remains disabled until the remaining release gates are complete.
+
+
+## Router-specific Stripe Customer Portal — 2026-11-11
+
+**Goal:** Let authenticated AI4U Router members manage their own billing without changing the existing Truth Task Force or legacy Router portal settings.
+
+**Dedicated Stripe live configuration**
+- Configuration ID: `bpc_1UaWw4ApPidFq8RlPzp2bvnw`.
+- Stripe account: `acct_1SSumlApPidFq8Rl` (live mode).
+- Name: `AI4U Router · routing.ai4utech.com · Customer Portal`.
+- Return URL: `https://routing.ai4utech.com/?portal=return`.
+- Enabled features: invoice history, payment-method updates, cancellation at the end of the current billing period.
+- Disabled features: direct hosted login page, customer email/profile updates, subscription plan changes and subscription pause. Plan changes remain disabled until Router's entitlement webhook can reliably reconcile changes.
+- The two existing Stripe portal configurations were not modified.
+
+**Server and UI**
+- `POST /api/billing/portal` requires a verified Supabase bearer token, derives the Stripe customer ID from the matching private `router_entitlements` row and never accepts a customer ID from browser input.
+- Uses a dedicated Stripe configuration ID and a server-only restricted Stripe API key to create a short-lived hosted portal session. Validates that the returned destination is HTTPS at `billing.stripe.com`.
+- `GET /api/access/check` now reports `has_portal` (not the Stripe customer ID); `GET /api/billing/config` reports `portal_available` (not the key).
+- Pricing UI reveals **Manage Subscription & Billing** only for an authenticated account with a linked membership and when the server key is configured.
+- Portal access is independent of `AI4U_ROUTER_BILLING_ENABLED`, allowing existing members to cancel or inspect invoices even if new checkout is paused.
+- The production environment has `AI4U_ROUTER_PORTAL_CONFIG_ID` set. **`STRIPE_ROUTER_PORTAL_API_KEY` is not configured yet**, so the portal button remains hidden and no live portal session can be issued. Owner must create a Stripe live restricted key with **Customer portal sessions: Write** permission and store it in Vercel Production as a sensitive value. Never paste the key into chat, code, GitHub, screenshots, or client JavaScript.
+
+**No-charge proof**
+- `tests/billing/portal.test.js` verifies request parameter scoping, authentication, membership ownership, URL validation and Stripe error handling using a mocked Stripe response.
+- `tests/billing/no-charge.test.js` verifies free-task quote, one-time claim, idempotent repeat claim, paid quote, cancellation, and risk/complexity threshold using an in-memory mock database. No real Stripe payments or Supabase users are created.
+- Six Node tests passed in an isolated Vercel sandbox (Node 24); CI workflow `.github/workflows/billing-portal-proof.yml` runs them on pull requests and main pushes and preserves a log.
+- **Limit:** These tests are deterministic non-charge integration simulations, not a completed live authenticated browser checkout or a real subscription portal session. Full end-to-end checks require a real signed-in Router account and the restricted key.
+
+**Launch hold**
+- Keep `AI4U_ROUTER_BILLING_ENABLED=false` until restricted key installation, portal session verification, and owner approval.
+- Keep Stripe Tax disabled until legal nexus/registration obligations are reviewed; do not assume zero tax obligation merely because tax is not currently collected.
