@@ -186,3 +186,31 @@ The connection client now normalizes the pooled connection URL by removing those
 The current compatibility configuration keeps the PostgreSQL connection encrypted, but uses `rejectUnauthorized: false`; it does not authenticate the database server's certificate chain or hostname. This is not the desired final production security posture. Supabase documents `verify-full` with the project's CA certificate as the strongest verification mode. Before activating live checkout, obtain the Supabase CA certificate from the project's Database Settings → SSL Configuration, add it as a protected Vercel production environment value (for example, `SUPABASE_DB_SSL_CA`), update the client to use `ssl: { ca: process.env.SUPABASE_DB_SSL_CA, rejectUnauthorized: true }`, remove any URL SSL parameters, and rerun the health check. Keep `AI4U_ROUTER_BILLING_ENABLED=false` until that verification and the remaining customer subscription-management gate are complete.
 
 No database passwords, Stripe secrets, payment links, or other credentials were changed or added to source control.
+
+
+## Strict PostgreSQL TLS verification and production proof — 2026-11-11
+
+The Supabase Root 2021 CA certificate was supplied and validated as a PEM X.509 certificate. Its subject is `CN=Supabase Root 2021 CA`, its validity ends on 2021-04-28 10:56:53 UTC through 2031-04-26 10:56:53 UTC, and its SHA-256 fingerprint is `80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA`.
+
+The certificate is stored in Vercel as the sensitive, Production-only environment variable `SUPABASE_DB_SSL_CA`. The certificate is not committed to GitHub. The database client now:
+- Requires the configured CA certificate and fails closed if it is missing or malformed.
+- Uses `ssl: { ca: process.env.SUPABASE_DB_SSL_CA, rejectUnauthorized: true }`.
+- Requires Node TLS to validate the server certificate chain and hostname.
+- Continues to remove SSL-related connection-string parameters before constructing the pool, so the URL cannot override the explicit TLS policy.
+- Applies the same strict policy to the pooled URL and explicit host-variable fallback.
+
+**Production proof**
+- GitHub PR #12 merged to main: `1b4b646bbf9a7fdbc9cfc12697b798cc11845716`.
+- Vercel production deployment: `dpl_BogW56FZG5bqwRjSZ3rDFXnm8A2i`, state READY, commit `1b4b646bbf9a7fdbc9cfc12697b798cc11845716`, alias `routing.ai4utech.com`.
+- Live `GET /api/billing/health` returned: `{"ok":true,"database_configured":true,"database_connected":true,"database_schema_ready":true,"connection_mode":"supabase-pooled","webhook_configured":true,"billing_enabled":false}`.
+- Live `GET /api/billing/config` returned: `{"enabled":false,"monthly_cents":499,"annual_cents":4999,"task_prices":{"basic":199,"standard":299,"advanced":499},"currency":"usd"}`.
+- The successful production database query under `rejectUnauthorized: true` confirms the live Supabase connection passed certificate-chain and hostname verification.
+- No checkout was activated and no payment was made.
+
+**Remaining release gates**
+1. Implement a Router-specific Stripe Customer Portal session endpoint and UI; do not modify the shared Stripe portal configurations used by other AI4U products.
+2. Run non-charge entitlement checks: starter-task claim, quote/cancel path, and checkout open/cancel path.
+3. Reconfirm health and config after those changes.
+4. Obtain explicit owner authorization before changing `AI4U_ROUTER_BILLING_ENABLED` from `false` to `true`.
+
+The earlier SSL caveat in the 2026-11-10 compatibility-fix section is historical and is superseded by this strict-TLS verification record. Billing remains disabled until the remaining release gates are complete.
