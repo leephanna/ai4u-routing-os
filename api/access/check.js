@@ -12,10 +12,17 @@ module.exports = async function (req, res) {
       [user.id]
     );
     const entitlement = result.rows[0] || null;
+    const portal = await db.query(
+      "SELECT 1 FROM ai4u_private.router_entitlements " +
+      "WHERE user_id=$1 AND stripe_customer_id IS NOT NULL " +
+      "AND stripe_subscription_id IS NOT NULL LIMIT 1",
+      [user.id]
+    );
     return send(res, 200, {
       signed_in: true,
       email: user.email,
       subscription_active: !!entitlement,
+      has_portal: portal.rows.length > 0,
       plan_code: entitlement ? entitlement.plan_code : null,
       current_period_end: entitlement ? entitlement.current_period_end : null,
       cancel_at_period_end: entitlement ? entitlement.cancel_at_period_end : false
