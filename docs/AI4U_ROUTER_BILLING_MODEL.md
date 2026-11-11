@@ -246,3 +246,19 @@ The earlier SSL caveat in the 2026-11-10 compatibility-fix section is historical
 **Launch hold**
 - Keep `AI4U_ROUTER_BILLING_ENABLED=false` until restricted key installation, portal session verification, and owner approval.
 - Keep Stripe Tax disabled until legal nexus/registration obligations are reviewed; do not assume zero tax obligation merely because tax is not currently collected.
+
+
+### Customer Portal production deployment and verification — 2026-11-11
+
+- GitHub PR #15 merged to main: `1dac0c126a63eadbf82278f1759e362641d4c7d0`.
+- Vercel deployment `dpl_m5cy2vvnN7Efc1g9htb8f1kXuSgZ`: READY, custom domain `routing.ai4utech.com`, commit `1dac0c126a63eadbf82278f1759e362641d4c7d0`.
+- GitHub Actions pull request proof: run `42988248275`, status completed/success, artifact `router-billing-portal-proof` (artifact ID `13840501550`, retained until 2027-02-09).
+- Local isolated Vercel sandbox Node 24: 6 tests passed, 0 failed, plus syntax checks. Tests use mocks and make no Stripe charges.
+- Live `GET /api/billing/health`: HTTP 200, `ok=true`, `database_connected=true`, `database_schema_ready=true`, `connection_mode=supabase-pooled`, `webhook_configured=true`, `billing_enabled=false`.
+- Live `GET /api/billing/config`: HTTP 200, `enabled=false`, `portal_available=false`, monthly 499 cents, annual 4999 cents, task tiers 199/299/499 cents.
+- Live `GET /api/billing/portal`: HTTP 405 Method not allowed.
+- Live unauthenticated `POST /api/billing/portal`: HTTP 401 Sign in to continue. No Stripe session created.
+- Live unauthenticated `POST /api/task/quote` with a simple goal while billing disabled: HTTP 200 `{"enabled":false,"allowed":true,"reason":"billing_not_enabled"}`; no payment URL or charge.
+- Stripe API read confirmed all five Router Payment Links are active in live mode with automatic tax disabled and redirect completion, without initiating any payment.
+
+**Outstanding before the portal is usable:** The owner must create a live restricted Stripe API key with **Customer portal sessions: Write** and store it in Vercel as sensitive Production-only `STRIPE_ROUTER_PORTAL_API_KEY`. Redeploy after saving. Until then `portal_available=false` and the Manage Subscription button remains hidden. Afterward, test a real signed-in account with a Router membership; do not make a real payment without owner approval. Keep new checkout disabled until explicit authorization.
