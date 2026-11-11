@@ -3155,8 +3155,8 @@ function runRouterCore(){
   const failure = document.getElementById('r-failure').value.trim();
   const output  = document.getElementById('r-output').value.trim();
 
-  if(!stage || !risk){
-    showToast('⚠️ Please select a Task Stage and Risk Level');
+  if(!stage || !risk || !goal){
+    showToast('⚠️ Enter your goal, task stage, and risk level');
     return;
   }
 
