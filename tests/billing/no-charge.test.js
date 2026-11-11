@@ -21,6 +21,7 @@ test("One free eligible task is claimable once; quote cancellation does not char
   const db = require("../../lib/billing/db");
   const auth = require("../../lib/billing/auth");
   const oldQuery = db.query, oldTransaction = db.transaction, oldAuth = auth.requireUser;
+  const oldFetch = global.fetch;
   const oldEnabled = process.env.AI4U_ROUTER_BILLING_ENABLED;
   const oldLink = process.env.AI4U_ROUTER_LINK_TASK_BASIC;
   const quotePath = require.resolve("../../api/task/quote");
@@ -34,6 +35,10 @@ test("One free eligible task is claimable once; quote cancellation does not char
     process.env.AI4U_ROUTER_BILLING_ENABLED = "true"; // Local mock only, never production.
     process.env.AI4U_ROUTER_LINK_TASK_BASIC = "https://buy.stripe.com/test-only-no-charge";
     auth.requireUser = async () => user;
+    global.fetch = async () => {
+      paymentRequests += 1;
+      throw new Error("A no-charge test must never call an external payment API.");
+    };
     db.query = async (sql, values) => {
       if (sql.startsWith("SELECT plan_code")) return { rows: [] };
       if (sql.startsWith("INSERT INTO ai4u_private.router_users")) return { rows: [] };
@@ -112,6 +117,7 @@ test("One free eligible task is claimable once; quote cancellation does not char
     assert.equal(paymentRequests, 0);
   } finally {
     db.query = oldQuery; db.transaction = oldTransaction; auth.requireUser = oldAuth;
+    global.fetch = oldFetch;
     if (oldEnabled === undefined) delete process.env.AI4U_ROUTER_BILLING_ENABLED;
     else process.env.AI4U_ROUTER_BILLING_ENABLED = oldEnabled;
     if (oldLink === undefined) delete process.env.AI4U_ROUTER_LINK_TASK_BASIC;
