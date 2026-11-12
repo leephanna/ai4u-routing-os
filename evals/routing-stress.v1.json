@@ -1,0 +1,182 @@
+[
+  {
+    "id": "S01",
+    "goal": "I need a website that accepts deposits for consultations",
+    "stage": "idea",
+    "risk": "medium",
+    "acceptable": [
+      "Wix"
+    ]
+  },
+  {
+    "id": "S02",
+    "goal": "Help me create a Facebook post advertising a sale",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "S03",
+    "goal": "I want a reliable tool to run E2E UI tests nightly",
+    "stage": "proof",
+    "risk": "high",
+    "acceptable": [
+      "GitHub Actions"
+    ]
+  },
+  {
+    "id": "S04",
+    "goal": "I need a verified evidence trail for a contested election claim",
+    "stage": "idea",
+    "risk": "high",
+    "acceptable": [
+      "AI4U Truth Task Force"
+    ]
+  },
+  {
+    "id": "S05",
+    "goal": "Need an app with login, database and recurring billing",
+    "stage": "prototype",
+    "risk": "high",
+    "acceptable": [
+      "Replit Agent"
+    ]
+  },
+  {
+    "id": "S06",
+    "goal": "Compare costs of Wix vs Webflow for an ecommerce site",
+    "stage": "idea",
+    "risk": "medium",
+    "acceptable": [
+      "Perplexity Pro"
+    ]
+  },
+  {
+    "id": "S07",
+    "goal": "Design a website logo for my restaurant",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "S08",
+    "goal": "Make a quick landing page for my lawn service",
+    "stage": "idea",
+    "risk": "medium",
+    "acceptable": [
+      "Wix"
+    ]
+  },
+  {
+    "id": "S09",
+    "goal": "Set up a no-code automation that adds Typeform leads to Airtable",
+    "stage": "automation",
+    "risk": "medium",
+    "acceptable": [
+      "Zapier"
+    ]
+  },
+  {
+    "id": "S10",
+    "goal": "Run a scheduled ETL pipeline with retries",
+    "stage": "automation",
+    "risk": "high",
+    "acceptable": [
+      "Trigger.dev"
+    ]
+  },
+  {
+    "id": "S11",
+    "goal": "Create a Python course outline",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "S12",
+    "goal": "Summarize a government report",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "S13",
+    "goal": "Research a political issue from reputable sources",
+    "stage": "idea",
+    "risk": "medium",
+    "acceptable": [
+      "Perplexity Pro"
+    ]
+  },
+  {
+    "id": "S14",
+    "goal": "Publish a new article on my Wix blog",
+    "stage": "production",
+    "risk": "medium",
+    "acceptable": [
+      "Wix"
+    ]
+  },
+  {
+    "id": "S15",
+    "goal": "Deploy my static HTML page",
+    "stage": "production",
+    "risk": "medium",
+    "acceptable": [
+      "Vercel"
+    ]
+  },
+  {
+    "id": "S16",
+    "goal": "Generate marketing images for a restaurant",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "S17",
+    "goal": "Draft a privacy policy for my app",
+    "stage": "idea",
+    "risk": "high",
+    "acceptable": [
+      "Claude Sonnet"
+    ]
+  },
+  {
+    "id": "S18",
+    "goal": "Fix a CSS bug in a production codebase",
+    "stage": "broken",
+    "risk": "high",
+    "acceptable": [
+      "Claude Code"
+    ]
+  },
+  {
+    "id": "S19",
+    "goal": "Build an agent that queries tools and logs every step",
+    "stage": "agent",
+    "risk": "high",
+    "acceptable": [
+      "Vercel AI SDK"
+    ]
+  },
+  {
+    "id": "S20",
+    "goal": "Make a Shopify store with payments",
+    "stage": "idea",
+    "risk": "high",
+    "acceptable": [
+      "Shopify"
+    ]
+  }
+]
