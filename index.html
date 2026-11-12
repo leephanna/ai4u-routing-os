@@ -3095,15 +3095,31 @@ const TASK_ROUTE_PROFILES = {
 };
 
 function inferTaskRoute(goal,stage){
-  if(['broken','production','automation','agent','proof','business'].includes(stage)) return null;
-  const g=String(goal||'').toLowerCase();
-  if(/\b(check whether|fact[- ]check|verify (?:a )?(?:claim|fact)|is this true|claim verification|evidence check)\b/i.test(g)) return 'research';
-  if(/\b(research|compare|comparison|product|prices?|reviews?|statistics|market trends|competitors?|source links)\b/i.test(g)) return 'research';
-  if(/\b(images?|illustrations?|logos?|graphics?|videos?|thumbnails?|visuals?|posters?|flyers?|creative concept)\b/i.test(g)) return 'visual';
-  if(/\b(linkedin|instagram|social media|marketing|campaign|content calendar|brand voice|business posts)\b/i.test(g)) return 'marketing';
-  if(/\b(email|resume|cv|cover letter|write|draft|rewrite|proofread|blog|article|proposal|letter)\b/i.test(g)) return 'writing';
-  if(/\b(explain|understand|learn|teach|study|summarize|simplify|translate|knowledge check)\b/i.test(g)) return 'learning';
-  if(/\b(organize|organise|plan|roadmap|outline|brainstorm|project plan|prioritize|prioritise|next actions)\b/i.test(g)) return 'planning';
+  const g=String(goal||'').toLowerCase().trim();
+  // Route from the intended action, not merely the presence of a platform name.
+  const isResearch=/\b(research|compare|comparison|investigate|look up|find sources?|current prices?|reviews?)\b/.test(g);
+  const isExplain=/\b(explain|teach|learn|understand|tutorial|what is|how does)\b/.test(g);
+  if(stage==='broken') return null; // preserve the codebase repair route
+  if(stage==='production' && /\bwix\b/.test(g) && /\b(publish|deploy|launch|update|changes?|site)\b/.test(g)) return 'wixPublish';
+  if(stage==='production') return null; // code-based deployment default: Vercel
+  if(stage==='proof' && /\b(browser|playwright|selenium|regression|live deployment|end.to.end|e2e|ui tests?)\b/.test(g)) return 'browserProof';
+  if(stage==='proof') return null; // model/prompt evaluations: promptfoo
+  if(stage==='automation' && /\b(no.code|without cod(?:e|ing)|drag.and.drop|zapier|make\.com)\b/.test(g)) return 'noCodeAutomation';
+  if(stage==='automation') return null; // code-first durable background jobs: Trigger.dev
+  if(stage==='agent') return null; // agent foundation: Vercel AI SDK
+  if(stage==='business' && /\b(airtable|no.code crm|spreadsheet.crm)\b/.test(g)) return 'airtable';
+  if(stage==='business') return null; // custom backend default: Supabase
+  if(/\b(fact[- ]check|verify|disputed|controversial|political claim|claim verification|challenge a claim)\b/.test(g)
+     && /\b(audit|auditable|evidence trail|proof pack|disputed|controversial|political|defend|receipts|challenge)\b/.test(g)) return 'factAudit';
+  const siteBuild=/\b(build|launch|publish|set up|setup|develop)\b.{0,85}\b(website|web site|landing page|storefront|online store|e.commerce|shop with|store with|wix site|product listings)\b/.test(g)
+    || /\b(create|design|make)\s+(?:(?:a|an|my|the|new|one.page|simple|small|business|marketing|e.commerce)\s+){0,5}(website|web site|landing page|storefront|online store)\b/.test(g);
+  if(siteBuild && !isResearch && !isExplain) return 'website';
+  if(/\b(images?|illustrations?|logos?|graphics?|videos?|thumbnails?|visuals?|posters?|flyers?|creative concept)\b/.test(g)) return 'visual';
+  if(/\b(linkedin|instagram|social media|marketing campaign|campaign|content calendar|brand voice|business posts)\b/.test(g)) return 'marketing';
+  if(/\b(email|resume|cv|cover letter|write|draft|rewrite|proofread|blog|article|proposal|letter)\b/.test(g)) return 'writing';
+  if(/\b(organize|organise|plan|roadmap|outline|brainstorm|project plan|prioritize|prioritise|next actions)\b/.test(g) && !isResearch) return 'planning';
+  if(/\b(research|compare|comparison|prices?|reviews?|statistics|market trends|competitors?|source links|fact[- ]check|verify a claim)\b/.test(g)) return 'research';
+  if(isExplain || /\b(study|summarize|simplify|translate|knowledge check)\b/.test(g)) return 'learning';
   return null;
 }
 
