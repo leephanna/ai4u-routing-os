@@ -61,7 +61,7 @@ test("Standalone offline verifier accepts a signed pack and rejects altered evid
   const tmp=fs.mkdtempSync(path.join(require("node:os").tmpdir(),"ai4u-proof-test-"));
   try{
    const original=fs.readFileSync(path.join(__dirname,"../../scripts/verify-proof-pack.js"),"utf8");
-   const script=original.replace(trusted.public_key_pem.replace(/\n/g,"\\n"),publicPem.replace(/\n/g,"\\n")).replace(/66d9b4bd1aac1f82ef5108a9710faa64c367dd9b9dc5ed3515c77fb36e6f3c83/g,kid);
+   const script=original.replace(prior.pub.replace(/\n/g,"\\n"),publicPem.replace(/\n/g,"\\n")).replace(/66d9b4bd1aac1f82ef5108a9710faa64c367dd9b9dc5ed3515c77fb36e6f3c83/g,kid);
    // Only the test copy gets a test trust root; the production verifier remains pinned.
    const scriptPath=path.join(tmp,"verify.js"),packPath=path.join(tmp,"pack.json");
    fs.writeFileSync(scriptPath,script);fs.writeFileSync(packPath,JSON.stringify(pack));
