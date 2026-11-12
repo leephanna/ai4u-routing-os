@@ -37,7 +37,7 @@ test("Ed25519 signed pack verifies; all tampering, missing evidence and wrong ke
   function modified(fn){const p=JSON.parse(JSON.stringify(pack));fn(p);return p;}
   assert.throws(()=>proof.verifyPack(modified(p=>p.manifest.checks[0].status="fail")),/signature/);
   assert.throws(()=>proof.verifyPack(modified(p=>p.manifest.issued_at="2030-01-01T00:00:00Z")),/signature/);
-  assert.throws(()=>proof.verifyPack(modified(p=>p.artifacts.homepage_sample.data=Buffer.from("different").toString("base64"))),/hash|length/);
+  assert.throws(()=>proof.verifyPack(modified(p=>p.artifacts.homepage_sample.data=Buffer.from("different").toString("base64"))),/modified|truncated|hash|length/);
   assert.throws(()=>proof.verifyPack(modified(p=>delete p.artifacts)),/Evidence/);
   assert.throws(()=>proof.verifyPack(modified(p=>p.signature.key_id="f".repeat(64))),/Untrusted/);
   assert.throws(()=>proof.verifyPack(modified(p=>p.signature.value_base64="A".repeat(86)+"==")),/signature/);
