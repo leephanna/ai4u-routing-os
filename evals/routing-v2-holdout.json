@@ -1,0 +1,541 @@
+{
+  "schema_version": 2,
+  "fixture": "holdout",
+  "fixture_file": "routing-holdout.v1.json",
+  "source": "Current source-code router; no AI or external provider called",
+  "evaluation_type": "Curated reference-route agreement (not ground-truth task success)",
+  "cases": 40,
+  "agreement_count": 40,
+  "disagreement_count": 0,
+  "error_count": 0,
+  "keyword_routes": 31,
+  "stage_routes": 9,
+  "limitations": [
+    "Reference answers are editorial judgments, not independently benchmarked tool outcomes.",
+    "No real user usability study or end-to-end task execution was performed.",
+    "Stage and risk are supplied to the legacy UI, not automatically inferred.",
+    "No empirical confidence calibration, real-user task completion or external platform benchmarking has been performed."
+  ],
+  "results": [
+    {
+      "id": "H01",
+      "goal": "Fact-check a disputed zoning claim and produce an auditable evidence trail",
+      "stage": "idea",
+      "risk": "high",
+      "acceptable": [
+        "AI4U Truth Task Force"
+      ],
+      "selected": "AI4U Truth Task Force",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H02",
+      "goal": "Verify a claim about inflation using recent published statistics",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H03",
+      "goal": "Compare the latest prices and reviews for two laptops",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H04",
+      "goal": "Create a small business website with a booking page",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H05",
+      "goal": "Write email copy for my website's new product",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "Claude Sonnet"
+      ],
+      "selected": "Claude Sonnet",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H06",
+      "goal": "Design a logo for an online store",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H07",
+      "goal": "Launch an online store with checkout and shipping",
+      "stage": "idea",
+      "risk": "high",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H08",
+      "goal": "Compare Wix and Squarespace for a new website",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H09",
+      "goal": "Explain how to publish a Wix site",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H10",
+      "goal": "Publish changes to our Wix homepage",
+      "stage": "production",
+      "risk": "medium",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H11",
+      "goal": "Deploy our Next.js application to Vercel",
+      "stage": "production",
+      "risk": "high",
+      "acceptable": [
+        "Vercel"
+      ],
+      "selected": "Vercel",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H12",
+      "goal": "Automate Slack reminders without coding",
+      "stage": "automation",
+      "risk": "low",
+      "acceptable": [
+        "Zapier"
+      ],
+      "selected": "Zapier",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H13",
+      "goal": "Run a long-lived job with retries and code",
+      "stage": "automation",
+      "risk": "high",
+      "acceptable": [
+        "Trigger.dev"
+      ],
+      "selected": "Trigger.dev",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H14",
+      "goal": "Build an AI tool-calling assistant with persistent conversation memory",
+      "stage": "agent",
+      "risk": "high",
+      "acceptable": [
+        "Vercel AI SDK"
+      ],
+      "selected": "Vercel AI SDK",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H15",
+      "goal": "Use Playwright to run browser tests after each deployment",
+      "stage": "proof",
+      "risk": "high",
+      "acceptable": [
+        "GitHub Actions"
+      ],
+      "selected": "GitHub Actions",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H16",
+      "goal": "Evaluate prompt quality across models with repeatable scoring",
+      "stage": "proof",
+      "risk": "high",
+      "acceptable": [
+        "promptfoo"
+      ],
+      "selected": "promptfoo",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H17",
+      "goal": "Set up Airtable as a CRM with contacts and deals",
+      "stage": "business",
+      "risk": "medium",
+      "acceptable": [
+        "Airtable"
+      ],
+      "selected": "Airtable",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H18",
+      "goal": "Create Postgres authentication and private file storage",
+      "stage": "business",
+      "risk": "high",
+      "acceptable": [
+        "Supabase"
+      ],
+      "selected": "Supabase",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H19",
+      "goal": "Fix an intermittent login bug in React",
+      "stage": "broken",
+      "risk": "high",
+      "acceptable": [
+        "Claude Code"
+      ],
+      "selected": "Claude Code",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H20",
+      "goal": "Build a clickable dashboard prototype",
+      "stage": "prototype",
+      "risk": "medium",
+      "acceptable": [
+        "Replit Agent"
+      ],
+      "selected": "Replit Agent",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H21",
+      "goal": "Brainstorm the roadmap for a kitchen gadget",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H22",
+      "goal": "Research current market trends for kitchen gadgets",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H23",
+      "goal": "Make a promotional poster for an event",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H24",
+      "goal": "Plan a launch campaign for social media",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H25",
+      "goal": "Draft a proposal for a new client",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Claude Sonnet"
+      ],
+      "selected": "Claude Sonnet",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H26",
+      "goal": "Teach a beginner what SQL joins do",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H27",
+      "goal": "Organize project milestones and priorities",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H28",
+      "goal": "Research a new AI agent framework and compare options",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H29",
+      "goal": "Create a no-code automation in Zapier",
+      "stage": "automation",
+      "risk": "medium",
+      "acceptable": [
+        "Zapier"
+      ],
+      "selected": "Zapier",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H30",
+      "goal": "Test deployed app in real browsers for regressions",
+      "stage": "proof",
+      "risk": "high",
+      "acceptable": [
+        "GitHub Actions"
+      ],
+      "selected": "GitHub Actions",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H31",
+      "goal": "Build a one-page landing page for my landscaping business",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H32",
+      "goal": "Build a new product idea with an AI assistant",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H33",
+      "goal": "Build a CRM in Airtable",
+      "stage": "business",
+      "risk": "medium",
+      "acceptable": [
+        "Airtable"
+      ],
+      "selected": "Airtable",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H34",
+      "goal": "Check primary sources for a controversial political claim and produce receipts",
+      "stage": "idea",
+      "risk": "high",
+      "acceptable": [
+        "AI4U Truth Task Force"
+      ],
+      "selected": "AI4U Truth Task Force",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H35",
+      "goal": "Review the latest industry statistics",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H36",
+      "goal": "Create a simple API prototype using Node",
+      "stage": "prototype",
+      "risk": "medium",
+      "acceptable": [
+        "Replit Agent"
+      ],
+      "selected": "Replit Agent",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H37",
+      "goal": "Design a marketing website for a local clinic",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H38",
+      "goal": "Research how to use Airtable for operations",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H39",
+      "goal": "Create a content calendar for my website",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "H40",
+      "goal": "Summarize the notes from my workshop",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    }
+  ]
+}

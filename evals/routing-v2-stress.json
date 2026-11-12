@@ -1,0 +1,281 @@
+{
+  "schema_version": 2,
+  "fixture": "stress",
+  "fixture_file": "routing-stress.v1.json",
+  "source": "Current source-code router; no AI or external provider called",
+  "evaluation_type": "Curated reference-route agreement (not ground-truth task success)",
+  "cases": 20,
+  "agreement_count": 20,
+  "disagreement_count": 0,
+  "error_count": 0,
+  "keyword_routes": 14,
+  "stage_routes": 6,
+  "limitations": [
+    "Reference answers are editorial judgments, not independently benchmarked tool outcomes.",
+    "No real user usability study or end-to-end task execution was performed.",
+    "Stage and risk are supplied to the legacy UI, not automatically inferred.",
+    "No empirical confidence calibration, real-user task completion or external platform benchmarking has been performed."
+  ],
+  "results": [
+    {
+      "id": "S01",
+      "goal": "I need a website that accepts deposits for consultations",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S02",
+      "goal": "Help me create a Facebook post advertising a sale",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S03",
+      "goal": "I want a reliable tool to run E2E UI tests nightly",
+      "stage": "proof",
+      "risk": "high",
+      "acceptable": [
+        "GitHub Actions"
+      ],
+      "selected": "GitHub Actions",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S04",
+      "goal": "I need a verified evidence trail for a contested election claim",
+      "stage": "idea",
+      "risk": "high",
+      "acceptable": [
+        "AI4U Truth Task Force"
+      ],
+      "selected": "AI4U Truth Task Force",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S05",
+      "goal": "Need an app with login, database and recurring billing",
+      "stage": "prototype",
+      "risk": "high",
+      "acceptable": [
+        "Replit Agent"
+      ],
+      "selected": "Replit Agent",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S06",
+      "goal": "Compare costs of Wix vs Webflow for an ecommerce site",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S07",
+      "goal": "Design a website logo for my restaurant",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S08",
+      "goal": "Make a quick landing page for my lawn service",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S09",
+      "goal": "Set up a no-code automation that adds Typeform leads to Airtable",
+      "stage": "automation",
+      "risk": "medium",
+      "acceptable": [
+        "Zapier"
+      ],
+      "selected": "Zapier",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S10",
+      "goal": "Run a scheduled ETL pipeline with retries",
+      "stage": "automation",
+      "risk": "high",
+      "acceptable": [
+        "Trigger.dev"
+      ],
+      "selected": "Trigger.dev",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S11",
+      "goal": "Create a Python course outline",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S12",
+      "goal": "Summarize a government report",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S13",
+      "goal": "Research a political issue from reputable sources",
+      "stage": "idea",
+      "risk": "medium",
+      "acceptable": [
+        "Perplexity Pro"
+      ],
+      "selected": "Perplexity Pro",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S14",
+      "goal": "Publish a new article on my Wix blog",
+      "stage": "production",
+      "risk": "medium",
+      "acceptable": [
+        "Wix"
+      ],
+      "selected": "Wix",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S15",
+      "goal": "Deploy my static HTML page",
+      "stage": "production",
+      "risk": "medium",
+      "acceptable": [
+        "Vercel"
+      ],
+      "selected": "Vercel",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S16",
+      "goal": "Generate marketing images for a restaurant",
+      "stage": "idea",
+      "risk": "low",
+      "acceptable": [
+        "ChatGPT"
+      ],
+      "selected": "ChatGPT",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S17",
+      "goal": "Draft a privacy policy for my app",
+      "stage": "idea",
+      "risk": "high",
+      "acceptable": [
+        "Claude Sonnet"
+      ],
+      "selected": "Claude Sonnet",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S18",
+      "goal": "Fix a CSS bug in a production codebase",
+      "stage": "broken",
+      "risk": "high",
+      "acceptable": [
+        "Claude Code"
+      ],
+      "selected": "Claude Code",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S19",
+      "goal": "Build an agent that queries tools and logs every step",
+      "stage": "agent",
+      "risk": "high",
+      "acceptable": [
+        "Vercel AI SDK"
+      ],
+      "selected": "Vercel AI SDK",
+      "route_type": "stage",
+      "agreement": true,
+      "error": null
+    },
+    {
+      "id": "S20",
+      "goal": "Make a Shopify store with payments",
+      "stage": "idea",
+      "risk": "high",
+      "acceptable": [
+        "Shopify"
+      ],
+      "selected": "Shopify",
+      "route_type": "keyword",
+      "agreement": true,
+      "error": null
+    }
+  ]
+}

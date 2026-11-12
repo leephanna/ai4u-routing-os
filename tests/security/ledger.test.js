@@ -36,5 +36,5 @@ test("Unmeasured success claims are not displayed as proof",()=>{
   assert.equal(html.includes('class="check-pass">✓ PASS'),false);
   assert.equal(html.includes("Routing guidance indicator: ${confidence}%"),false);
   assert.equal(html.includes("data:[96,94,91,88,99,92,98,78]"),false);
-  assert.ok(html.includes("Reference-route agreement"));
+  assert.ok(html.includes("Routing Evaluation · V2"));
 });

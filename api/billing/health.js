@@ -5,10 +5,21 @@ module.exports = async function (req, res) {
   if (req.method !== "GET") return send(res, 405, { error: "Method not allowed" });
 
   if (req.query && req.query.baseline === "1") {
+    const versions = Object.freeze({
+      legacy: "legacy-2026-11-11",
+      baseline: "router-v2-baseline-2026-11-12",
+      holdout: "router-v2-holdout-2026-11-12",
+      stress: "router-v2-stress-2026-11-12",
+      challenge: "router-v2-challenge-2026-11-12"
+    });
+    const version = String(req.query.version || "legacy");
+    if (!Object.prototype.hasOwnProperty.call(versions, version)) {
+      return send(res, 400, { error: "Unknown evaluation version" });
+    }
     try {
       const result = await db.query(
         "SELECT baseline_id, report, created_at FROM ai4u_private.router_eval_baselines WHERE baseline_id=$1",
-        ["legacy-2026-11-11"]
+        [versions[version]]
       );
       if (!result.rows.length) return send(res, 404, { error: "Baseline not available" });
       const row = result.rows[0];

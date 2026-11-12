@@ -1,0 +1,19 @@
+{
+  "date_utc": "2026-11-12",
+  "scope": "Chromium headless smoke against actual branch HTML/JS served locally in Vercel sandbox",
+  "browser": "Chromium Headless Shell 143",
+  "routing_cases_exercised": 8,
+  "routing_cases_passed": 8,
+  "empty_form_did_not_request_billing_access": true,
+  "mobile_navigation_375px": "PASS",
+  "external_billing": "NOT EXECUTED",
+  "authentication": "MOCKED",
+  "production": "NOT DEPLOYED AT TIME OF TEST",
+  "real_user_task_success": "NOT MEASURED",
+  "test_file": "tests/e2e/local-routing-smoke.js",
+  "caveats": [
+    "This test runs branch files on a local HTTP server, not against protected Vercel Preview.",
+    "The mocked billing approval verifies the route UI, not Stripe.",
+    "The routing cases are editorial checks, not independent benchmarks."
+  ]
+}

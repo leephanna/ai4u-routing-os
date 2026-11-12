@@ -1267,15 +1267,26 @@ ai4uShowExample(0);
     </div>
   </div>
 
-  <!-- MEASURED BASELINE — NO SYNTHETIC METRICS -->
+  <!-- EVIDENCE-BASED ROUTING SCORECARD — EDITORIAL AGREEMENT ONLY -->
   <div class="section" id="measured-baseline">
     <div class="section-title">Evidence, Not Estimates</div>
-    <div class="section-heading">Routing Baseline</div>
-    <p class="section-sub">30 curated reference tasks were run through the original rule-based engine. Agreement with editorial reference choices is not the same as real-world task success.</p>
+    <div class="section-heading">Routing Evaluation · V2</div>
+    <p class="section-sub">The same 30 curated tasks were rerun after the intent-routing update. These numbers measure agreement with editorial reference choices, not actual user success, model accuracy, or verified platform quality.</p>
     <div class="grid-2" style="gap:20px;margin-top:20px">
-      <div class="card"><div class="card-title">Reference-route agreement</div><div style="font-size:28px;font-weight:700;color:var(--cyan)">20 / 30</div><p style="font-size:12px;color:var(--white2)">10 disagreements; 0 execution errors in the deterministic baseline. No claim of measured user satisfaction.</p></div>
-      <div class="card"><div class="card-title">What remains unmeasured</div><p style="font-size:13px;color:var(--white2)">Real-world task completion, user time saved, browser usability, and platform reliability have not yet been benchmarked.</p><a href="https://github.com/leephanna/ai4u-routing-os/blob/main/evals/baseline-2026-11-11.json" target="_blank" rel="noopener">Review baseline evidence</a></div>
+      <div class="card">
+        <div class="card-title">Original → V2 reference agreement</div>
+        <div style="font-size:28px;font-weight:700;color:var(--cyan)">20/30 → 30/30</div>
+        <p style="font-size:12px;color:var(--white2)">The original 10 disagreements are resolved on this fixed development set. This is an in-sample result and should not be interpreted as 100% reliability.</p>
+        <a href="https://github.com/leephanna/ai4u-routing-os/blob/main/evals/routing-v2-baseline.json" target="_blank" rel="noopener noreferrer">View 30-task evaluation</a>
+      </div>
+      <div class="card">
+        <div class="card-title">Generalization checks</div>
+        <div style="font-size:23px;font-weight:700;color:var(--cyan)">40/40 · 20/20 · 17/20</div>
+        <p style="font-size:12px;color:var(--white2)">40-case validation and 20-case stress sets were reviewed during development. The final 20-case challenge set was evaluated without subsequent tuning: three disagreements remain.</p>
+        <a href="https://github.com/leephanna/ai4u-routing-os/blob/main/evals/routing-v2-challenge.json" target="_blank" rel="noopener noreferrer">Inspect the three unresolved cases</a>
+      </div>
     </div>
+    <p class="section-sub" style="margin-top:16px">Not yet measured: independent expert judgments, actual task completion, time saved, accessibility outcomes, and real-user satisfaction. All evaluation fixtures and results are preserved in GitHub.</p>
   </div>
 
   <!-- SELF-IMPROVEMENT LOOP -->
@@ -1776,7 +1787,7 @@ ai4uShowExample(0);
               <option value="low">Low — Experiment freely</option>
               <option value="medium">Medium — Needs review</option>
               <option value="high">High — Requires verification</option>
-              <option value="critical">Mission Critical — Zero tolerance</option>
+              <option value="critical">Mission Critical — Independent verification</option>
             </select>
           </div>
           <div class="form-group">
@@ -3069,17 +3080,24 @@ function buildMatrix(){
    ROUTE ENGINE
 ═══════════════════════════════════════════════════════ */
 const ROUTING_DB = {
-  idea:       {platform:'Manus Agent',    why:'Manus excels at turning vague ideas into complete first builds through multi-step orchestration. It handles research, code, and deployment in a single session.',        avoid:'Do not use Claude Code (needs existing code), Codex (too narrow), or Zapier (no code generation).', where:'Paste in Manus chat. Start with "Build me..." and describe the full vision.'},
+  idea:       {platform:'ChatGPT', why:'For a new idea, define the outcome, constraints and acceptance criteria before selecting a build platform. Planning is not proof that an app was built.', avoid:'Do not assume chat output deployed software or performed external actions.', where:'Open ChatGPT, describe the outcome and constraints, and request an executable plan.'},
   prototype:  {platform:'Replit Agent',   why:'Replit provides a live-preview environment with AI assistance. Perfect for interactive demos and client-facing MVPs that need to run immediately.',                    avoid:'Do not use Vercel (no IDE), GitHub Actions (no AI coding), or Supabase alone.', where:'Open Replit.com, start a new Repl, activate the AI Agent, and describe your prototype.'},
   broken:     {platform:'Claude Code',    why:'Claude Code reads entire codebases with full context and applies surgical, precise fixes. It understands the relationship between files and avoids breaking working code.', avoid:'Do not use ChatGPT (loses context), Codex (too narrow), or Manus (better for new builds).', where:'Open Claude.ai, use the Projects feature, upload your repo or paste the broken files.'},
   production: {platform:'Vercel',         why:'Vercel is the gold standard for production deployment. Zero-config, instant CDN, custom domains, automatic HTTPS, and GitHub CI/CD built in.',                         avoid:'Do not use Replit (not production-grade), Wix (no code deploy), or manual hosting.', where:'Push to GitHub, import repo in Vercel dashboard, configure domain, deploy.'},
   automation: {platform:'Trigger.dev',    why:'Trigger.dev provides durable, code-first background job execution with automatic retries, long-running task support, and full observability.',                          avoid:'Do not use Zapier for complex code-based automation. Do not use GitHub Actions for user-triggered flows.', where:'Install @trigger.dev/sdk, define your job, deploy via their CLI.'},
-  agent:      {platform:'Manus Agent',    why:'Manus is purpose-built for multi-step AI agent tasks. It can orchestrate research, code, deploy, and verify in a single autonomous session.',                          avoid:'Do not use ChatGPT alone (no file system), Codex (no orchestration), or Zapier (no AI reasoning).', where:'Describe the full agent workflow in Manus chat. Be explicit about inputs, outputs, and verification.'},
+  agent:      {platform:'Vercel AI SDK', why:'The Vercel AI SDK is a programmable foundation for tool-using agents. Pair it with Supabase for durable records and Trigger.dev for background jobs when needed.', avoid:'An SDK alone does not supply hosting, persistence, auth or verified autonomy. Add permissions, budget limits, tests and a stop rule.', where:'Build a Next.js app using the Vercel AI SDK, implement scoped tools, run evaluations and deploy through Vercel.'},
   proof:      {platform:'promptfoo',      why:'promptfoo is the leading open-source LLM evaluation framework. It generates quantitative proof of AI output quality with repeatable, auditable test suites.',           avoid:'Do not use manual testing alone. Do not use Sentry for LLM evals (it is for runtime errors).', where:'Install promptfoo CLI, define your eval config YAML, run npx promptfoo eval.'},
   business:   {platform:'Supabase',       why:'Supabase provides the full backend stack for business systems: Postgres database, user auth, file storage, real-time subscriptions, and vector embeddings.',            avoid:'Do not use localStorage for business data. Do not use Firebase (vendor lock-in). Do not use raw Postgres without an ORM.', where:'Create a Supabase project, define your schema, use the JS/Python SDK in your app.'}
 };
 
 const TASK_ROUTE_PROFILES = {
+  factAudit:{label:'Contested claim / defensible evidence audit',platform:'AI4U Truth Task Force',fallback:'Perplexity Pro',promptPlatform:'chatgpt',why:'A disputed claim requiring a traceable evidence record needs more than search snippets. Truth Task Force is designed for source review, challenges and evidence receipts; inspect its actual findings.',avoid:'Do not treat an automated support score as objective truth or a legal guarantee. Check primary evidence, provenance, limitations and reviewer independence.',where:'Open https://truth.ai4utech.com/, submit the exact claim, inspect evidence and limitations, and export the Proof Pack when available.'},
+  website:{label:'Business website or storefront',platform:'Wix',fallback:'Replit Agent',promptPlatform:'chatgpt',why:'For a conventional small-business website or storefront, a hosted site builder with editing and payment options can reduce custom infrastructure.',avoid:'Verify payment, shipping, tax, plan pricing, mobile layout and domain ownership. Do not assume checkout is configured until tested.',where:'Open Wix, create the pages and products, configure payments, test the checkout and publish after review.'},
+  shopify:{label:'Shopify storefront',platform:'Shopify',fallback:'Wix',promptPlatform:'chatgpt',why:'When the request explicitly names Shopify for a dedicated ecommerce storefront, use that platform rather than routing to a generic chatbot.',avoid:'Verify current subscription, transaction fees, tax settings, shipping, payment eligibility and app costs before launch.',where:'Open Shopify, create the store, configure products and payments, test checkout, and verify the published domain.'},
+  wixPublish:{label:'Existing Wix site publishing',platform:'Wix',fallback:'Wix support',promptPlatform:'chatgpt',why:'Changes to an existing Wix site should normally be published and verified in Wix rather than moved to unrelated hosting.',avoid:'Do not move a working Wix site to Vercel merely to publish content updates.',where:'Open the Wix site dashboard, review changes, select Publish and verify the live URL.'},
+  noCodeAutomation:{label:'No-code automation',platform:'Zapier',fallback:'Make',promptPlatform:'chatgpt',why:'For a straightforward recurring cross-app workflow without programming, a no-code automation platform is a practical starting point.',avoid:'Check permissions, plan limits, retry behavior and error alerts. Save and export or document the Zapier workflow.',where:'Open Zapier, configure trigger and actions, test with sample data, save the workflow and enable it.'},
+  browserProof:{label:'Browser and deployment regression proof',platform:'GitHub Actions',fallback:'Playwright',promptPlatform:'chatgpt',why:'GitHub Actions can run Playwright browser tests for each proposed change and retain proof artifacts. A green build alone does not verify the live website.',avoid:'Do not claim PASS because a workflow file exists. Inspect actual CI logs, the deployed URL and browser output.',where:'Add Playwright tests to the repository, execute them through GitHub Actions and preserve logs, screenshots and commit IDs.'},
+  airtable:{label:'No-code relational business database',platform:'Airtable',fallback:'Supabase',promptPlatform:'chatgpt',why:'For a lightweight no-code CRM or structured tracker, Airtable provides editable tables, views and forms without a custom backend.',avoid:'Check record limits, collaborator permissions and automation quotas; custom auth may require Supabase.',where:'Create an Airtable base with contacts and activities, add views and forms, and verify access and backups.'},
   research:{label:'Research & comparison',platform:'Perplexity Pro',fallback:'ChatGPT',promptPlatform:'perplexity',why:'For current or evidence-based questions, Perplexity is a useful starting point because it can search the web and surface source links. Open the original sources before relying on a summary.',avoid:'Do not accept a claim from a single search snippet. Check the source itself, publication date, and whether it supports the exact statement. High-stakes claims need independent review.',where:'Open Perplexity, enter the question, request current sources and direct links, then open the original documents.'},
   writing:{label:'Writing & communication',platform:'Claude Sonnet',fallback:'ChatGPT',promptPlatform:'claude',why:'Claude is a strong starting point for clear, structured writing and revision. Give it the audience, purpose, tone, and any wording that must stay unchanged.',avoid:'Do not treat the first draft as final. Check names, dates, factual claims, promises, and sensitive wording before sending or publishing.',where:'Open Claude, start a new chat, paste the prepared instructions, and add your draft or background when supported.'},
   marketing:{label:'Business content',platform:'ChatGPT',fallback:'Claude Sonnet',promptPlatform:'chatgpt',why:'ChatGPT is a practical starting point for generating campaign ideas, variations, and content adapted for different channels. Brand context and audience details improve the result.',avoid:'Review brand voice, offers, links, and factual claims. Do not publish automatically without checking the final content.',where:'Open ChatGPT, use its main chat or creation tools, paste the prepared brief, and ask for revisions until the content fits your brand.'},
@@ -3089,15 +3107,35 @@ const TASK_ROUTE_PROFILES = {
 };
 
 function inferTaskRoute(goal,stage){
-  if(['broken','production','automation','agent','proof','business'].includes(stage)) return null;
-  const g=String(goal||'').toLowerCase();
-  if(/\b(check whether|fact[- ]check|verify (?:a )?(?:claim|fact)|is this true|claim verification|evidence check)\b/i.test(g)) return 'research';
-  if(/\b(research|compare|comparison|product|prices?|reviews?|statistics|market trends|competitors?|source links)\b/i.test(g)) return 'research';
-  if(/\b(images?|illustrations?|logos?|graphics?|videos?|thumbnails?|visuals?|posters?|flyers?|creative concept)\b/i.test(g)) return 'visual';
-  if(/\b(linkedin|instagram|social media|marketing|campaign|content calendar|brand voice|business posts)\b/i.test(g)) return 'marketing';
-  if(/\b(email|resume|cv|cover letter|write|draft|rewrite|proofread|blog|article|proposal|letter)\b/i.test(g)) return 'writing';
-  if(/\b(explain|understand|learn|teach|study|summarize|simplify|translate|knowledge check)\b/i.test(g)) return 'learning';
-  if(/\b(organize|organise|plan|roadmap|outline|brainstorm|project plan|prioritize|prioritise|next actions)\b/i.test(g)) return 'planning';
+  const g=String(goal||'').toLowerCase().trim();
+  // Route from the intended action, not merely the presence of a platform name.
+  const isResearch=/\b(research|compare|comparison|investigate|look up|find sources?|current prices?|reviews?)\b/.test(g);
+  const isExplain=/\b(explain|teach|learn|understand|tutorial|what is|how does)\b/.test(g);
+  if(stage==='broken') return null; // preserve the codebase repair route
+  if(stage==='production' && /\bwix\b/.test(g) && /\b(publish|deploy|launch|update|changes?|site)\b/.test(g)) return 'wixPublish';
+  if(stage==='production') return null; // code-based deployment default: Vercel
+  if(stage==='proof' && /\b(browsers?|playwright|selenium|regressions?|live deployment|end.to.end|e2e|ui tests?)\b/.test(g)) return 'browserProof';
+  if(stage==='proof') return null; // model/prompt evaluations: promptfoo
+  if(stage==='automation' && /\b(no.code|without cod(?:e|ing)|drag.and.drop|zapier|make\.com)\b/.test(g)) return 'noCodeAutomation';
+  if(stage==='automation') return null; // code-first durable background jobs: Trigger.dev
+  if(stage==='agent') return null; // agent foundation: Vercel AI SDK
+  if(stage==='business' && /\b(airtable|no.code crm|spreadsheet.crm)\b/.test(g)) return 'airtable';
+  if(stage==='business') return null; // custom backend default: Supabase
+  if(/\b(fact[- ]check|verify|verified|disputed|contested|controversial|political claim|election claim|claim verification|challenge a claim)\b/.test(g)
+     && /\b(audit|auditable|evidence trail|proof pack|disputed|contested|controversial|political|election|defend|receipts|challenge)\b/.test(g)) return 'factAudit';
+  if(/\b(shopify)\b/.test(g) && /\b(build|make|create|launch|publish|store|shop|checkout|payments?)\b/.test(g) && !isResearch && !isExplain) return 'shopify';
+  // Do not confuse an asset FOR a website with a request to BUILD the website.
+  if(/\b(design|make|create)\s+(?:(?:a|an|my|the|new|website|business)\s+){0,3}(logos?|posters?|graphics?|images?|illustrations?)\b/.test(g)) return 'visual';
+  if(/\b(need|want)\s+(?:(?:a|an|my|the|new|business)\s+){0,3}(website|web site|landing page|storefront)\b/.test(g) && !isResearch && !isExplain) return 'website';
+  const siteBuild=/\b(build|launch|publish|set up|setup|develop)\b.{0,85}\b(website|web site|landing page|storefront|online store|e.commerce|shop with|store with|wix site|product listings)\b/.test(g)
+    || /\b(create|design|make)\s+(?:(?:a|an|my|the|new|one.page|simple|small|quick|business|marketing|e.commerce)\s+){0,5}(website|web site|landing page|storefront|online store)\b/.test(g);
+  if(siteBuild && !isResearch && !isExplain) return 'website';
+  if(/\b(images?|illustrations?|logos?|graphics?|videos?|thumbnails?|visuals?|posters?|flyers?|creative concept)\b/.test(g)) return 'visual';
+  if(/\b(linkedin|instagram|social media|marketing campaign|campaign|content calendar|brand voice|business posts)\b/.test(g)) return 'marketing';
+  if(/\b(email|resume|cv|cover letter|write|draft|rewrite|proofread|blog|article|proposal|letter)\b/.test(g)) return 'writing';
+  if(/\b(organize|organise|plan|roadmap|outline|brainstorm|project plan|prioritize|prioritise|next actions)\b/.test(g) && !isResearch) return 'planning';
+  if(/\b(research|compare|comparison|prices?|reviews?|statistics|market trends|competitors?|source links|fact[- ]check|verify a claim)\b/.test(g)) return 'research';
+  if(isExplain || /\b(study|summarize|simplify|translate|knowledge check)\b/.test(g)) return 'learning';
   return null;
 }
 
@@ -3117,7 +3155,7 @@ const RISK_NOTES = {
   low:      'Low risk — experiment freely. Use the recommended platform without additional verification layers.',
   medium:   'Medium risk — review output before deploying. Add a manual proof step before going live.',
   high:     'High risk — requires verification. Add automated testing, peer review, and a proof receipt before deployment.',
-  critical: 'MISSION CRITICAL — zero tolerance for failure. Use Claude Code + Supabase + GitHub Actions. Every step must produce a verifiable proof receipt. Do not deploy without full proof chain sign-off.'
+  critical: 'Mission-critical — require human approval for irreversible actions, independent checks, budget controls, and a recorded stop rule. No toolchain guarantees zero failures.'
 };
 const CHECKLISTS = {
   idea:       ['Define the full vision in one sentence','Describe the required output format','List all constraints and non-goals','Verify the output matches the vision before proceeding'],
@@ -3134,12 +3172,13 @@ async function runRouter(){
   if(state.guideDemoActive){ runRouterCore(); return; }
   const task = {
     goal: (document.getElementById('r-goal')?.value || '').trim(),
-    stage: document.getElementById('r-stage')?.value || 'idea',
-    risk: document.getElementById('r-risk')?.value || 'medium',
+    stage: document.getElementById('r-stage')?.value || '',
+    risk: document.getElementById('r-risk')?.value || '',
     asset: (document.getElementById('r-asset')?.value || '').trim(),
     failure: (document.getElementById('r-failure')?.value || '').trim(),
     output: (document.getElementById('r-output')?.value || '').trim()
   };
+  if(!task.goal || !task.stage || !task.risk){ showToast('⚠️ Enter your goal, task stage, and risk level before requesting a route'); return; }
   if(window.AI4UBilling && typeof AI4UBilling.requestTaskAccess === 'function'){
     const allowed = await AI4UBilling.requestTaskAccess(task, 'route');
     if(!allowed) return;
@@ -3165,7 +3204,7 @@ function runRouterCore(){
   const routeCategory = taskRouteKey ? TASK_ROUTE_PROFILES[taskRouteKey].label : ({idea:'New idea / first draft',prototype:'First working version',broken:'Repair / troubleshooting',production:'Launch / deployment',automation:'Automation',agent:'AI agent or widget',proof:'Testing / evaluation',business:'Business system'}[stage] || 'General task');
   const routeSource = taskRouteKey ? 'Task-specific match' : 'Stage-based starting point';
   const promptPlatform = route.promptPlatform || ({'Manus Agent':'manus','Replit Agent':'replit','Claude Code':'claude-code','Vercel':'claude','Trigger.dev':'claude','promptfoo':'claude','Supabase':'claude'}[route.platform] || 'chatgpt');
-  const fallback = route.fallback || (stage==='production'?'Cloudflare Pages':stage==='broken'?'Manus Agent':stage==='automation'?'Zapier':stage==='proof'?'LangSmith':'Claude Sonnet');
+  const fallback = route.fallback || (stage==='production'?'Cloudflare Pages':stage==='broken'?'ChatGPT':stage==='automation'?'Zapier':stage==='agent'?'Trigger.dev':stage==='proof'?'LangSmith':'Claude Sonnet');
   const checklist = CHECKLISTS[stage] || CHECKLISTS['idea'];
   const riskNote = RISK_NOTES[risk] || '';
 
