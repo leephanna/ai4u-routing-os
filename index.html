@@ -1267,15 +1267,26 @@ ai4uShowExample(0);
     </div>
   </div>
 
-  <!-- MEASURED BASELINE — NO SYNTHETIC METRICS -->
+  <!-- EVIDENCE-BASED ROUTING SCORECARD — EDITORIAL AGREEMENT ONLY -->
   <div class="section" id="measured-baseline">
     <div class="section-title">Evidence, Not Estimates</div>
-    <div class="section-heading">Routing Baseline</div>
-    <p class="section-sub">30 curated reference tasks were run through the original rule-based engine. Agreement with editorial reference choices is not the same as real-world task success.</p>
+    <div class="section-heading">Routing Evaluation · V2</div>
+    <p class="section-sub">The same 30 curated tasks were rerun after the intent-routing update. These numbers measure agreement with editorial reference choices, not actual user success, model accuracy, or verified platform quality.</p>
     <div class="grid-2" style="gap:20px;margin-top:20px">
-      <div class="card"><div class="card-title">Reference-route agreement</div><div style="font-size:28px;font-weight:700;color:var(--cyan)">20 / 30</div><p style="font-size:12px;color:var(--white2)">10 disagreements; 0 execution errors in the deterministic baseline. No claim of measured user satisfaction.</p></div>
-      <div class="card"><div class="card-title">What remains unmeasured</div><p style="font-size:13px;color:var(--white2)">Real-world task completion, user time saved, browser usability, and platform reliability have not yet been benchmarked.</p><a href="https://github.com/leephanna/ai4u-routing-os/blob/main/evals/baseline-2026-11-11.json" target="_blank" rel="noopener">Review baseline evidence</a></div>
+      <div class="card">
+        <div class="card-title">Original → V2 reference agreement</div>
+        <div style="font-size:28px;font-weight:700;color:var(--cyan)">20/30 → 30/30</div>
+        <p style="font-size:12px;color:var(--white2)">The original 10 disagreements are resolved on this fixed development set. This is an in-sample result and should not be interpreted as 100% reliability.</p>
+        <a href="https://github.com/leephanna/ai4u-routing-os/blob/main/evals/routing-v2-baseline.json" target="_blank" rel="noopener noreferrer">View 30-task evaluation</a>
+      </div>
+      <div class="card">
+        <div class="card-title">Generalization checks</div>
+        <div style="font-size:23px;font-weight:700;color:var(--cyan)">40/40 · 20/20 · 17/20</div>
+        <p style="font-size:12px;color:var(--white2)">40-case validation and 20-case stress sets were reviewed during development. The final 20-case challenge set was evaluated without subsequent tuning: three disagreements remain.</p>
+        <a href="https://github.com/leephanna/ai4u-routing-os/blob/main/evals/routing-v2-challenge.json" target="_blank" rel="noopener noreferrer">Inspect the three unresolved cases</a>
+      </div>
     </div>
+    <p class="section-sub" style="margin-top:16px">Not yet measured: independent expert judgments, actual task completion, time saved, accessibility outcomes, and real-user satisfaction. All evaluation fixtures and results are preserved in GitHub.</p>
   </div>
 
   <!-- SELF-IMPROVEMENT LOOP -->
