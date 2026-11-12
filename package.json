@@ -11,7 +11,8 @@
   "scripts": {
     "test:billing": "node --test tests/billing/*.test.js",
     "test:quality": "node --test tests/security/*.test.js tests/mission/*.test.js",
-    "test": "node --test tests/billing/*.test.js tests/security/*.test.js tests/mission/*.test.js",
-    "eval:router": "node scripts/evaluate-routing.js"
+    "test": "node --test tests/billing/*.test.js tests/security/*.test.js tests/mission/*.test.js tests/routing/*.test.js",
+    "eval:router": "node scripts/evaluate-routing.js",
+    "test:routing": "node --test tests/routing/*.test.js"
   }
 }
