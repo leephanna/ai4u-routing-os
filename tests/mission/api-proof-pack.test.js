@@ -25,9 +25,9 @@ test("Signed export enforces owner scope, refuses V1 evidence and reuses persist
    if(sql.startsWith("INSERT INTO ai4u_private.router_mission_receipts")){created++;receipt=JSON.parse(params[4]);return {rows:[]};}
    throw Error("Unexpected SQL");
   };
-  const p=require.resolve("../../api/mission/proof-pack");delete require.cache[p];const handler=require(p);
-  const call=async(query,method="GET")=>{const res=response();await handler({method,query,headers:{}},res);return res;};
-  assert.equal((await call({mission_id:id},"POST")).statusCode,405);
+  const p=require.resolve("../../api/mission/site-audit");delete require.cache[p];const handler=require(p);
+  const call=async(query,method="GET")=>{const res=response();await handler({method,query:{...query,proof:"1"},headers:{}},res);return res;};
+  assert.equal((await call({mission_id:id},"PUT")).statusCode,405);
   assert.equal((await call({mission_id:"invalid"})).statusCode,400);
   user="00000000-0000-4000-8000-000000000002";
   assert.equal((await call({mission_id:id})).statusCode,404);
@@ -44,6 +44,6 @@ test("Signed export enforces owner scope, refuses V1 evidence and reuses persist
   if(original.pem===undefined)delete process.env.AI4U_PROOF_SIGNING_PRIVATE_KEY;
   else process.env.AI4U_PROOF_SIGNING_PRIVATE_KEY=original.pem;
   trusted.key_id=original.key;trusted.public_key_pem=original.pub;
-  delete require.cache[require.resolve("../../api/mission/proof-pack")];
+  delete require.cache[require.resolve("../../api/mission/site-audit")];
  }
 });
