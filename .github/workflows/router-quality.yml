@@ -23,16 +23,27 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Billing, security and mission regression suite
         run: npm test
-      - name: Routing reference evaluation
+      - name: Routing reference and challenge evaluations
         run: |
-          node scripts/evaluate-routing.js > routing-evaluation.json
-          node -e 'const x=require("./routing-evaluation.json");if(x.cases!==30||x.error_count!==0||x.agreement_count<20)process.exit(1);'
+          for f in baseline holdout stress challenge; do
+            node scripts/evaluate-routing.js --fixture="$f" > "routing-evaluation-$f.json"
+          done
+          node - <<'NODE'
+          const floors={baseline:[30,30],holdout:[40,40],stress:[20,20],challenge:[20,17]};
+          for(const [fixture,[count,floor]] of Object.entries(floors)){
+            const result=require("./routing-evaluation-"+fixture+".json");
+            if(result.cases!==count||result.error_count!==0||result.agreement_count<floor){
+              throw Error(fixture+" regression: "+result.agreement_count+"/"+result.cases);
+            }
+          }
+          NODE
       - name: Preserve quality proof
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: router-quality-proof
           path: |
-            routing-evaluation.json
+            routing-evaluation-*.json
             evals/baseline-2026-11-11.json
+            evals/routing-v2-*.json
           retention-days: 90
