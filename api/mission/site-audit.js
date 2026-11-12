@@ -34,9 +34,20 @@ module.exports=async function(req,res){
     }
     if(action!=="run")return send(res,400,{error:"Unknown mission action."});
     if(mission.attempts>=5)return send(res,429,{error:"This mission has reached its five-attempt limit. Start a new mission."});
-    await db.query("UPDATE ai4u_private.router_missions SET status='running',attempts=attempts+1,last_error=NULL,updated_at=now() WHERE id=$1 AND user_id=$2",[id,user.id]);
+    // Atomic state claim prevents concurrent runs from reusing an attempt number.
+    const claimed=await db.query("UPDATE ai4u_private.router_missions SET status='running',attempts=attempts+1,completed_at=NULL,last_error=NULL,updated_at=now() WHERE id=$1 AND user_id=$2 AND status<>'running' AND attempts<5 RETURNING attempts",[id,user.id]);
+    if(!claimed.rows.length)return send(res,409,{error:"This mission is already running or has reached its attempt limit."});
+    const attempt=Number(claimed.rows[0].attempts);
     const report=await auditSite(mission.target_url);
-    const saved=await db.query("UPDATE ai4u_private.router_missions SET status=$3,checks=$4::jsonb,evidence=$5::jsonb,checked_at=now(),updated_at=now() WHERE id=$1 AND user_id=$2 RETURNING *",[id,user.id,report.status,JSON.stringify(report.checks),JSON.stringify(report.evidence)]);
+    // Preserve exact sample bytes in a private, per-attempt evidence row.
+    // Store mission summary and evidence atomically; never expose raw HTML in publicMission().
+    const saved=await db.transaction(async client=>{
+      const inserted=await client.query("INSERT INTO ai4u_private.router_mission_evidence(mission_id,user_id,attempt,sample_bytes,sample_sha256,report) VALUES($1,$2,$3,$4,$5,$6::jsonb) ON CONFLICT DO NOTHING RETURNING attempt",
+        [id,user.id,attempt,report.sample_buffer,report.evidence.sample_sha256,JSON.stringify({status:report.status,checks:report.checks,evidence:report.evidence})]);
+      if(!inserted.rows.length)throw new Error("Evidence attempt already exists; refusing to overwrite it.");
+      return client.query("UPDATE ai4u_private.router_missions SET status=$3,checks=$4::jsonb,evidence=$5::jsonb,checked_at=$6::timestamptz,updated_at=now() WHERE id=$1 AND user_id=$2 RETURNING *",
+        [id,user.id,report.status,JSON.stringify(report.checks),JSON.stringify(report.evidence),report.evidence.checked_at]);
+    });
     return send(res,200,{mission:publicMission(saved.rows[0])});
   }catch(error){
     if(action==="run"&&id&&UUID.test(String(id))&&user){
