@@ -3,6 +3,7 @@ const db=require("../../lib/billing/db");
 const {requireUser}=require("../../lib/billing/auth");
 const {send,readJson}=require("../../lib/billing/http");
 const {validateTarget,auditSite}=require("../../lib/mission/site-audit");
+const exportProof=require("../../lib/mission/proof-export");
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function publicMission(row){
   return {id:row.id,target_url:row.target_url,status:row.status,attempts:row.attempts,checks:row.checks,evidence:row.evidence,last_error:row.last_error,created_at:row.created_at,checked_at:row.checked_at,completed_at:row.completed_at};
@@ -13,7 +14,7 @@ module.exports=async function(req,res){
   try{
     user=await requireUser(req);
     const body=req.method==="POST"?await readJson(req):{};
-    action=req.method==="GET"?"get":String(body.action||"start");
+    action=req.method==="GET"?(req.query&&req.query.proof==="1"?"proof":"get"):String(body.action||"start");
     id=req.method==="GET"?req.query&&req.query.mission_id:body.mission_id;
     if(action==="start"){
       const target=validateTarget(body.target_url).href;
@@ -27,6 +28,7 @@ module.exports=async function(req,res){
     if(!found.rows.length)return send(res,404,{error:"Mission not found for this account."});
     const mission=found.rows[0];
     if(action==="get")return send(res,200,{mission:publicMission(mission)});
+    if(action==="proof")return await exportProof(req,res,user,mission);
     if(action==="accept"){
       if(mission.status!=="verified"&&mission.status!=="complete")return send(res,409,{error:"Resolve failed checks and rerun the audit before confirming completion."});
       const result=await db.query("UPDATE ai4u_private.router_missions SET status='complete',completed_at=coalesce(completed_at,now()),updated_at=now() WHERE id=$1 AND user_id=$2 RETURNING *",[id,user.id]);
@@ -55,6 +57,6 @@ module.exports=async function(req,res){
     }
     const status=Number(error.status)||500;
     if(status>=500)console.error("Website mission failed",{code:error.code||"UNKNOWN"});
-    return send(res,status,{error:status>=500?"The website check could not complete. Retry later.":error.message});
+    return send(res,status,{error:status>=500&&status!==503?"The mission or Proof Pack request could not complete. Retry later.":error.message});
   }
 };
