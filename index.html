@@ -3102,7 +3102,7 @@ function inferTaskRoute(goal,stage){
   if(stage==='broken') return null; // preserve the codebase repair route
   if(stage==='production' && /\bwix\b/.test(g) && /\b(publish|deploy|launch|update|changes?|site)\b/.test(g)) return 'wixPublish';
   if(stage==='production') return null; // code-based deployment default: Vercel
-  if(stage==='proof' && /\b(browser|playwright|selenium|regression|live deployment|end.to.end|e2e|ui tests?)\b/.test(g)) return 'browserProof';
+  if(stage==='proof' && /\b(browsers?|playwright|selenium|regressions?|live deployment|end.to.end|e2e|ui tests?)\b/.test(g)) return 'browserProof';
   if(stage==='proof') return null; // model/prompt evaluations: promptfoo
   if(stage==='automation' && /\b(no.code|without cod(?:e|ing)|drag.and.drop|zapier|make\.com)\b/.test(g)) return 'noCodeAutomation';
   if(stage==='automation') return null; // code-first durable background jobs: Trigger.dev
