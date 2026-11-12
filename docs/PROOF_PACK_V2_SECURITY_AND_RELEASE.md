@@ -15,7 +15,7 @@ Existing Vercel Node.js API, Supabase-backed private Postgres schema, GitHub Act
 1. An authenticated owner starts and runs the HTTPS homepage mission. DNS is vetted and pinned to a public IPv4 address, with TLS certificate verification enabled.
 2. The server retains **exact sampled response bytes**, up to 262,144 bytes. Hashing is performed on these bytes, not on re-encoded UTF-8 text. HTML may be truncated at the byte limit.
 3. A single database transaction saves the mission report and an append-only per-attempt evidence row in `ai4u_private.router_mission_evidence`. The raw sample is **never** returned by the ordinary mission status API.
-4. When the owner downloads V2, `GET /api/mission/proof-pack?mission_id=<uuid>` reads the owner's evidence, constructs a canonical JSON manifest, signs it using the production-only Ed25519 private key, and persists the receipt in `ai4u_private.router_mission_receipts`. Subsequent downloads of the same attempt/state reuse the saved receipt.
+4. When the owner downloads V2, `GET /api/mission/site-audit?proof=1&mission_id=<uuid>` reads the owner's evidence, constructs a canonical JSON manifest, signs it using the production-only Ed25519 private key, and persists the receipt in `ai4u_private.router_mission_receipts`. Subsequent downloads of the same attempt/state reuse the saved receipt.
 5. The downloaded pack contains the signed manifest, the original sample encoded as base64, a key ID and the verification-key URL. The independent offline verifier pins the public key separately and recomputes the signature, SHA-256 and sample length.
 6. A user may download V1 as an unsigned legacy report. **V1 missions have no retained raw sample** and cannot be retroactively issued a V2 receipt. Start a fresh mission for V2 evidence.
 
@@ -43,7 +43,7 @@ Existing Vercel Node.js API, Supabase-backed private Postgres schema, GitHub Act
 - V2 core: `lib/mission/proof-v2.js`
 - Public key: `proof-key-v2.json`
 - Independent verifier: `scripts/verify-proof-pack.js`
-- Authenticated download: `api/mission/proof-pack.js`
+- Authenticated download: `api/mission/site-audit.js` + `lib/mission/proof-export.js`
 - Raw evidence capture: `lib/mission/site-audit.js`
 - Per-attempt storage and transactional execution: `lib/billing/db.js`, `api/mission/site-audit.js`
 - UI: `mission.js`, `index.html`
