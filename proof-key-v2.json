@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "key_id": "66d9b4bd1aac1f82ef5108a9710faa64c367dd9b9dc5ed3515c77fb36e6f3c83",
+  "algorithm": "Ed25519",
+  "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAQHvZD7u88KU22bjlMbRLeUsIX/zlR2JcwoEBsdx2cbU=\n-----END PUBLIC KEY-----\n",
+  "created_on": "2026-11-12",
+  "status": "active",
+  "purpose": "AI4U Router Proof Pack V2 receipt signatures",
+  "warning": "Pin this public key independently. A key supplied only inside a downloaded pack is not a trusted root."
+}

@@ -48,6 +48,7 @@
     byId("mission-retry").disabled=busy||mission.attempts>=5;
     byId("mission-accept").disabled=busy||!verified||mission.status==="complete";
     byId("mission-download").disabled=checks.length===0;
+    byId("mission-download-v2").disabled=checks.length===0;
     byId("mission-attempts").textContent=String(mission.attempts);
     byId("mission-checked").textContent=mission.checked_at||"Not yet run";
     byId("mission-result").hidden=false;
@@ -96,5 +97,29 @@
     a.href=href;a.download="AI4U_Proof_Pack_"+current.id+".json";
     document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),1000);
   }
-  global.AI4UMission={start,run,resume,accept,download};
+  async function downloadSigned(){
+    if(!current||busy||!Array.isArray(current.checks)||!current.checks.length)return;
+    const button=byId("mission-download-v2");button.disabled=true;
+    try{
+      setMessage("Retrieving owner-authorized, server-signed Proof Pack V2...");
+      const token=await accessToken();
+      if(!token)throw new Error("Sign in to download a signed Proof Pack.");
+      const response=await fetch("/api/mission/site-audit?proof=1&mission_id="+encodeURIComponent(current.id),{
+        method:"GET",cache:"no-store",headers:{"Authorization":"Bearer "+token}
+      });
+      if(!response.ok){
+        let error={};try{error=await response.json();}catch(_){}
+        throw new Error(error.error||"Signed Proof Pack could not be issued.");
+      }
+      const pack=await response.json();
+      if(pack.format!=="AI4U Router Signed Proof Pack V2"||!pack.signature||!pack.artifacts)throw new Error("The server did not return a signed V2 proof pack.");
+      const blob=new Blob([JSON.stringify(pack,null,2)],{type:"application/json"});
+      const href=URL.createObjectURL(blob),a=document.createElement("a");
+      a.href=href;a.download="AI4U_Signed_Proof_Pack_"+current.id+".json";
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),1000);
+      setMessage("Signed Proof Pack V2 downloaded. Verify it offline using the published verifier and independently pinned public key.");
+    }catch(e){setMessage(e.message);}
+    finally{button.disabled=false;}
+  }
+  global.AI4UMission={start,run,resume,accept,download,downloadSigned};
 })(window);
