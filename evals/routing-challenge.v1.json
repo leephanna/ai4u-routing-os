@@ -1,0 +1,182 @@
+[
+  {
+    "id": "C01",
+    "goal": "I want an online appointment booking website",
+    "stage": "idea",
+    "risk": "medium",
+    "acceptable": [
+      "Wix"
+    ]
+  },
+  {
+    "id": "C02",
+    "goal": "I need a custom ecommerce checkout in Shopify",
+    "stage": "idea",
+    "risk": "high",
+    "acceptable": [
+      "Shopify"
+    ]
+  },
+  {
+    "id": "C03",
+    "goal": "Create a newsletter announcing our product launch",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "Claude Sonnet"
+    ]
+  },
+  {
+    "id": "C04",
+    "goal": "Automate invoices with Zapier",
+    "stage": "automation",
+    "risk": "medium",
+    "acceptable": [
+      "Zapier"
+    ]
+  },
+  {
+    "id": "C05",
+    "goal": "Design a brand identity moodboard",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "C06",
+    "goal": "Review court filings about a contested ballot claim with citations",
+    "stage": "idea",
+    "risk": "high",
+    "acceptable": [
+      "AI4U Truth Task Force"
+    ]
+  },
+  {
+    "id": "C07",
+    "goal": "Find the latest census figures for Minnesota",
+    "stage": "idea",
+    "risk": "medium",
+    "acceptable": [
+      "Perplexity Pro"
+    ]
+  },
+  {
+    "id": "C08",
+    "goal": "Deploy the new React app to a public URL",
+    "stage": "production",
+    "risk": "high",
+    "acceptable": [
+      "Vercel"
+    ]
+  },
+  {
+    "id": "C09",
+    "goal": "Audit Playwright screenshots after each pull request",
+    "stage": "proof",
+    "risk": "high",
+    "acceptable": [
+      "GitHub Actions"
+    ]
+  },
+  {
+    "id": "C10",
+    "goal": "Evaluate an LLM prompt for hallucinations",
+    "stage": "proof",
+    "risk": "high",
+    "acceptable": [
+      "promptfoo"
+    ]
+  },
+  {
+    "id": "C11",
+    "goal": "Build a CRM using Airtable forms",
+    "stage": "business",
+    "risk": "medium",
+    "acceptable": [
+      "Airtable"
+    ]
+  },
+  {
+    "id": "C12",
+    "goal": "Build a CRM with a custom Postgres backend",
+    "stage": "business",
+    "risk": "high",
+    "acceptable": [
+      "Supabase"
+    ]
+  },
+  {
+    "id": "C13",
+    "goal": "Create a customer dashboard mockup",
+    "stage": "prototype",
+    "risk": "medium",
+    "acceptable": [
+      "Replit Agent"
+    ]
+  },
+  {
+    "id": "C14",
+    "goal": "Debug a broken database migration",
+    "stage": "broken",
+    "risk": "high",
+    "acceptable": [
+      "Claude Code"
+    ]
+  },
+  {
+    "id": "C15",
+    "goal": "Plan a launch sequence for a new course",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "C16",
+    "goal": "Research competing AI writing assistants",
+    "stage": "idea",
+    "risk": "medium",
+    "acceptable": [
+      "Perplexity Pro"
+    ]
+  },
+  {
+    "id": "C17",
+    "goal": "Produce a flyer for a fundraiser",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  },
+  {
+    "id": "C18",
+    "goal": "Write a thank-you note to a donor",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "Claude Sonnet"
+    ]
+  },
+  {
+    "id": "C19",
+    "goal": "Create a recurring scheduled workflow with code and retry",
+    "stage": "automation",
+    "risk": "high",
+    "acceptable": [
+      "Trigger.dev"
+    ]
+  },
+  {
+    "id": "C20",
+    "goal": "Teach me how to use the Wix editor",
+    "stage": "idea",
+    "risk": "low",
+    "acceptable": [
+      "ChatGPT"
+    ]
+  }
+]
