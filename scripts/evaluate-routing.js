@@ -11,8 +11,8 @@ const program=source.slice(start,end)+"\n({ ROUTING_DB, TASK_ROUTE_PROFILES, inf
 const router=vm.runInNewContext(program,Object.freeze({}),{timeout:3000});
 const fixtureFlag=process.argv.find(a=>a.startsWith("--fixture="));
 const fixture=fixtureFlag?fixtureFlag.split("=")[1]:"baseline";
-if(!["baseline","holdout","stress"].includes(fixture))throw new Error("Unsupported fixture");
-const fixtureFile=fixture==="baseline"?"routing-cases.v1.json":fixture==="holdout"?"routing-holdout.v1.json":"routing-stress.v1.json";
+if(!["baseline","holdout","stress","challenge"].includes(fixture))throw new Error("Unsupported fixture");
+const fixtureFile=fixture==="baseline"?"routing-cases.v1.json":fixture==="holdout"?"routing-holdout.v1.json":fixture==="stress"?"routing-stress.v1.json":"routing-challenge.v1.json";
 const cases=JSON.parse(fs.readFileSync(path.join(root,"evals",fixtureFile),"utf8"));
 const canonical=name=>String(name).replace("ChatGPT-4o","ChatGPT").replace("Gemini Ultra","Gemini");
 const results=cases.map(c=>{
