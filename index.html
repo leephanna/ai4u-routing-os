@@ -1787,7 +1787,7 @@ ai4uShowExample(0);
               <option value="low">Low — Experiment freely</option>
               <option value="medium">Medium — Needs review</option>
               <option value="high">High — Requires verification</option>
-              <option value="critical">Mission Critical — Zero tolerance</option>
+              <option value="critical">Mission Critical — Independent verification</option>
             </select>
           </div>
           <div class="form-group">
@@ -3172,13 +3172,13 @@ async function runRouter(){
   if(state.guideDemoActive){ runRouterCore(); return; }
   const task = {
     goal: (document.getElementById('r-goal')?.value || '').trim(),
-    stage: document.getElementById('r-stage')?.value || 'idea',
-    risk: document.getElementById('r-risk')?.value || 'medium',
+    stage: document.getElementById('r-stage')?.value || '',
+    risk: document.getElementById('r-risk')?.value || '',
     asset: (document.getElementById('r-asset')?.value || '').trim(),
     failure: (document.getElementById('r-failure')?.value || '').trim(),
     output: (document.getElementById('r-output')?.value || '').trim()
   };
-  if(!task.goal){ showToast('⚠️ Enter your goal before requesting a route'); return; }
+  if(!task.goal || !task.stage || !task.risk){ showToast('⚠️ Enter your goal, task stage, and risk level before requesting a route'); return; }
   if(window.AI4UBilling && typeof AI4UBilling.requestTaskAccess === 'function'){
     const allowed = await AI4UBilling.requestTaskAccess(task, 'route');
     if(!allowed) return;
