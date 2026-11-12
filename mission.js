@@ -104,7 +104,7 @@
       setMessage("Retrieving owner-authorized, server-signed Proof Pack V2...");
       const token=await accessToken();
       if(!token)throw new Error("Sign in to download a signed Proof Pack.");
-      const response=await fetch("/api/mission/proof-pack?mission_id="+encodeURIComponent(current.id),{
+      const response=await fetch("/api/mission/site-audit?proof=1&mission_id="+encodeURIComponent(current.id),{
         method:"GET",cache:"no-store",headers:{"Authorization":"Bearer "+token}
       });
       if(!response.ok){
