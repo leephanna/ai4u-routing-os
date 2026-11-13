@@ -54,11 +54,17 @@
     signed.disabled=busy||checks.length===0;
     signed.classList.toggle("btn-primary",completed);
     signed.classList.toggle("btn-ghost",!completed);
-    retry.hidden=completed;
-    retry.disabled=busy||mission.attempts>=5||completed;
     const needsRetry=["needs_attention","failed"].includes(mission.status);
-    retry.classList.toggle("btn-primary",needsRetry&&!completed);
-    retry.classList.toggle("btn-ghost",!needsRetry||completed);
+    const exhausted=needsRetry&&mission.attempts>=5;
+    const draft=mission.status==="draft";
+    const startNew=byId("mission-new");
+    retry.textContent=draft?"Run Checks":"Retry Checks";
+    retry.hidden=completed||exhausted;
+    retry.disabled=busy||mission.attempts>=5||completed;
+    retry.classList.toggle("btn-primary",(draft||needsRetry)&&!exhausted&&!completed);
+    retry.classList.toggle("btn-ghost",!(draft||needsRetry)||exhausted||completed);
+    startNew.hidden=!exhausted;
+    startNew.disabled=busy;
     byId("mission-download").disabled=checks.length===0;
     let title,copy,stage;
     if(completed){
@@ -69,6 +75,14 @@
       title="Ready to finish — are you satisfied?";
       copy="All five HTTPS homepage checks passed. Review the check details below. If they meet your goal, click “I'm Satisfied — Complete.” AI4U will save and confirm your decision.";
       stage="ready";
+    }else if(exhausted){
+      title="All five attempts used — start a fresh mission";
+      copy="Your previous results remain saved. Fix the website issue, then select Start New Mission to run new checks on the same URL. To use a different URL, edit it above and select Start & Run Website Checks.";
+      stage="attention";
+    }else if(draft){
+      title="Mission saved — run your checks";
+      copy="DO THIS NEXT: Select Run Checks to test the website. Your progress is already saved.";
+      stage="pending";
     }else if(mission.status==="needs_attention"){
       title="Fix the failed checks, then retry";
       copy="Review each failed check below, correct the website, and click “Retry Checks.” Your mission is saved, so you won't lose progress.";
@@ -131,6 +145,11 @@
       await run();
     }catch(e){setMessage(e.message);}
     finally{busy=false;byId("mission-start").disabled=false;if(current)syncActions(current);}
+  }
+  async function startNew(){
+    if(!current||busy)return;
+    byId("mission-url").value=current.target_url;
+    await start();
   }
   async function run(){
     if(!current)return;
@@ -227,5 +246,5 @@
     }catch(e){setMessage(e.message);}
     finally{if(current)syncActions(current);}
   }
-  global.AI4UMission={start,run,resume,accept,download,downloadSigned};
+  global.AI4UMission={start,startNew,run,resume,accept,download,downloadSigned};
 })(window);
