@@ -39,6 +39,14 @@
   function token() {
     return state.session && state.session.access_token ? state.session.access_token : "";
   }
+  async function freshToken() {
+    if(state.client&&state.client.auth&&typeof state.client.auth.getSession==="function"){
+      const result=await state.client.auth.getSession();
+      if(result.error)throw new Error("Your account session could not be refreshed. Sign in again under Settings.");
+      state.session=result.data&&result.data.session?result.data.session:null;
+    }
+    return token();
+  }
   async function api(path, options) {
     const opts = options || {};
     const headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
@@ -467,6 +475,7 @@
   global.AI4UBilling = {
     init: init,
     getAccessToken: token,
+    getFreshAccessToken: freshToken,
     requestTaskAccess: requestTaskAccess,
     startSubscription: startSubscription,
     openPortal: openPortal,

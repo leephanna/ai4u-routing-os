@@ -2811,8 +2811,9 @@ The output will include:
           <button id="mission-retry" class="btn btn-ghost" onclick="AI4UMission.run()" type="button">Retry Checks</button>
           <button id="mission-download-v2" class="btn btn-primary" onclick="AI4UMission.downloadSigned()" type="button">Download Signed Proof Pack V2</button>
           <button id="mission-download" class="btn btn-ghost" onclick="AI4UMission.download()" type="button">Legacy V1 JSON</button>
-          <button id="mission-accept" class="btn btn-primary" onclick="AI4UMission.accept()" type="button">I'm Satisfied — Complete</button>
+          <button id="mission-accept" class="btn btn-primary" onclick="AI4UMission.accept()" type="button" aria-describedby="mission-action-status">I'm Satisfied — Complete</button>
         </div>
+        <p id="mission-action-status" role="status" aria-live="polite" aria-atomic="true" style="font-size:13px;color:var(--white2);margin-top:12px;min-height:20px"></p>
         <p style="font-size:12px;color:var(--white3);margin-top:12px">V2 includes exact sampled bytes, a server-issued Ed25519 signature, and an independent verification key. Older V1 missions cannot be retroactively certified. A signed receipt proves what AI4U recorded, not the truth of third-party content or full website readiness. <a href="https://github.com/leephanna/ai4u-routing-os/blob/main/scripts/verify-proof-pack.js" target="_blank" rel="noopener noreferrer">Offline verifier</a> · <a href="/proof-key-v2.json" target="_blank" rel="noopener noreferrer">Public verification key</a></p>
       </div>
     </div>
