@@ -13,7 +13,8 @@ function harness(failAccept=false){
     if(!elements.has(id))elements.set(id,{
       textContent:"",disabled:false,hidden:false,style:{},
       replaceChildren(){this.children=[];},
-      append(...children){this.children=(this.children||[]).concat(children);}
+      append(...children){this.children=(this.children||[]).concat(children);},
+      appendChild(child){this.children=(this.children||[]).concat(child);}
     });
     return elements.get(id);
   }
