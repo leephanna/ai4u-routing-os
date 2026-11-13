@@ -29,10 +29,19 @@ function saveStatus(message,isError){
  }
  status(message,isError);
 }
+async function boundedFetch(url,options,ms=20000){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),ms);
+ try{return await fetch(url,{...options,signal:controller.signal});}
+ catch(error){
+  if(controller.signal.aborted){const e=new Error("The server did not respond within "+Math.ceil(ms/1000)+" seconds.");e.code="REQUEST_TIMEOUT";throw e;}
+  throw error;
+ }finally{clearTimeout(timeout);}
+}
 async function api(method,payload){
  const auth=await token();
  if(!auth)throw Error("Sign in under Settings, then return here to optimize and save your mission.");
- const response=await fetch("/api/mission/site-audit?intent=1",{method,cache:"no-store",headers:{"Content-Type":"application/json","Authorization":"Bearer "+auth},body:JSON.stringify(payload)});
+ const response=await boundedFetch("/api/mission/site-audit?intent=1",{method,cache:"no-store",headers:{"Content-Type":"application/json","Authorization":"Bearer "+auth},body:JSON.stringify(payload)});
  const result=await response.json().catch(()=>({}));
  if(!response.ok){const e=new Error(result.error||"Mission plan request failed.");e.status=response.status;e.code=result.code||"";throw e;}
  return result;
@@ -103,7 +112,7 @@ async function save(){
   if(!saved?.id)throw Error("The server did not return a saved plan identifier.");
   const auth=await token();
   if(!auth)throw Error("Your session expired during verification. Sign in and select Resume Saved Plan to check whether the save completed.");
-  const response=await fetch("/api/mission/site-audit?intent=1&id="+encodeURIComponent(saved.id),{
+  const response=await boundedFetch("/api/mission/site-audit?intent=1&id="+encodeURIComponent(saved.id),{
    cache:"no-store",headers:{"Authorization":"Bearer "+auth}
   });
   const checked=await response.json().catch(()=>({}));
@@ -119,14 +128,32 @@ async function save(){
     if(matched){try{const u=new URL(matched[0].replace(/[.,;!?]+$/,""));if(u.pathname==="/"&&!u.search)$("mission-url").value=u.origin+"/";}catch(_){}}
   }
  }catch(e){
-  saveStatus("✕ NOT CONFIRMED — "+e.message+(e.status===401?" Sign in under Settings, then try again.":""),true);
+  // The server may have committed before a timeout disconnected the client.
+  // Read once, without creating another write, before deciding whether it persisted.
+  if(e.code==="REQUEST_TIMEOUT"){
+   saveStatus("The save request timed out. Checking whether your plan was recorded...",false);
+   try{
+    const auth=await token();
+    if(auth){
+     const response=await boundedFetch("/api/mission/site-audit?intent=1",{cache:"no-store",headers:{"Authorization":"Bearer "+auth}},10000);
+     const check=await response.json().catch(()=>({}));
+     if(response.ok&&check.saved?.original_goal===plan.original_goal&&check.saved?.chosen_option===selected){
+      $("intent-saved").hidden=false;
+      $("intent-saved").textContent="✓ Verified saved plan · "+check.saved.id;
+      saveStatus("✓ SAVED AND VERIFIED — The plan was found in your account after the delayed response.",false);
+      return;
+     }
+    }
+   }catch(_){}
+   saveStatus("✕ NOT CONFIRMED — The server did not answer and no matching saved plan could be verified. Your goal remains here. Please use Resume Saved Plan before attempting Save again.",true);
+  }else saveStatus("✕ NOT CONFIRMED — "+e.message+(e.status===401?" Sign in under Settings, then try again.":""),true);
  }finally{busy=false;$("intent-save").disabled=false;$("intent-save").textContent="Save This Plan to My Account";}
 }
 async function resume(){
  if(busy)return;busy=true;$("intent-resume").disabled=true;
  try{
   const auth=await token();if(!auth)throw Error("Sign in under Settings to restore your last plan.");
-  const response=await fetch("/api/mission/site-audit?intent=1",{cache:"no-store",headers:{"Authorization":"Bearer "+auth}});
+  const response=await boundedFetch("/api/mission/site-audit?intent=1",{cache:"no-store",headers:{"Authorization":"Bearer "+auth}});
   const json=await response.json().catch(()=>({}));
   if(!response.ok)throw Error(json.error||"Could not retrieve saved plan.");
   if(!json.saved){saveStatus("No saved plan found for the currently signed-in account. If your earlier save failed, review and save the goal again.",true);return;}
