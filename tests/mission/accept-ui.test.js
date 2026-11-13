@@ -7,7 +7,7 @@ const vm=require("node:vm");
 
 const script=fs.readFileSync(path.join(__dirname,"../../mission.js"),"utf8");
 const ID="11111111-1111-4111-8111-111111111111";
-function harness(failAccept=false,initiallyComplete=false){
+function harness(failAccept=false,initiallyComplete=false,initiallyNeedsAttention=false){
   const elements=new Map();
   function element(id){
     if(!elements.has(id)){
@@ -30,7 +30,9 @@ function harness(failAccept=false,initiallyComplete=false){
   const verified={id:ID,target_url:"https://example.com/",status:"verified",attempts:1,
     checks:[{status:"pass",label:"HTTPS",detail:"TLS valid"}],checked_at:"2026-11-12T04:00:00Z"};
   const complete={...verified,status:"complete",completed_at:"2026-11-12T04:01:00Z"};
-  let saved=initiallyComplete?complete:verified,tokenRefreshes=0;
+  let saved=initiallyComplete?complete:initiallyNeedsAttention?{
+    ...verified,status:"needs_attention",checks:[{status:"fail",label:"HTTP",detail:"HTTP 503"}]
+  }:verified,tokenRefreshes=0;
   const requests=[];
   const window={AI4UBilling:{
     getAccessToken:()=>"intentionally-stale-token",
@@ -118,4 +120,16 @@ test("Mission HTML exposes next-step guidance and keeps legacy export behind Adv
   assert.match(html,/id="mission-next-title"/);
   assert.match(html,/id="mission-next-copy"/);
   assert.match(html,/<details class="mission-advanced">[\s\S]*?id="mission-download"/);
+});
+
+test("Failed checks give a single obvious retry action without implying success",async()=>{
+  const h=harness(false,false,true);
+  await h.mission.resume();
+  assert.equal(h.element("mission-next").dataset.state,"attention");
+  assert.match(h.element("mission-next-title").textContent,/Fix the failed checks/);
+  assert.equal(h.element("mission-retry").classList.contains("btn-primary"),true);
+  assert.equal(h.element("mission-retry").disabled,false);
+  assert.equal(h.element("mission-accept").classList.contains("btn-primary"),false);
+  assert.equal(h.element("mission-accept").disabled,true);
+  assert.equal(h.element("mission-download-v2").classList.contains("btn-primary"),false);
 });
