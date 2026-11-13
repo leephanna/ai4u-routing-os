@@ -1065,6 +1065,11 @@ canvas{max-width:100%;height:auto}
 .intent-preview{background:var(--bg-input);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:14px}
 .intent-preview strong{color:var(--cyan);font-size:12px}
 .intent-preview p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7;margin-top:8px}
+.intent-steps-details{margin-bottom:14px;padding:12px;border:1px solid var(--border);border-radius:9px}
+.intent-steps-details summary{cursor:pointer;color:var(--white2);font-size:12px}
+.intent-steps-details ol{padding-left:22px;margin-top:10px}
+.intent-steps-details li{margin:12px 0;font-size:12px;color:var(--white2)}
+.intent-steps-details li strong{display:block;color:var(--white1)}
 .intent-clarify{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .intent-clarify p{width:100%;font-weight:700}
 .intent-clarify .btn{white-space:normal;text-align:left;font-family:var(--font-body);font-size:11px}
@@ -2830,6 +2835,7 @@ The output will include:
         <div id="intent-clarify" class="intent-clarify"></div>
         <fieldset class="intent-choices"><legend>Better routes to your goal</legend><div id="intent-options"></div></fieldset>
         <div class="intent-preview"><strong>Your selected wording</strong><p id="intent-chosen"></p></div>
+        <details class="intent-steps-details"><summary>View proposed steps and how success will be checked</summary><ol id="intent-steps"></ol></details>
         <button id="intent-save" class="btn btn-primary" type="button" onclick="AI4UIntent.save()">Save This Plan to My Account</button>
       </div>
       <p id="intent-saved" class="intent-help" hidden></p>
