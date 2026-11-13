@@ -27,9 +27,11 @@
 
 | Server status | What the user sees | Primary action |
 | --- | --- | --- |
-| Draft/running | Checks being prepared; progress is saved | Wait for checks |
+| Draft (saved but not executed) | Mission is preserved; execution is still required | **Run Checks** |
+| Running | Checks in progress | Wait for checks |
 | Verified | Five scoped checks passed; review evidence and confirm satisfaction | **I'm Satisfied — Complete** |
-| Needs attention / failed | Specific failure and recovery guidance | **Retry Checks** after correction |
+| Needs attention / failed, fewer than five attempts | Specific failure and recovery guidance | **Retry Checks** after correction |
+| Needs attention / failed, five attempts used | Prior attempt remains saved; create a fresh mission | **Start New Mission** |
 | Complete | **✓ MISSION COMPLETE — saved to your account**, database confirmation, no repeat acceptance | **Download Signed Proof Pack V2** |
 
 **Scope boundary:** The pilot checks HTTPS homepage transport, HTTP success, HTML response, page title, and viewport metadata. It does not certify complete website readiness, payment functionality, accessibility, or user satisfaction outside the explicitly accepted scoped mission. The signed proof receipt establishes what AI4U recorded, not third-party truth.
