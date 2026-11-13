@@ -1050,6 +1050,30 @@ canvas{max-width:100%;height:auto}
 .mission-advanced .btn{margin-top:8px}
 @media(max-width:600px){.mission-actions{flex-direction:column}.mission-actions .btn{width:100%}.mission-next{padding:16px}}
 
+
+/* Mission optimization: clear choices, one primary action, good phone readability */
+.intent-card .form-textarea{width:100%;min-height:88px}
+.intent-card [hidden]{display:none!important}
+.intent-help{font-size:12px;line-height:1.6;color:var(--white2);margin-top:12px}
+.intent-choices{border:1px solid var(--border);border-radius:12px;margin:18px 0 12px;padding:14px}
+.intent-choices legend{font-weight:700;color:var(--cyan);font-size:13px;padding:0 8px}
+.intent-option{display:flex;align-items:flex-start;gap:12px;padding:12px;margin:7px 0;border:1px solid var(--border);border-radius:9px;cursor:pointer;min-height:52px}
+.intent-option:has(input:checked){border-color:var(--cyan);background:rgba(0,212,255,.08)}
+.intent-option input{margin-top:4px;accent-color:var(--cyan)}
+.intent-option span{display:flex;flex-direction:column;gap:5px}
+.intent-option small{font-size:11px;color:var(--white3)}
+.intent-preview{background:var(--bg-input);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:14px}
+.intent-preview strong{color:var(--cyan);font-size:12px}
+.intent-preview p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7;margin-top:8px}
+.intent-steps-details{margin-bottom:14px;padding:12px;border:1px solid var(--border);border-radius:9px}
+.intent-steps-details summary{cursor:pointer;color:var(--white2);font-size:12px}
+.intent-steps-details ol{padding-left:22px;margin-top:10px}
+.intent-steps-details li{margin:12px 0;font-size:12px;color:var(--white2)}
+.intent-steps-details li strong{display:block;color:var(--white1)}
+.intent-clarify{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.intent-clarify p{width:100%;font-weight:700}
+.intent-clarify .btn{white-space:normal;text-align:left;font-family:var(--font-body);font-size:11px}
+@media(max-width:600px){.intent-card .mission-actions{flex-direction:column}.intent-card .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -2795,6 +2819,30 @@ The output will include:
 ═══════════════════════════════════════════════════════ -->
 <div class="panel" id="panel-mission">
   <div class="section">
+    <div class="section-title">AI4U · Intelligent Mission Optimization</div>
+    <h2 class="section-heading">Describe your goal. We'll help make it better.</h2>
+    <p class="section-sub">Start in your own words. AI4U will suggest clearer wording, useful alternatives, and measurable steps. You choose the direction. Suggestions are not automatic execution.</p>
+    <div class="card intent-card" style="margin-top:20px;max-width:860px">
+      <div class="card-title">DO THIS NEXT · Describe what you want to achieve</div>
+      <label class="form-label" for="intent-goal" style="margin-top:14px;display:block">My goal</label>
+      <textarea class="form-textarea" id="intent-goal" maxlength="4000" rows="3" placeholder="Example: Help me launch an affordable online shop for my handmade products."></textarea>
+      <div class="mission-actions">
+        <button class="btn btn-primary" id="intent-preview" type="button" onclick="AI4UIntent.preview()">Improve My Goal</button>
+        <button class="btn btn-ghost" id="intent-resume" type="button" onclick="AI4UIntent.resume()">Resume Saved Plan</button>
+      </div>
+      <p class="intent-help" id="intent-status" aria-live="polite" role="status">Sign in under Settings to optimize and save your mission. This does not charge or publish anything.</p>
+      <div id="intent-suggestions" hidden>
+        <div id="intent-clarify" class="intent-clarify"></div>
+        <fieldset class="intent-choices"><legend>Better routes to your goal</legend><div id="intent-options"></div></fieldset>
+        <div class="intent-preview"><strong>Your selected wording</strong><p id="intent-chosen"></p></div>
+        <details class="intent-steps-details"><summary>View proposed steps and how success will be checked</summary><ol id="intent-steps"></ol></details>
+        <button id="intent-save" class="btn btn-primary" type="button" onclick="AI4UIntent.save()">Save This Plan to My Account</button>
+      </div>
+      <p id="intent-saved" class="intent-help" hidden></p>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title">Mission Runner · Working Pilot</div>
     <div class="section-heading">Website Launch Readiness</div>
     <p class="section-sub">This first executable workflow checks a public HTTPS homepage, records actual network evidence, supports retry/resume, and creates a downloadable Proof Pack. It does not build or publish a website, simulate a browser, or test payments.</p>
@@ -2973,6 +3021,7 @@ The output will include:
 <script src="billing-config.js" onerror="window.AI4U_BILLING_CONFIG=null"></script>
 <script src="billing.js" onerror="window.AI4UBilling=null"></script>
 <script src="mission.js" onerror="window.AI4UMission=null"></script>
+<script src="mission-intent.js" onerror="window.AI4UIntent=null"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
