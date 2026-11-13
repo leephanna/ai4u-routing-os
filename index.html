@@ -1043,6 +1043,7 @@ canvas{max-width:100%;height:auto}
 .mission-next-copy{font-size:13px;line-height:1.65;color:var(--white2);margin:0}
 .mission-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .mission-actions .btn{min-height:44px}
+.mission-actions [hidden]{display:none!important}
 #mission-accept.mission-complete-button:disabled{opacity:1;cursor:default;border-color:rgba(91,222,160,.65);color:#8bedb6;background:rgba(13,64,46,.5)}
 .mission-advanced{margin-top:14px;font-size:12px;color:var(--white3)}
 .mission-advanced summary{cursor:pointer;max-width:max-content;padding:6px 0}
@@ -2831,6 +2832,7 @@ The output will include:
           <button id="mission-accept" class="btn btn-primary" onclick="AI4UMission.accept()" type="button" aria-describedby="mission-action-status">I'm Satisfied — Complete</button>
           <button id="mission-download-v2" class="btn btn-ghost" onclick="AI4UMission.downloadSigned()" type="button">Download Signed Proof Pack V2</button>
           <button id="mission-retry" class="btn btn-ghost" onclick="AI4UMission.run()" type="button">Retry Checks</button>
+          <button id="mission-new" class="btn btn-primary" onclick="AI4UMission.startNew()" type="button" hidden>Start New Mission</button>
         </div>
         <p id="mission-action-status" role="status" aria-live="polite" aria-atomic="true" style="font-size:13px;color:var(--white2);margin-top:12px;min-height:20px"></p>
         <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--white2);margin-top:16px">CHECK DETAILS · 5 SCOPED TESTS</div>
