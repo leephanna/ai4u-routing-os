@@ -62,3 +62,24 @@ test("Mission Runner reports failures at Save button and verifies persisted read
  assert.match(ui,/getSession/);
  assert.match(planner,/Recommended — Most effective/);
 });
+
+test("Failed storage writes return actionable non-sensitive error codes",async()=>{
+ const originalAuth=auth.requireUser,originalQuery=db.query,route=require.resolve("../../lib/mission/intent-handler");
+ const error=new Error("private database details must not leak");error.code="42P01";
+ try{
+  auth.requireUser=async()=>({id:"00000000-0000-4000-8000-000000000001",email:"test@example.com"});
+  db.query=async()=>{throw error;};
+  delete require.cache[route];const handler=require(route);
+  const response=res();
+  const originalConsole=console.error;console.error=()=>{};
+  try{
+   await handler({method:"POST",headers:{},body:{action:"save",goal:"Build a professional website for my handmade wreath business",option:"recommended"}},response);
+  }finally{console.error=originalConsole;}
+  assert.equal(response.statusCode,503);
+  assert.equal(response.body.code,"PLAN_TABLE_MISSING");
+  assert.match(response.body.error,/NOT saved/);
+  assert.doesNotMatch(response.body.error,/private database details/);
+ }finally{
+  auth.requireUser=originalAuth;db.query=originalQuery;delete require.cache[route];
+ }
+});
