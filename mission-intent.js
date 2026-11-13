@@ -12,7 +12,7 @@ async function token(){
 async function api(method,payload){
  const auth=await token();
  if(!auth)throw Error("Sign in under Settings, then return here to optimize and save your mission.");
- const response=await fetch("/api/mission/intent",{method,cache:"no-store",headers:{"Content-Type":"application/json","Authorization":"Bearer "+auth},body:JSON.stringify(payload)});
+ const response=await fetch("/api/mission/site-audit?intent=1",{method,cache:"no-store",headers:{"Content-Type":"application/json","Authorization":"Bearer "+auth},body:JSON.stringify(payload)});
  const result=await response.json().catch(()=>({}));
  if(!response.ok)throw Error(result.error||"Mission plan request failed.");
  return result;
@@ -85,7 +85,7 @@ async function resume(){
  if(busy)return;busy=true;$("intent-resume").disabled=true;
  try{
   const auth=await token();if(!auth)throw Error("Sign in under Settings to restore your last plan.");
-  const response=await fetch("/api/mission/intent",{cache:"no-store",headers:{"Authorization":"Bearer "+auth}});
+  const response=await fetch("/api/mission/site-audit?intent=1",{cache:"no-store",headers:{"Authorization":"Bearer "+auth}});
   const json=await response.json().catch(()=>({}));
   if(!response.ok)throw Error(json.error||"Could not retrieve saved plan.");
   if(!json.saved){status("No saved plan on this account yet.");return;}
