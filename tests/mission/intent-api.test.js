@@ -83,3 +83,14 @@ test("Failed storage writes return actionable non-sensitive error codes",async()
   auth.requireUser=originalAuth;db.query=originalQuery;delete require.cache[route];
  }
 });
+
+test("Save network calls have deadlines and timed-out commits are checked before retry",()=>{
+ const fs=require("node:fs"),path=require("node:path");
+ const ui=fs.readFileSync(path.join(__dirname,"../../mission-intent.js"),"utf8");
+ assert.match(ui,/AbortController/);
+ assert.match(ui,/REQUEST_TIMEOUT/);
+ assert.match(ui,/boundedFetch\("/);
+ assert.match(ui,/Checking whether your plan was recorded/);
+ assert.match(ui,/no matching saved plan could be verified/);
+ assert.match(ui,/check\.saved\?\.chosen_option===selected/);
+});
