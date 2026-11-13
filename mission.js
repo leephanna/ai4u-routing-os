@@ -4,8 +4,19 @@
   let current=null,busy=false;
   const byId=id=>document.getElementById(id);
   function setMessage(value){const el=byId("mission-message");if(el)el.textContent=value;}
+  function setActionStatus(value,isError=false){
+    const el=byId("mission-action-status");
+    if(!el)return;
+    el.textContent=value;
+    el.style.color=isError?"#ffb4b4":"var(--white2)";
+  }
   async function accessToken(){
     const billing=global.AI4UBilling;
+    // The cached billing token may expire while a user reviews mission evidence.
+    // Ask Supabase for the current (auto-refreshed) session before each request.
+    if(billing&&typeof billing.getFreshAccessToken==="function"){
+      return (await billing.getFreshAccessToken())||"";
+    }
     if(billing&&typeof billing.getAccessToken==="function"){
       const t=billing.getAccessToken();if(t)return t;
     }
@@ -19,7 +30,11 @@
     const url="/api/mission/site-audit"+(id?"?mission_id="+encodeURIComponent(id):"");
     const response=await fetch(url,{method,cache:"no-store",headers:{"Content-Type":"application/json","Authorization":"Bearer "+token},body:body?JSON.stringify(body):undefined});
     let data={};try{data=await response.json();}catch(_){}
-    if(!response.ok)throw new Error(data.error||"The mission request failed.");
+    if(!response.ok){
+      const error=new Error(data.error||("The mission request failed (HTTP "+response.status+")."));
+      error.status=response.status;
+      throw error;
+    }
     return data.mission;
   }
   function markStep(id,done){const el=byId(id);if(el)el.textContent=done?"✓":"○";}
@@ -60,7 +75,7 @@
   }
   async function start(){
     if(busy)return;
-    busy=true;byId("mission-start").disabled=true;
+    busy=true;byId("mission-start").disabled=true;setActionStatus("");
     try{
       setMessage("Saving the mission to the project database...");
       const mission=await request("POST",{action:"start",target_url:byId("mission-url").value.trim()});
@@ -71,7 +86,7 @@
   }
   async function run(){
     if(!current)return;
-    byId("mission-retry").disabled=true;
+    byId("mission-retry").disabled=true;setActionStatus("");
     setMessage("Executing HTTPS, response, title, and viewport checks. Please wait...");
     try{const mission=await request("POST",{action:"run",mission_id:current.id});render(mission);}
     catch(e){setMessage(e.message+" The mission is preserved; select Resume then Retry.");}
@@ -80,13 +95,59 @@
   async function resume(){
     let id;try{id=localStorage.getItem(KEY);}catch(_){}
     if(!id){setMessage("No saved mission on this device. Enter a URL to begin.");return;}
-    try{setMessage("Restoring the last mission from persistent storage...");render(await request("GET",null,id));}
+    try{
+      setMessage("Restoring the last mission from persistent storage...");
+      const mission=await request("GET",null,id);
+      render(mission);
+      setActionStatus(mission.status==="complete"?"✓ Mission completion is confirmed in the database.":"");
+    }
     catch(e){setMessage(e.message);}
   }
   async function accept(){
-    if(!current)return;
-    try{render(await request("POST",{action:"accept",mission_id:current.id}));}
-    catch(e){setMessage(e.message);}
+    if(!current||busy)return;
+    const id=current.id,button=byId("mission-accept");
+    busy=true;
+    button.disabled=true;
+    button.textContent="Completing...";
+    setActionStatus("Saving your satisfaction and confirming the database record...");
+    try{
+      const accepted=await request("POST",{action:"accept",mission_id:id});
+      if(!accepted||accepted.id!==id||accepted.status!=="complete"){
+        throw new Error("The completion response did not confirm the mission status.");
+      }
+      // A fresh read distinguishes a persisted completion from a successful-looking POST.
+      const confirmed=await request("GET",null,id);
+      if(!confirmed||confirmed.id!==id||confirmed.status!=="complete"){
+        throw new Error("The saved mission did not return a completed status.");
+      }
+      render(confirmed);
+      setActionStatus("✓ Mission completed and confirmed in the database. You can now download Signed Proof Pack V2.");
+    }catch(error){
+      // A network error may occur after the server committed the update.
+      // Read before offering a retry to avoid misleading the user.
+      let recovered=false;
+      try{
+        const latest=await request("GET",null,id);
+        if(latest&&latest.id===id){
+          render(latest);
+          recovered=latest.status==="complete";
+        }
+      }catch(_){}
+      if(recovered){
+        setActionStatus("✓ Mission completion is confirmed in the database. You can now download Signed Proof Pack V2.");
+      }else{
+        const message="Completion NOT confirmed: "+(error.message||"Request failed")+
+          ". Your mission remains saved. If asked, sign in again under Settings, then retry.";
+        setActionStatus(message,true);
+        setMessage(message);
+      }
+    }finally{
+      busy=false;
+      button.textContent="I'm Satisfied — Complete";
+      const checks=current&&Array.isArray(current.checks)?current.checks:[];
+      const verified=checks.length>0&&checks.every(c=>c.status==="pass")&&current.status==="verified";
+      button.disabled=!verified;
+    }
   }
   function download(){
     if(!current||!Array.isArray(current.checks)||!current.checks.length)return;
