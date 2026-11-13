@@ -50,7 +50,7 @@ function harness(failAccept=false){
 test("Completion confirms POST and persisted GET, then updates the visible progress",async()=>{
   const h=harness();
   await h.mission.resume();
-  assert.equal(h.element("mission-step-4").textContent,"○");
+  assert.equal(h.element("mission-step-4").textContent,"○",h.element("mission-message").textContent);
   await h.mission.accept();
   assert.equal(h.element("mission-step-4").textContent,"✓");
   assert.equal(h.element("mission-state").textContent,"complete");
@@ -65,7 +65,7 @@ test("Failed completion leaves mission verified and displays error beside the bu
   const h=harness(true);
   await h.mission.resume();
   await h.mission.accept();
-  assert.equal(h.element("mission-step-4").textContent,"○");
+  assert.equal(h.element("mission-step-4").textContent,"○",h.element("mission-message").textContent);
   assert.equal(h.element("mission-state").textContent,"verified");
   assert.match(h.element("mission-action-status").textContent,/session expired/i);
   assert.equal(h.element("mission-accept").disabled,false);
