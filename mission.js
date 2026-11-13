@@ -1,7 +1,7 @@
 (function(global){
   "use strict";
   const KEY="ai4u_router_last_site_mission";
-  let current=null,busy=false;
+  let current=null,busy=false,accepting=false;
   const byId=id=>document.getElementById(id);
   function setMessage(value){const el=byId("mission-message");if(el)el.textContent=value;}
   function setActionStatus(value,isError=false){
@@ -45,7 +45,7 @@
     const verified=checks.length>0&&checks.every(c=>c.status==="pass")&&["verified","complete"].includes(mission.status);
     const completed=mission.status==="complete";
     const accept=byId("mission-accept"),signed=byId("mission-download-v2"),retry=byId("mission-retry");
-    accept.textContent=completed?"✓ MISSION COMPLETE":busy?"Completing...":"I'm Satisfied — Complete";
+    accept.textContent=completed?"✓ MISSION COMPLETE":accepting?"Completing...":"I'm Satisfied — Complete";
     accept.disabled=busy||!verified||completed;
     accept.classList.toggle("btn-primary",verified&&!completed);
     accept.classList.toggle("btn-ghost",!verified||completed);
@@ -151,7 +151,7 @@
   async function accept(){
     if(!current||busy)return;
     const id=current.id,button=byId("mission-accept");
-    busy=true;
+    busy=true;accepting=true;
     button.disabled=true;
     button.textContent="Completing...";
     setActionStatus("Saving your satisfaction and confirming the database record...");
@@ -187,7 +187,7 @@
         setMessage(message);
       }
     }finally{
-      busy=false;
+      busy=false;accepting=false;
       if(current)syncActions(current);
     }
   }
