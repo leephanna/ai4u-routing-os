@@ -1033,6 +1033,23 @@ canvas{max-width:100%;height:auto}
 .billing-email-input{width:100%}
 @media(max-width:900px){.billing-grid{grid-template-columns:1fr}.billing-explainer{grid-template-columns:1fr}.billing-card{padding:20px}}
 
+/* Mission Runner: one obvious action, and an unmistakable persisted completion state. */
+.mission-next{margin-top:18px;padding:18px 20px;border:1px solid rgba(69,203,240,.55);border-radius:12px;background:rgba(11,38,58,.66)}
+.mission-next[data-state="complete"]{border-color:rgba(91,222,160,.72);background:rgba(10,54,40,.55)}
+.mission-next[data-state="attention"]{border-color:rgba(240,180,41,.55);background:rgba(65,45,10,.28)}
+.mission-next-kicker{font-family:var(--font-head);font-size:11px;letter-spacing:1.4px;font-weight:800;color:var(--cyan)}
+.mission-next[data-state="complete"] .mission-next-kicker{color:#88edb8}
+.mission-next-title{font-size:18px;font-weight:800;line-height:1.4;color:var(--white1);margin:8px 0}
+.mission-next-copy{font-size:13px;line-height:1.65;color:var(--white2);margin:0}
+.mission-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.mission-actions .btn{min-height:44px}
+.mission-actions [hidden]{display:none!important}
+#mission-accept.mission-complete-button:disabled{opacity:1;cursor:default;border-color:rgba(91,222,160,.65);color:#8bedb6;background:rgba(13,64,46,.5)}
+.mission-advanced{margin-top:14px;font-size:12px;color:var(--white3)}
+.mission-advanced summary{cursor:pointer;max-width:max-content;padding:6px 0}
+.mission-advanced .btn{margin-top:8px}
+@media(max-width:600px){.mission-actions{flex-direction:column}.mission-actions .btn{width:100%}.mission-next{padding:16px}}
+
 </style>
 </head>
 <body>
@@ -2806,14 +2823,24 @@ The output will include:
         <p style="font-size:12px;color:var(--white3);margin-top:12px">Mission ID: <span id="mission-id"></span></p>
         <p style="font-size:12px;color:var(--white3)">URL: <span id="mission-target"></span></p>
         <p style="font-size:12px;color:var(--white3)">Status: <strong id="mission-state"></strong> · Attempts: <span id="mission-attempts">0</span> · Last checked: <span id="mission-checked">—</span></p>
-        <div id="mission-checks" style="margin-top:12px"></div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-          <button id="mission-retry" class="btn btn-ghost" onclick="AI4UMission.run()" type="button">Retry Checks</button>
-          <button id="mission-download-v2" class="btn btn-primary" onclick="AI4UMission.downloadSigned()" type="button">Download Signed Proof Pack V2</button>
-          <button id="mission-download" class="btn btn-ghost" onclick="AI4UMission.download()" type="button">Legacy V1 JSON</button>
+        <div id="mission-next" class="mission-next" data-state="pending" role="region" aria-label="Your next step">
+          <div class="mission-next-kicker">DO THIS NEXT →</div>
+          <div id="mission-next-title" class="mission-next-title">Review the checks</div>
+          <p id="mission-next-copy" class="mission-next-copy">AI4U will tell you the next action as soon as the checks finish.</p>
+        </div>
+        <div class="mission-actions">
           <button id="mission-accept" class="btn btn-primary" onclick="AI4UMission.accept()" type="button" aria-describedby="mission-action-status">I'm Satisfied — Complete</button>
+          <button id="mission-download-v2" class="btn btn-ghost" onclick="AI4UMission.downloadSigned()" type="button">Download Signed Proof Pack V2</button>
+          <button id="mission-retry" class="btn btn-ghost" onclick="AI4UMission.run()" type="button">Retry Checks</button>
+          <button id="mission-new" class="btn btn-primary" onclick="AI4UMission.startNew()" type="button" hidden>Start New Mission</button>
         </div>
         <p id="mission-action-status" role="status" aria-live="polite" aria-atomic="true" style="font-size:13px;color:var(--white2);margin-top:12px;min-height:20px"></p>
+        <div style="font-size:11px;font-weight:700;letter-spacing:1px;color:var(--white2);margin-top:16px">CHECK DETAILS · 5 SCOPED TESTS</div>
+        <div id="mission-checks" style="margin-top:12px"></div>
+        <details class="mission-advanced">
+          <summary>Advanced: older proof export (V1)</summary>
+          <button id="mission-download" class="btn btn-ghost" onclick="AI4UMission.download()" type="button">Legacy V1 JSON</button>
+        </details>
         <p style="font-size:12px;color:var(--white3);margin-top:12px">V2 includes exact sampled bytes, a server-issued Ed25519 signature, and an independent verification key. Older V1 missions cannot be retroactively certified. A signed receipt proves what AI4U recorded, not the truth of third-party content or full website readiness. <a href="https://github.com/leephanna/ai4u-routing-os/blob/main/scripts/verify-proof-pack.js" target="_blank" rel="noopener noreferrer">Offline verifier</a> · <a href="/proof-key-v2.json" target="_blank" rel="noopener noreferrer">Public verification key</a></p>
       </div>
     </div>
