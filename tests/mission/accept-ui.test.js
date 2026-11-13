@@ -7,7 +7,8 @@ const vm=require("node:vm");
 
 const script=fs.readFileSync(path.join(__dirname,"../../mission.js"),"utf8");
 const ID="11111111-1111-4111-8111-111111111111";
-function harness(failAccept=false,initiallyComplete=false,initiallyNeedsAttention=false){
+const NEW_ID="22222222-2222-4222-8222-222222222222";
+function harness(failAccept=false,initiallyComplete=false,initiallyNeedsAttention=false,initiallyDraft=false,attempts=1){
   const elements=new Map();
   function element(id){
     if(!elements.has(id)){
@@ -30,8 +31,10 @@ function harness(failAccept=false,initiallyComplete=false,initiallyNeedsAttentio
   const verified={id:ID,target_url:"https://example.com/",status:"verified",attempts:1,
     checks:[{status:"pass",label:"HTTPS",detail:"TLS valid"}],checked_at:"2026-11-12T04:00:00Z"};
   const complete={...verified,status:"complete",completed_at:"2026-11-12T04:01:00Z"};
-  let saved=initiallyComplete?complete:initiallyNeedsAttention?{
-    ...verified,status:"needs_attention",checks:[{status:"fail",label:"HTTP",detail:"HTTP 503"}]
+  let saved=initiallyComplete?complete:initiallyDraft?{
+    ...verified,status:"draft",checks:[],attempts:0
+  }:initiallyNeedsAttention?{
+    ...verified,status:"needs_attention",attempts,checks:[{status:"fail",label:"HTTP",detail:"HTTP 503"}]
   }:verified,tokenRefreshes=0;
   const requests=[];
   const window={AI4UBilling:{
@@ -47,9 +50,15 @@ function harness(failAccept=false,initiallyComplete=false,initiallyNeedsAttentio
       const method=options.method;
       requests.push({method,url,authorization:options.headers.Authorization});
       if(method==="POST"){
-        assert.equal(JSON.parse(options.body).action,"accept");
-        if(failAccept)return {ok:false,status:401,json:async()=>({error:"Your sign-in session expired. Please sign in again."})};
-        saved=complete;
+        const action=JSON.parse(options.body).action;
+        if(action==="accept"){
+          if(failAccept)return {ok:false,status:401,json:async()=>({error:"Your sign-in session expired. Please sign in again."})};
+          saved=complete;
+        }else if(action==="start"){
+          saved={...verified,id:NEW_ID,status:"draft",attempts:0,checks:[]};
+        }else if(action==="run"){
+          saved={...verified,id:NEW_ID,status:"verified",attempts:1};
+        }else throw Error("Unexpected POST action "+action);
       }
       return {ok:true,status:200,json:async()=>({mission:saved})};
     }
@@ -132,4 +141,33 @@ test("Failed checks give a single obvious retry action without implying success"
   assert.equal(h.element("mission-accept").classList.contains("btn-primary"),false);
   assert.equal(h.element("mission-accept").disabled,true);
   assert.equal(h.element("mission-download-v2").classList.contains("btn-primary"),false);
+});
+
+test("Resumed draft offers Run Checks instead of indefinite waiting",async()=>{
+  const h=harness(false,false,false,true);
+  await h.mission.resume();
+  assert.equal(h.element("mission-next-title").textContent,"Mission saved — run your checks");
+  assert.equal(h.element("mission-retry").textContent,"Run Checks");
+  assert.equal(h.element("mission-retry").disabled,false);
+  assert.equal(h.element("mission-retry").classList.contains("btn-primary"),true);
+  assert.equal(h.element("mission-new").hidden,true);
+});
+
+test("Exhausted mission offers one-click fresh mission instead of disabled Retry",async()=>{
+  const h=harness(false,false,true,false,5);
+  await h.mission.resume();
+  assert.equal(h.element("mission-retry").hidden,true);
+  assert.equal(h.element("mission-new").hidden,false);
+  assert.match(h.element("mission-next-title").textContent,/All five attempts used/);
+  await h.mission.startNew();
+  assert.deepEqual(h.requests.map(r=>r.method),["GET","POST","POST"]);
+  assert.equal(h.element("mission-id").textContent,NEW_ID);
+  assert.equal(h.element("mission-state").textContent,"verified");
+  assert.equal(h.element("mission-new").hidden,true);
+});
+
+test("Hidden mission controls cannot be displayed by the shared button CSS",()=>{
+  const html=fs.readFileSync(path.join(__dirname,"../../index.html"),"utf8");
+  assert.match(html,/\.mission-actions \[hidden\]\{display:none!important\}/);
+  assert.match(html,/id="mission-new".*hidden/);
 });
