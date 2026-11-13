@@ -99,5 +99,13 @@ async function resume(){
  }catch(e){status(e.message,true);}
  finally{busy=false;$("intent-resume").disabled=false;}
 }
+const goalEditor=$("intent-goal");
+if(goalEditor)goalEditor.addEventListener("input",()=>{
+ if(!plan)return;
+ plan=null;
+ $("intent-suggestions").hidden=true;
+ $("intent-saved").hidden=true;
+ status("Goal changed. Select Improve My Goal to review up-to-date choices before saving.");
+});
 global.AI4UIntent={preview,save,resume};
 })(window);
