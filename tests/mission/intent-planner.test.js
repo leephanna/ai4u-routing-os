@@ -50,3 +50,9 @@ test("No fabricated numeric confidence and no auto-completion",()=>{
  assert.equal(p.steps.at(-1).status,"not_started");
  assert.throws(()=>planMission(null),TypeError);
 });
+
+test("Natural first-person requests are not duplicated in improvements",()=>{
+ const p=planMission({goal:"I want to sell handmade wreaths online"});
+ assert.match(p.suggested_prompt,/^I want to sell/);
+ assert.doesNotMatch(p.suggested_prompt,/I want to I want to/);
+});
