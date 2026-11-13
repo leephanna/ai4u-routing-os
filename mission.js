@@ -38,11 +38,56 @@
     return data.mission;
   }
   function markStep(id,done){const el=byId(id);if(el)el.textContent=done?"✓":"○";}
+  // One clear next action for every persisted mission state.
+  // Completion is driven by the server-confirmed mission, never by a local click alone.
+  function syncActions(mission){
+    const checks=Array.isArray(mission.checks)?mission.checks:[];
+    const verified=checks.length>0&&checks.every(c=>c.status==="pass")&&["verified","complete"].includes(mission.status);
+    const completed=mission.status==="complete";
+    const accept=byId("mission-accept"),signed=byId("mission-download-v2"),retry=byId("mission-retry");
+    accept.textContent=completed?"✓ MISSION COMPLETE":busy?"Completing...":"I'm Satisfied — Complete";
+    accept.disabled=busy||!verified||completed;
+    accept.classList.toggle("btn-primary",verified&&!completed);
+    accept.classList.toggle("btn-ghost",!verified||completed);
+    accept.classList.toggle("mission-complete-button",completed);
+    accept.setAttribute("aria-label",completed?"Mission complete and saved to your account":"Confirm satisfaction and complete this mission");
+    signed.disabled=busy||checks.length===0;
+    signed.classList.toggle("btn-primary",completed);
+    signed.classList.toggle("btn-ghost",!completed);
+    retry.hidden=completed;
+    retry.disabled=busy||mission.attempts>=5||completed;
+    byId("mission-download").disabled=checks.length===0;
+    let title,copy,stage;
+    if(completed){
+      title="✓ MISSION COMPLETE — saved to your account";
+      copy="You already confirmed you're satisfied. DO THIS NEXT: Download Signed Proof Pack V2 to keep your verification receipt. No further completion click is needed.";
+      stage="complete";
+    }else if(verified){
+      title="Ready to finish — are you satisfied?";
+      copy="All five HTTPS homepage checks passed. Review the results above. If they meet your goal, click “I'm Satisfied — Complete.” AI4U will save and confirm your decision.";
+      stage="ready";
+    }else if(mission.status==="needs_attention"){
+      title="Fix the failed checks, then retry";
+      copy="Review each failed check above, correct the website, and click “Retry Checks.” Your mission is saved, so you won't lose progress.";
+      stage="attention";
+    }else if(mission.status==="failed"){
+      title="Retry the checks";
+      copy="The checks could not finish. Review the error, then click “Retry Checks.” Your mission is still saved.";
+      stage="attention";
+    }else{
+      title="Checks are being prepared";
+      copy="AI4U saves the mission and runs the checks. Wait for the results; the next action will appear here.";
+      stage="pending";
+    }
+    byId("mission-next").dataset.state=stage;
+    byId("mission-next-title").textContent=title;
+    byId("mission-next-copy").textContent=copy;
+  }
   function render(mission){
     current=mission;
     try{localStorage.setItem(KEY,mission.id);}catch(_){}
     byId("mission-id").textContent=mission.id;
-    byId("mission-state").textContent=mission.status.replaceAll("_"," ");
+    byId("mission-state").textContent=mission.status==="complete"?"✓ MISSION COMPLETE":mission.status.replaceAll("_"," ");
     byId("mission-target").textContent=mission.target_url;
     const checks=Array.isArray(mission.checks)?mission.checks:[];
     const container=byId("mission-checks");container.replaceChildren();
@@ -60,14 +105,14 @@
     markStep("mission-step-2",checks.length>0);
     markStep("mission-step-3",checks.length>0);
     markStep("mission-step-4",mission.status==="complete");
-    byId("mission-retry").disabled=busy||mission.attempts>=5;
-    byId("mission-accept").disabled=busy||!verified||mission.status==="complete";
-    byId("mission-download").disabled=checks.length===0;
-    byId("mission-download-v2").disabled=checks.length===0;
+    syncActions(mission);
     byId("mission-attempts").textContent=String(mission.attempts);
     byId("mission-checked").textContent=mission.checked_at||"Not yet run";
     byId("mission-result").hidden=false;
-    if(mission.status==="complete")setMessage("Completed and preserved. The Proof Pack covers HTTPS homepage checks only.");
+    if(mission.status==="complete"){
+      setMessage("✓ Mission complete. Your satisfaction and evidence are saved. Proof Pack scope: HTTPS homepage checks only.");
+      setActionStatus("✓ Mission completion is confirmed in the database. No need to click again.");
+    }
     else if(verified)setMessage("All five scoped checks passed. Review the evidence, download the Proof Pack, then confirm satisfaction.");
     else if(mission.status==="needs_attention")setMessage("Some checks failed. Correct the website and select Retry; no false VERIFIED status was issued.");
     else if(mission.status==="failed")setMessage("Execution failed: "+(mission.last_error||"Try again later.")+" You can retry without losing the mission.");
@@ -82,7 +127,7 @@
       render(mission);
       await run();
     }catch(e){setMessage(e.message);}
-    finally{busy=false;byId("mission-start").disabled=false; if(current){const checks=Array.isArray(current.checks)?current.checks:[];byId("mission-accept").disabled=!(checks.length&&checks.every(c=>c.status==="pass")&&current.status==="verified");}}
+    finally{busy=false;byId("mission-start").disabled=false;if(current)syncActions(current);}
   }
   async function run(){
     if(!current)return;
@@ -90,7 +135,7 @@
     setMessage("Executing HTTPS, response, title, and viewport checks. Please wait...");
     try{const mission=await request("POST",{action:"run",mission_id:current.id});render(mission);}
     catch(e){setMessage(e.message+" The mission is preserved; select Resume then Retry.");}
-    finally{byId("mission-retry").disabled=!!(current&&current.attempts>=5);}
+    finally{if(current)syncActions(current);}
   }
   async function resume(){
     let id;try{id=localStorage.getItem(KEY);}catch(_){}
@@ -99,7 +144,7 @@
       setMessage("Restoring the last mission from persistent storage...");
       const mission=await request("GET",null,id);
       render(mission);
-      setActionStatus(mission.status==="complete"?"✓ Mission completion is confirmed in the database.":"");
+      if(mission.status!=="complete")setActionStatus("");
     }
     catch(e){setMessage(e.message);}
   }
@@ -143,10 +188,7 @@
       }
     }finally{
       busy=false;
-      button.textContent="I'm Satisfied — Complete";
-      const checks=current&&Array.isArray(current.checks)?current.checks:[];
-      const verified=checks.length>0&&checks.every(c=>c.status==="pass")&&current.status==="verified";
-      button.disabled=!verified;
+      if(current)syncActions(current);
     }
   }
   function download(){
@@ -180,7 +222,7 @@
       document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(href),1000);
       setMessage("Signed Proof Pack V2 downloaded. Verify it offline using the published verifier and independently pinned public key.");
     }catch(e){setMessage(e.message);}
-    finally{button.disabled=false;}
+    finally{if(current)syncActions(current);}
   }
   global.AI4UMission={start,run,resume,accept,download,downloadSigned};
 })(window);
