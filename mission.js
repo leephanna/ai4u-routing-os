@@ -56,6 +56,9 @@
     signed.classList.toggle("btn-ghost",!completed);
     retry.hidden=completed;
     retry.disabled=busy||mission.attempts>=5||completed;
+    const needsRetry=["needs_attention","failed"].includes(mission.status);
+    retry.classList.toggle("btn-primary",needsRetry&&!completed);
+    retry.classList.toggle("btn-ghost",!needsRetry||completed);
     byId("mission-download").disabled=checks.length===0;
     let title,copy,stage;
     if(completed){
@@ -64,11 +67,11 @@
       stage="complete";
     }else if(verified){
       title="Ready to finish — are you satisfied?";
-      copy="All five HTTPS homepage checks passed. Review the results above. If they meet your goal, click “I'm Satisfied — Complete.” AI4U will save and confirm your decision.";
+      copy="All five HTTPS homepage checks passed. Review the check details below. If they meet your goal, click “I'm Satisfied — Complete.” AI4U will save and confirm your decision.";
       stage="ready";
     }else if(mission.status==="needs_attention"){
       title="Fix the failed checks, then retry";
-      copy="Review each failed check above, correct the website, and click “Retry Checks.” Your mission is saved, so you won't lose progress.";
+      copy="Review each failed check below, correct the website, and click “Retry Checks.” Your mission is saved, so you won't lose progress.";
       stage="attention";
     }else if(mission.status==="failed"){
       title="Retry the checks";
