@@ -39,6 +39,13 @@ function render(value){
  const box=$("intent-suggestions"),options=$("intent-options"),clarify=$("intent-clarify");
  clear(options);clear(clarify);
  box.hidden=false;
+ const steps=$("intent-steps");clear(steps);
+ plan.steps.forEach(step=>{
+  const item=document.createElement("li");
+  text(item,"strong",step.title);
+  text(item,"span",step.action+" Success: "+step.acceptance_criteria);
+  steps.appendChild(item);
+ });
  text(options,"p","Choose your preferred route. Nothing changes without your approval.","intent-help");
  plan.alternatives.forEach(a=>options.appendChild(optionRow(a)));
  options.appendChild(optionRow({id:"original",label:"Keep my wording",tradeoff:"Preserve exactly what I meant."}));
