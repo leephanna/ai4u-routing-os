@@ -2822,12 +2822,12 @@ The output will include:
         <p style="font-size:12px;color:var(--white3);margin-top:12px">Mission ID: <span id="mission-id"></span></p>
         <p style="font-size:12px;color:var(--white3)">URL: <span id="mission-target"></span></p>
         <p style="font-size:12px;color:var(--white3)">Status: <strong id="mission-state"></strong> · Attempts: <span id="mission-attempts">0</span> · Last checked: <span id="mission-checked">—</span></p>
-        <div id="mission-checks" style="margin-top:12px"></div>
         <div id="mission-next" class="mission-next" data-state="pending" role="region" aria-label="Your next step">
           <div class="mission-next-kicker">DO THIS NEXT →</div>
           <div id="mission-next-title" class="mission-next-title">Review the checks</div>
           <p id="mission-next-copy" class="mission-next-copy">AI4U will tell you the next action as soon as the checks finish.</p>
         </div>
+        <div id="mission-checks" style="margin-top:12px"></div>
         <div class="mission-actions">
           <button id="mission-accept" class="btn btn-primary" onclick="AI4UMission.accept()" type="button" aria-describedby="mission-action-status">I'm Satisfied — Complete</button>
           <button id="mission-download-v2" class="btn btn-ghost" onclick="AI4UMission.downloadSigned()" type="button">Download Signed Proof Pack V2</button>
