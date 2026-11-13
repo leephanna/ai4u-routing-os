@@ -6,15 +6,35 @@ function status(message,error){const el=$("intent-status");if(!el)return;el.text
 function clear(node){node.replaceChildren();}
 async function token(){
  const billing=global.AI4UBilling;
- if(billing&&typeof billing.getFreshAccessToken==="function")return await billing.getFreshAccessToken()||"";
+ if(billing&&typeof billing.getFreshAccessToken==="function"){
+  const candidate=await billing.getFreshAccessToken();
+  if(candidate)return candidate;
+ }
+ const sb=global.AI4U_SB;
+ if(sb&&sb.client&&sb.client.auth&&typeof sb.client.auth.getSession==="function"){
+  const response=await sb.client.auth.getSession();
+  if(response.error)throw Error("Your sign-in session needs refreshing. Sign in under Settings, then retry.");
+  return response.data?.session?.access_token||"";
+ }
  return "";
+}
+function saveStatus(message,isError){
+ const el=$("intent-save-status");
+ if(el){
+  el.textContent=message;
+  el.hidden=false;
+  el.dataset.state=isError?"error":"success";
+  el.setAttribute("role",isError?"alert":"status");
+  if(isError)el.scrollIntoView({block:"nearest",behavior:"smooth"});
+ }
+ status(message,isError);
 }
 async function api(method,payload){
  const auth=await token();
  if(!auth)throw Error("Sign in under Settings, then return here to optimize and save your mission.");
  const response=await fetch("/api/mission/site-audit?intent=1",{method,cache:"no-store",headers:{"Content-Type":"application/json","Authorization":"Bearer "+auth},body:JSON.stringify(payload)});
  const result=await response.json().catch(()=>({}));
- if(!response.ok)throw Error(result.error||"Mission plan request failed.");
+ if(!response.ok){const e=new Error(result.error||"Mission plan request failed.");e.status=response.status;e.code=result.code||"";throw e;}
  return result;
 }
 function text(parent,type,value,css){const el=document.createElement(type);el.textContent=value;if(css)el.className=css;parent.appendChild(el);return el;}
@@ -73,20 +93,34 @@ async function preview(){
 }
 async function save(){
  if(busy||!plan)return;
- if(plan.status==="needs_clarification"){status("Select a clearer goal above, then choose Improve My Goal before saving.",true);return;}
+ if(plan.status==="needs_clarification"){saveStatus("Please clarify your goal and select Improve My Goal again before saving.",true);return;}
  busy=true;$("intent-save").disabled=true;
+ $("intent-save").textContent="Saving and verifying...";
+ saveStatus("Saving your decision to your account, then checking that it can be retrieved...",false);
  try{
   const result=await api("POST",{action:"save",goal:plan.original_goal,option:selected});
   const saved=result.saved;
+  if(!saved?.id)throw Error("The server did not return a saved plan identifier.");
+  const auth=await token();
+  if(!auth)throw Error("Your session expired during verification. Sign in and select Resume Saved Plan to check whether the save completed.");
+  const response=await fetch("/api/mission/site-audit?intent=1&id="+encodeURIComponent(saved.id),{
+   cache:"no-store",headers:{"Authorization":"Bearer "+auth}
+  });
+  const checked=await response.json().catch(()=>({}));
+  if(!response.ok||checked.saved?.id!==saved.id||checked.saved?.chosen_option!==selected||
+     checked.saved?.original_goal!==plan.original_goal){
+   throw Error("A save was requested, but a matching saved plan could not be read back. Select Resume Saved Plan to check before retrying.");
+  }
   $("intent-saved").hidden=false;
-  $("intent-saved").textContent="✓ Saved to your account · "+(saved.chosen_option==="original"?"Original wording":saved.chosen_option)+" · "+saved.id;
-  status("✓ Mission plan recorded in Supabase-backed storage. If this goal includes a homepage check, enter its public URL below to run the existing scoped test.");
+  $("intent-saved").textContent="✓ Saved and independently read back from your account · "+(saved.chosen_option==="original"?"Original wording":saved.chosen_option)+" · "+saved.id;
+  saveStatus("✓ SAVED AND VERIFIED — Your plan can be restored with Resume Saved Plan.",false);
   if(result.plan.category==="website_readiness"){
     const matched=saved.original_goal.match(/https:\/\/[^\s<>\"']+/i);
     if(matched){try{const u=new URL(matched[0].replace(/[.,;!?]+$/,""));if(u.pathname==="/"&&!u.search)$("mission-url").value=u.origin+"/";}catch(_){}}
   }
- }catch(e){status("Save NOT confirmed: "+e.message,true);}
- finally{busy=false;$("intent-save").disabled=false;}
+ }catch(e){
+  saveStatus("✕ NOT CONFIRMED — "+e.message+(e.status===401?" Sign in under Settings, then try again.":""),true);
+ }finally{busy=false;$("intent-save").disabled=false;$("intent-save").textContent="Save This Plan to My Account";}
 }
 async function resume(){
  if(busy)return;busy=true;$("intent-resume").disabled=true;
@@ -95,15 +129,15 @@ async function resume(){
   const response=await fetch("/api/mission/site-audit?intent=1",{cache:"no-store",headers:{"Authorization":"Bearer "+auth}});
   const json=await response.json().catch(()=>({}));
   if(!response.ok)throw Error(json.error||"Could not retrieve saved plan.");
-  if(!json.saved){status("No saved plan on this account yet.");return;}
+  if(!json.saved){saveStatus("No saved plan found for the currently signed-in account. If your earlier save failed, review and save the goal again.",true);return;}
   $("intent-goal").value=json.saved.original_goal;
   render(json.saved.plan);
   selected=json.saved.chosen_option;
   for(const input of document.querySelectorAll("input[name=intent-choice]"))input.checked=input.value===selected;
   showChoice();$("intent-saved").hidden=false;
   $("intent-saved").textContent="✓ Restored saved decision · "+json.saved.id;
-  status("Saved plan restored. You can change the wording or continue with the website check below.");
- }catch(e){status(e.message,true);}
+  saveStatus("✓ Saved plan successfully restored from your account.",false);
+ }catch(e){saveStatus("Resume failed: "+e.message,true);}
  finally{busy=false;$("intent-resume").disabled=false;}
 }
 const goalEditor=$("intent-goal");
@@ -112,6 +146,7 @@ if(goalEditor)goalEditor.addEventListener("input",()=>{
  plan=null;
  $("intent-suggestions").hidden=true;
  $("intent-saved").hidden=true;
+ $("intent-save-status").hidden=true;
  status("Goal changed. Select Improve My Goal to review up-to-date choices before saving.");
 });
 global.AI4UIntent={preview,save,resume};

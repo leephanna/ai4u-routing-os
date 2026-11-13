@@ -48,3 +48,38 @@ test("Mission Runner exposes opt-in improvement and never silently runs a check"
  assert.doesNotMatch(ui,/AI4UMission\.start\(/);
  assert.doesNotMatch(ui,/localStorage/);
 });
+
+test("Mission Runner reports failures at Save button and verifies persisted readback before success",()=>{
+ const fs=require("node:fs"),path=require("node:path");
+ const html=fs.readFileSync(path.join(__dirname,"../../index.html"),"utf8");
+ const ui=fs.readFileSync(path.join(__dirname,"../../mission-intent.js"),"utf8");
+ const planner=fs.readFileSync(path.join(__dirname,"../../lib/mission/intent-planner.js"),"utf8");
+ assert.match(html,/id="intent-save-status"/);
+ assert.match(ui,/function saveStatus\(/);
+ assert.match(ui,/NOT CONFIRMED/);
+ assert.match(ui,/id="intent-save-status"|intent-save-status/);
+ assert.match(ui,/checked\.saved\?\.id!==saved\.id/);
+ assert.match(ui,/getSession/);
+ assert.match(planner,/Recommended — Most effective/);
+});
+
+test("Failed storage writes return actionable non-sensitive error codes",async()=>{
+ const originalAuth=auth.requireUser,originalQuery=db.query,route=require.resolve("../../lib/mission/intent-handler");
+ const error=new Error("private database details must not leak");error.code="42P01";
+ try{
+  auth.requireUser=async()=>({id:"00000000-0000-4000-8000-000000000001",email:"test@example.com"});
+  db.query=async()=>{throw error;};
+  delete require.cache[route];const handler=require(route);
+  const response=res();
+  const originalConsole=console.error;console.error=()=>{};
+  try{
+   await handler({method:"POST",headers:{},body:{action:"save",goal:"Build a professional website for my handmade wreath business",option:"recommended"}},response);
+  }finally{console.error=originalConsole;}
+  assert.equal(response.statusCode,503);
+  assert.equal(response.body.code,"PLAN_TABLE_MISSING");
+  assert.match(response.body.error,/NOT saved/);
+  assert.doesNotMatch(response.body.error,/private database details/);
+ }finally{
+  auth.requireUser=originalAuth;db.query=originalQuery;delete require.cache[route];
+ }
+});

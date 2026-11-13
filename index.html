@@ -1065,6 +1065,8 @@ canvas{max-width:100%;height:auto}
 .intent-preview{background:var(--bg-input);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:14px}
 .intent-preview strong{color:var(--cyan);font-size:12px}
 .intent-preview p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;line-height:1.7;margin-top:8px}
+.intent-save-status{margin-top:10px;padding:12px 14px;border-radius:8px;border:1px solid rgba(91,222,160,.45);background:rgba(7,66,41,.45);color:#a8f1c6;font-size:13px;line-height:1.55;font-weight:600}
+.intent-save-status[data-state="error"]{border-color:rgba(240,180,41,.7);background:rgba(65,45,10,.42);color:#ffd99a}
 .intent-steps-details{margin-bottom:14px;padding:12px;border:1px solid var(--border);border-radius:9px}
 .intent-steps-details summary{cursor:pointer;color:var(--white2);font-size:12px}
 .intent-steps-details ol{padding-left:22px;margin-top:10px}
@@ -2837,6 +2839,7 @@ The output will include:
         <div class="intent-preview"><strong>Your selected wording</strong><p id="intent-chosen"></p></div>
         <details class="intent-steps-details"><summary>View proposed steps and how success will be checked</summary><ol id="intent-steps"></ol></details>
         <button id="intent-save" class="btn btn-primary" type="button" onclick="AI4UIntent.save()">Save This Plan to My Account</button>
+        <p id="intent-save-status" class="intent-save-status" role="status" aria-live="polite" hidden></p>
       </div>
       <p id="intent-saved" class="intent-help" hidden></p>
     </div>
