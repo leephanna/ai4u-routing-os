@@ -9,6 +9,7 @@ function publicMission(row){
   return {id:row.id,target_url:row.target_url,status:row.status,attempts:row.attempts,checks:row.checks,evidence:row.evidence,last_error:row.last_error,created_at:row.created_at,checked_at:row.checked_at,completed_at:row.completed_at};
 }
 module.exports=async function(req,res){
+  if(req.query&&req.query.intent==="1")return require("../../lib/mission/intent-handler")(req,res);
   if(req.method!=="POST"&&req.method!=="GET")return send(res,405,{error:"Method not allowed"});
   let action=null,id=null,user;
   try{
