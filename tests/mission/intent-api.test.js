@@ -3,7 +3,7 @@ const test=require("node:test"),assert=require("node:assert/strict");
 const auth=require("../../lib/billing/auth"),db=require("../../lib/billing/db");
 function res(){return {statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v;},end(s){this.body=JSON.parse(s);}};}
 test("Intent planning API saves decisions and enforces account ownership",async()=>{
- const oldAuth=auth.requireUser,oldQuery=db.query,path=require.resolve("../../api/mission/intent");
+ const oldAuth=auth.requireUser,oldQuery=db.query,path=require.resolve("../../lib/mission/intent-handler");
  const owner="00000000-0000-4000-8000-000000000001",other="00000000-0000-4000-8000-000000000002";
  const id="11111111-1111-4111-8111-111111111111";
  let user=owner,saved=null;
@@ -19,7 +19,7 @@ test("Intent planning API saves decisions and enforces account ownership",async(
    throw Error("Unexpected SQL: "+sql.slice(0,90));
   };
   delete require.cache[path];const handler=require(path);
-  async function call(method,body,query={}){const response=res();await handler({method,headers:{},body,query},response);return response;}
+  async function call(method,body,query={intent:"1"}){const response=res();await handler({method,headers:{},body,query},response);return response;}
   const proposal=await call("POST",{action:"preview",goal:"Audit my website https://example.com/ for launch readiness"});
   assert.equal(proposal.statusCode,200);
   assert.equal(proposal.body.plan.execution_allowed,false);
