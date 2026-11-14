@@ -2842,6 +2842,12 @@ The output will include:
         <p id="intent-save-status" class="intent-save-status" role="status" aria-live="polite" hidden></p>
       </div>
       <p id="intent-saved" class="intent-help" hidden></p>
+      <div id="intent-next" class="mission-next" data-state="ready" hidden>
+        <div class="mission-next-kicker">DO THIS NEXT →</div>
+        <div class="mission-next-title">Choose the best execution route</div>
+        <p class="mission-next-copy">Your plan is saved. Open Route Engine with your chosen wording already entered. Review the task stage and risk level, then request a route when ready. This does not execute or purchase anything.</p>
+        <div class="mission-actions"><button class="btn btn-primary" id="intent-next-route" type="button" onclick="AI4UIntent.next()">Open Route Engine With My Goal</button></div>
+      </div>
     </div>
   </div>
 
