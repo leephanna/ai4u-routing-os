@@ -3,7 +3,9 @@ const test=require("node:test"),assert=require("node:assert/strict");
 const fs=require("node:fs"),vm=require("node:vm"),path=require("node:path");
 class Element {
  constructor(){this.value="";this.hidden=false;this.disabled=false;this.textContent="";this.dataset={};this.attributes={};this.events={};}
- setAttribute(key,val){this.attributes[key]=val;}\n appendChild(child){this.children.push(child);}\n replaceChildren(){this.children=[];}
+ setAttribute(key,val){this.attributes[key]=val;}
+ appendChild(child){this.children.push(child);}
+ replaceChildren(){this.children=[];}
  scrollIntoView(){this.scrolled=true;}
 }
 test("Real UI lifecycle: Start saved mission → confirm choices → server readback → Resume",async()=>{
