@@ -1,7 +1,7 @@
 (function(global){
 "use strict";
 const $=id=>document.getElementById(id);
-let current=null,busy=false,latestComparison=null;
+let current=null,busy=false,latestComparison=null,latestCommerce=null;
 // Public site reference obtained from an independent, read-only Wix account inspection.
 // Not evidence of a live homepage or an authorization granted to Routing OS.
 const KNOWN_PUBLIC_PREVIEWS={
@@ -36,8 +36,9 @@ async function request(method,body,url="/api/mission/site-audit?guided=1"){
   throw error;
  }finally{clearTimeout(timeout);}
 }
-function show(record,comparison=null){
+function show(record,comparison=null,commerce=null){
  latestComparison=comparison;
+ latestCommerce=commerce;
  current=record;
  const card=$("guided-panel");if(!card)return;
  card.hidden=false;
@@ -72,6 +73,7 @@ function show(record,comparison=null){
    :known&&!context.site_url
    ?"Suggested public URL from a separate Wix account inspection; confirm it is the right site. Public availability has NOT been verified."
    :"Verify this is the correct public root homepage URL before testing. Routing OS is not connected to Wix administration.";
+  renderCommerceReview(record,commerce);
 
  }
  if(selected)$("guided-selected-route").textContent="Selected: "+(record.route_choice?.platform_name||record.route_choice?.platform||"saved platform")+". Pricing and checkout have not been independently verified.";
@@ -85,6 +87,63 @@ function show(record,comparison=null){
  }else{
   if(!selected||record.route_choice?.platform==="wix")message(siteRecorded?"✓ Existing-site discovery saved. Verification of access and storefront setup is next.":selected?"✓ Your route choice is saved. Confirm whether a Wix site already exists.":"✓ Requirements saved as user-confirmed inputs to your account. Review the comparison before choosing.");
  }
+}
+function renderCommerceReview(record,assessment){
+ const summary=$("guided-commerce-summary");
+ if(!summary)return;
+ const items=$("guided-commerce-findings"),controls=$("guided-commerce-record-controls");
+ const saved=$("guided-commerce-saved"),provenance=$("guided-commerce-provenance");
+ items.replaceChildren();controls.hidden=true;saved.hidden=true;
+ const review=record.setup_context?.commerce_review;
+ if(review){
+  saved.hidden=false;
+  saved.textContent="✓ Scoped commerce review saved to your account. Proof mission: "+review.proof_mission_id+". Checkout remains unverified.";
+ }
+ if(!assessment){
+  summary.textContent="No commerce assessment was returned. Resume this guided mission to check stored homepage evidence.";
+  provenance.textContent="No Wix account is connected inside Routing OS.";
+  return;
+ }
+ const homepage=assessment.homepage||{};
+ summary.textContent=homepage.status==="five_checks_passed"
+  ?"Verified public homepage: five network/HTML checks passed. Commerce functionality remains unverified."
+  :"No completed, matching five-check homepage proof was found for this signed-in account and selected Wix site.";
+ const facts=[
+  ["Public HTTPS homepage",homepage.status==="five_checks_passed"?"5/5 scoped checks passed":"Not linked / needs review"],
+  ["HTML preview",homepage.html_observations?.preview_notice?"Explicitly marked as a preview":"Not independently established"],
+  ["Product showcase",homepage.html_observations?.showcase_cards?"Example product cards in sampled HTML":"Not established"],
+  ["Search indexing",homepage.html_observations?.noindex?"Noindex in sampled HTML":"Not verified"],
+  ["Wix Stores","Not listed in previous separate Wix app inventory; installation status not independently confirmed inside Routing OS"],
+  ["Live catalog, payments, checkout, shipping, pickup","Not verified"]
+ ];
+ for(const [label,value] of facts){
+  const paragraph=document.createElement("p");
+  paragraph.textContent=label+": "+value;items.appendChild(paragraph);
+ }
+ provenance.textContent="Evidence: "+(homepage.mission_id||"no matching completed mission")
+  +(homepage.checked_at?" · Checked "+homepage.checked_at:"")
+  +". Separate Wix inspection is not an active Routing OS Wix connection.";
+ if(homepage.status==="five_checks_passed"&&homepage.sample_sha256&&!review){
+  controls.hidden=false;$("guided-commerce-ack").checked=false;
+  $("guided-commerce-save").disabled=false;
+ }
+}
+async function recordCommerceReview(){
+ if(busy||!current||current.step_index!==3)return;
+ if(!$("guided-commerce-ack")?.checked){message("Confirm the limited verification scope before saving the commerce review.",true);return;}
+ const id=global.crypto?.randomUUID?.();
+ if(!id){message("Unable to generate a safe request identifier. Update your browser.",true);return;}
+ busy=true;$("guided-commerce-save").disabled=true;
+ try{
+  message("Recording the scoped commerce evidence in your saved mission...");
+  const result=await request("POST",{action:"record_commerce_review",mission_id:current.id,
+   revision:current.revision,request_id:id,acknowledge_scope:true});
+  if(!result.mission?.setup_context?.commerce_review)throw Error("The server did not confirm the commerce review.");
+  const verified=await verifiedReadback(current.id);
+  if(verified.step_index!==3||verified.setup_context?.commerce_review?.proof_mission_id!==result.mission.setup_context.commerce_review.proof_mission_id)
+   throw Error("The review could not be independently read back. Resume before trying again.");
+ }catch(error){failed(error);}
+ finally{busy=false;if(current?.step_index===3&&!current.setup_context?.commerce_review)$("guided-commerce-save").disabled=false;}
 }
 function renderComparison(comparison){
  const container=$("guided-route-options"),reasons=$("guided-reasons");
@@ -116,7 +175,7 @@ function renderComparison(comparison){
 async function verifiedReadback(id){
  const response=await request("GET",null,"/api/mission/site-audit?guided=1&id="+encodeURIComponent(id));
  if(response.mission?.id!==id)throw Error("The server could not retrieve this mission. Resume before trying again.");
- show(response.mission,response.comparison);
+ show(response.mission,response.comparison,response.commerce_readiness);
  return response.mission;
 }
 async function chooseRoute(){
@@ -209,7 +268,7 @@ async function resume(){
   const result=await request("GET",null);
   if(!result.mission)throw Error("No guided mission exists yet. Select Start Guided Mission first.");
   global.showPanel?.("mission");
-  show(result.mission,result.comparison);
+  show(result.mission,result.comparison,result.commerce_readiness);
  }catch(error){failed(error);}
  finally{busy=false;}
 }
@@ -227,9 +286,9 @@ async function confirmStep(){
   const checked=await request("GET",null,"/api/mission/site-audit?guided=1&id="+encodeURIComponent(current.id));
   if(checked.mission?.id!==current.id||checked.mission.step_index!==1)
    throw Error("The update was not independently read back. Resume before trying again.");
-  show(checked.mission,checked.comparison);
+  show(checked.mission,checked.comparison,checked.commerce_readiness);
  }catch(error){failed(error);}
  finally{busy=false;if(current?.step_index===0)$("guided-confirm").disabled=false;}
 }
-global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory,preparePublicAudit};
+global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory,preparePublicAudit,recordCommerceReview};
 })(window);
