@@ -95,6 +95,15 @@ function renderCommerceReview(record,assessment){
  const saved=$("guided-commerce-saved"),provenance=$("guided-commerce-provenance");
  items.replaceChildren();controls.hidden=true;saved.hidden=true;
  const review=record.setup_context?.commerce_review;
+ const homepageVerified=assessment?.homepage?.status==="five_checks_passed"&&!!assessment?.homepage?.sample_sha256;
+ const auditButton=$("guided-public-audit"),heading=$("guided-step4-heading");
+ if(auditButton)auditButton.hidden=!!homepageVerified;
+ if(heading)heading.textContent=homepageVerified
+  ?review?"✓ Commerce evidence review saved · Next: authorize read-only Wix inspection"
+   :"DO THIS NEXT · Save your evidence-backed Commerce Readiness Review"
+  :"DO THIS NEXT · Check the existing site's public homepage";
+ if(homepageVerified&&$("guided-site-audit-source"))
+  $("guided-site-audit-source").textContent="Public HTTPS/HTML checks are already verified in your account. No need to rerun this homepage test.";
  if(review){
   saved.hidden=false;
   saved.textContent="✓ Scoped commerce review saved to your account. Proof mission: "+review.proof_mission_id+". Checkout remains unverified.";
