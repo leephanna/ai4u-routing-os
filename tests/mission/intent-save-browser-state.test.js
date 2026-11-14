@@ -7,6 +7,7 @@ class Element {
  setAttribute(key,value){this.attributes[key]=value;}
  addEventListener(name,callback){this.listeners[name]=callback;}
  scrollIntoView(){}
+ focus(){this.focused=true;}
 }
 test("Improve → Save is enabled after preview; Save is called and readback verified",async()=>{
  const ids=["intent-status","intent-goal","intent-preview","intent-resume","intent-suggestions","intent-options","intent-clarify","intent-steps","intent-chosen","intent-save","intent-saved","intent-save-status","intent-next","mission-url","r-goal"];
