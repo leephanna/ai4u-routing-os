@@ -37,12 +37,28 @@ function show(record,comparison=null){
  const card=$("guided-panel");if(!card)return;
  card.hidden=false;
  $("guided-id").textContent=record.id;
- const active=record.step_index===0,comparing=record.step_index===1,selected=record.step_index===2;
+ const active=record.step_index===0,comparing=record.step_index===1,selected=record.step_index===2,siteRecorded=record.step_index===3;
  $("guided-step-one").hidden=!active;
  $("guided-step-two").hidden=!comparing;
  $("guided-step-three").hidden=!selected;
- $("guided-progress").textContent=active?"Step 1 of 3 — Confirm store requirements":comparing?"Step 1 confirmed · Step 2 — Compare platforms":"Step 2 confirmed · Step 3 awaiting guided setup";
+ $("guided-step-four").hidden=!siteRecorded;
+ $("guided-progress").textContent=active?"Step 1 of 3 — Confirm store requirements":comparing?"Step 1 confirmed · Step 2 — Compare platforms":selected?"Step 2 confirmed · Step 3 — Identify an existing Wix site":"Step 3 confirmed · Step 4 awaiting site verification";
  if(comparing)renderComparison(comparison);
+ if(selected){
+  const panel=$("guided-step-three");
+  const fields=$("guided-existing-fields");
+  for(const input of document.querySelectorAll('input[name="guided-site-status"]'))input.checked=false;
+  fields.hidden=true;
+  $("guided-site-name").value="";
+  $("guided-site-url").value="";
+  $("guided-save-site").disabled=record.route_choice?.platform!=="wix";
+  if(record.route_choice?.platform!=="wix")message("This first site inventory checkpoint supports Wix only. Your saved choice remains unchanged.",true);
+ }
+ if(siteRecorded){
+  const context=record.setup_context||{};
+  const type=context.site_status==="existing"?"Existing Wix site":context.site_status==="new"?"No existing site reported":"Site status unknown";
+  $("guided-site-review").textContent=type+(context.site_name?" · "+context.site_name:"")+(context.site_url?" · "+context.site_url:"")+". User-reported only; ownership and function are not verified.";
+ }
  if(selected)$("guided-selected-route").textContent="Selected: "+(record.route_choice?.platform_name||record.route_choice?.platform||"saved platform")+". Pricing and checkout have not been independently verified.";
  if(active){
   const values=record.requirements||{};
@@ -52,7 +68,7 @@ function show(record,comparison=null){
   $("guided-confirm").disabled=false;
   message("Select the three essentials. Choosing Not sure is valid; AI4U will record what is unknown.");
  }else{
-  message(selected?"✓ Your route choice is saved to your account. Store setup is still pending.":"✓ Requirements saved to your account as user-confirmed inputs. Review the comparison before choosing.");
+  if(!selected||record.route_choice?.platform==="wix")message(siteRecorded?"✓ Existing-site discovery saved. Verification of access and storefront setup is next.":selected?"✓ Your route choice is saved. Confirm whether a Wix site already exists.":"✓ Requirements saved to your account. Review the comparison before choosing.");
  }
 }
 function renderComparison(comparison){
@@ -107,6 +123,33 @@ async function chooseRoute(){
  }catch(error){failed(error);}
  finally{busy=false;if(current?.step_index===1)$("guided-choose-route").disabled=false;}
 }
+function updateExistingFields(){
+ const selected=document.querySelector('input[name="guided-site-status"]:checked');
+ $("guided-existing-fields").hidden=selected?.value!=="existing";
+ if(selected?.value!=="existing"){$("guided-site-name").value="";$("guided-site-url").value="";}
+}
+async function confirmSiteInventory(){
+ if(busy||!current||current.step_index!==2)return;
+ const selected=document.querySelector('input[name="guided-site-status"]:checked');
+ if(!selected){message("Choose Existing, New, or Not sure before continuing.",true);return;}
+ const requestId=global.crypto?.randomUUID?.();
+ if(!requestId){message("Cannot create a safe request identifier. Update your browser.",true);return;}
+ const details={action:"confirm_site_inventory",mission_id:current.id,revision:current.revision,request_id:requestId,
+  site_status:selected.value,site_name:selected.value==="existing"?$("guided-site-name").value.trim():"",
+  site_url:selected.value==="existing"?$("guided-site-url").value.trim():""};
+ busy=true;$("guided-save-site").disabled=true;
+ try{
+  message("Saving your existing-site answer...");
+  const saved=await request("POST",details);
+  if(!saved.mission)throw Error("The server did not confirm site inventory.");
+  const checked=await verifiedReadback(current.id);
+  if(checked.step_index!==3||checked.setup_context?.site_status!==selected.value)
+   throw Error("The site discovery was not confirmed by readback. Resume before retrying.");
+ }catch(error){failed(error);}
+ finally{busy=false;if(current?.step_index===2)$("guided-save-site").disabled=false;}
+}
+const siteStatusControls=document.querySelectorAll('input[name="guided-site-status"]');
+for(const input of siteStatusControls)input.addEventListener("change",updateExistingFields);
 function failed(error){message(error.message||"Action not confirmed.",true);}
 async function startLatest(){
  if(busy)return;busy=true;
@@ -151,5 +194,5 @@ async function confirmStep(){
  }catch(error){failed(error);}
  finally{busy=false;if(current?.step_index===0)$("guided-confirm").disabled=false;}
 }
-global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute};
+global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory};
 })(window);
