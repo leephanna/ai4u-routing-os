@@ -1091,7 +1091,7 @@ canvas{max-width:100%;height:auto}
 .guided-option span{display:block;font-size:12px;color:var(--white2);margin-top:7px}
 .guided-option a{display:inline-block;font-size:12px;margin:8px 10px 0 0;color:var(--cyan)}
 .guided-check-row{display:flex;align-items:flex-start;gap:9px;margin:16px 0;font-size:13px;line-height:1.5}
-#guided-step-three[hidden],#guided-step-four[hidden],#guided-existing-fields[hidden],#guided-commerce-record-controls[hidden],#guided-commerce-saved[hidden]{display:none!important}
+#guided-step-three[hidden],#guided-step-four[hidden],#guided-existing-fields[hidden],#guided-commerce-record-controls[hidden],#guided-commerce-saved[hidden],#guided-wix-connect-controls[hidden],#guided-wix-audit-controls[hidden]{display:none!important}
 #guided-existing-fields .form-input{width:100%;margin-top:5px}
 </style>
 </head>
@@ -2967,6 +2967,27 @@ The output will include:
               </div>
               <p id="guided-commerce-saved" class="intent-help" hidden></p>
               <p class="intent-help">The guided mission stays at Step 4 until actual commerce capabilities are verified. No purchase, Wix installation, or publication is authorized.</p>
+            </section>
+            <section class="guided-next-instructions" id="guided-wix-connect-panel">
+              <strong>STEP 4B · Secure Wix Commerce Inspection</strong>
+              <p id="guided-wix-connection-status" role="status" aria-live="polite">Checking whether Routing OS has its own authorized Wix connection…</p>
+              <div id="guided-wix-connect-controls" hidden>
+                <label class="guided-check-row">
+                  <input id="guided-wix-connect-consent" type="checkbox">
+                  I want to open Wix's app authorization screen for this specific site and review the requested read-only permissions. Installing the app adds a Wix app instance; no subscription or site publication is authorized.
+                </label>
+                <button class="btn btn-primary" type="button" id="guided-wix-connect-button" onclick="AI4UGuided.beginWixConnection()">Review Wix Access Permissions</button>
+              </div>
+              <div id="guided-wix-audit-controls" hidden>
+                <label class="guided-check-row">
+                  <input id="guided-wix-audit-consent" type="checkbox">
+                  I authorize a read-only inventory of installed Wix apps and the product catalog; no orders, customer records, payment settings, or changes.
+                </label>
+                <button class="btn btn-primary" type="button" id="guided-wix-audit-button" onclick="AI4UGuided.runWixInventory()">Run Read-only Wix Inventory</button>
+              </div>
+              <p id="guided-wix-inventory-result" class="intent-help"></p>
+              <p class="intent-help">Connection setup is disabled until a dedicated Wix Developer app and encryption secret are configured. The Wix app connected to this ChatGPT conversation is not an AI4U Routing OS connection.</p>
+              <p class="intent-help">Developer configuration reference: <a href="https://dev.wix.com/docs/build-apps/launch-your-app/app-distribution/install-your-app/set-up-the-external-install-flow" target="_blank" rel="noopener noreferrer">Wix external installation documentation</a>.</p>
             </section>
             <details class="intent-steps-details">
               <summary>What still requires account-authorized inspection?</summary>
