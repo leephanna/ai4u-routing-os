@@ -56,3 +56,13 @@ test("Natural first-person requests are not duplicated in improvements",()=>{
  assert.match(p.suggested_prompt,/^I want to sell/);
  assert.doesNotMatch(p.suggested_prompt,/I want to I want to/);
 });
+
+test("Repeated AI4U instruction boilerplate is not re-appended, while original goal is preserved",()=>{
+ const goal="I want to build an affordable online store for handmade wreaths. Copy prompt. Identify the most efficient practical route and return a verifiable result. Respect my constraints and clearly identify any assumptions. Ask before irreversible actions. Identify the most efficient practical route and return a verifiable result. Respect my constraints and clearly identify any assumptions. Ask before irreversible actions.";
+ const p=planMission({goal});
+ assert.equal(p.original_goal,goal);
+ assert.equal((p.suggested_prompt.match(/Identify the most efficient practical route/g)||[]).length,1);
+ assert.equal((p.suggested_prompt.match(/Ask before irreversible actions/g)||[]).length,1);
+ assert.doesNotMatch(p.suggested_prompt,/Copy prompt/);
+ assert.match(p.suggested_prompt,/handmade wreaths/);
+});
