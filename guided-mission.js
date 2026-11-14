@@ -1,7 +1,7 @@
 (function(global){
 "use strict";
 const $=id=>document.getElementById(id);
-let current=null,busy=false;
+let current=null,busy=false,latestComparison=null;
 function message(value,error=false){
  const el=$("guided-message");if(!el)return;
  el.hidden=false;el.textContent=value;el.dataset.state=error?"error":"normal";
@@ -31,15 +31,19 @@ async function request(method,body,url="/api/mission/site-audit?guided=1"){
   throw error;
  }finally{clearTimeout(timeout);}
 }
-function show(record){
+function show(record,comparison=null){
+ latestComparison=comparison;
  current=record;
  const card=$("guided-panel");if(!card)return;
  card.hidden=false;
  $("guided-id").textContent=record.id;
- const active=record.step_index===0;
+ const active=record.step_index===0,comparing=record.step_index===1,selected=record.step_index===2;
  $("guided-step-one").hidden=!active;
- $("guided-step-two").hidden=active;
- $("guided-progress").textContent=active?"Step 1 of 2 — Confirm store requirements":"Step 1 confirmed · Step 2 awaiting route comparison";
+ $("guided-step-two").hidden=!comparing;
+ $("guided-step-three").hidden=!selected;
+ $("guided-progress").textContent=active?"Step 1 of 3 — Confirm store requirements":comparing?"Step 1 confirmed · Step 2 — Compare platforms":"Step 2 confirmed · Step 3 awaiting guided setup";
+ if(comparing)renderComparison(comparison);
+ if(selected)$("guided-selected-route").textContent="Selected: "+(record.route_choice?.platform_name||record.route_choice?.platform||"saved platform")+". Pricing and checkout have not been independently verified.";
  if(active){
   const values=record.requirements||{};
   for(const field of ["region","shipping","budget"]){
@@ -48,8 +52,60 @@ function show(record){
   $("guided-confirm").disabled=false;
   message("Select the three essentials. Choosing Not sure is valid; AI4U will record what is unknown.");
  }else{
-  message("✓ Requirements saved to your account as user-confirmed inputs. AI4U has not built or tested a store.");
+  message(selected?"✓ Your route choice is saved to your account. Store setup is still pending.":"✓ Requirements saved to your account as user-confirmed inputs. Review the comparison before choosing.");
  }
+}
+function renderComparison(comparison){
+ const container=$("guided-route-options"),reasons=$("guided-reasons");
+ container.replaceChildren();reasons.replaceChildren();
+ if(!comparison||comparison.mode!=="source_snapshot"){
+  message("A US price comparison is not available for these requirements. Current local pricing must be verified.",true);
+  $("guided-choose-route").disabled=true;return;
+ }
+ $("guided-choose-route").disabled=false;
+ $("guided-review-ack").checked=false;
+ $("guided-comparison-date").textContent="Sources reviewed "+comparison.reviewed_at+" · pricing and availability may change; check links before paying.";
+ for(const line of comparison.reasons||[]){
+  const paragraph=document.createElement("p");paragraph.textContent=line;reasons.appendChild(paragraph);
+ }
+ for(const option of comparison.options){
+  const label=document.createElement("label");label.className="guided-option";
+  const input=document.createElement("input");input.type="radio";input.name="guided-platform";input.value=option.id;input.checked=option.id===comparison.recommendation;
+  const title=document.createElement("strong");title.textContent=option.name+(input.checked?" — Suggested":"");
+  label.appendChild(input);label.appendChild(title);
+  for(const line of [option.cost,option.strength,option.caution,option.fit]){
+   const small=document.createElement("span");small.textContent=line;label.appendChild(small);
+  }
+  for(const uri of option.sources){
+   const a=document.createElement("a");a.href=uri;a.target="_blank";a.rel="noopener noreferrer";a.textContent=new URL(uri).hostname+" source";label.appendChild(a);
+  }
+  container.appendChild(label);
+ }
+}
+async function verifiedReadback(id){
+ const response=await request("GET",null,"/api/mission/site-audit?guided=1&id="+encodeURIComponent(id));
+ if(response.mission?.id!==id)throw Error("The server could not retrieve this mission. Resume before trying again.");
+ show(response.mission,response.comparison);
+ return response.mission;
+}
+async function chooseRoute(){
+ if(busy||!current||current.step_index!==1)return;
+ const selected=document.querySelector('input[name="guided-platform"]:checked');
+ if(!selected){message("Select a platform option first.",true);return;}
+ if(!$("guided-review-ack").checked){message("Please acknowledge that current fees, checkout and shipping need verification.",true);return;}
+ const requestId=global.crypto?.randomUUID?.();
+ if(!requestId){message("Unable to create a safe request ID. Refresh your browser.",true);return;}
+ busy=true;$("guided-choose-route").disabled=true;
+ try{
+  message("Saving your route choice to the account ledger...");
+  const result=await request("POST",{action:"choose_route",mission_id:current.id,request_id:requestId,revision:current.revision,
+   platform:selected.value,acknowledge_review:true});
+  if(!result.mission)throw Error("The route was not confirmed by the server.");
+  const checked=await verifiedReadback(current.id);
+  if(checked.step_index!==2||checked.route_choice?.platform!==selected.value)
+   throw Error("The saved route could not be verified. Resume instead of resubmitting.");
+ }catch(error){failed(error);}
+ finally{busy=false;if(current?.step_index===1)$("guided-choose-route").disabled=false;}
 }
 function failed(error){message(error.message||"Action not confirmed.",true);}
 async function startLatest(){
@@ -61,7 +117,7 @@ async function startLatest(){
   const started=await request("POST",{action:"start",plan_id:result.saved.id});
   if(!started.mission)throw Error("Guided mission creation was not verified.");
   global.showPanel?.("mission");
-  show(started.mission);
+  await verifiedReadback(started.mission.id);
   $("guided-panel")?.scrollIntoView({behavior:"smooth",block:"start"});
  }catch(error){failed(error);}
  finally{busy=false;}
@@ -73,7 +129,7 @@ async function resume(){
   const result=await request("GET",null);
   if(!result.mission)throw Error("No guided mission exists yet. Select Start Guided Mission first.");
   global.showPanel?.("mission");
-  show(result.mission);
+  show(result.mission,result.comparison);
  }catch(error){failed(error);}
  finally{busy=false;}
 }
@@ -91,9 +147,9 @@ async function confirmStep(){
   const checked=await request("GET",null,"/api/mission/site-audit?guided=1&id="+encodeURIComponent(current.id));
   if(checked.mission?.id!==current.id||checked.mission.step_index!==1)
    throw Error("The update was not independently read back. Resume before trying again.");
-  show(checked.mission);
+  show(checked.mission,checked.comparison);
  }catch(error){failed(error);}
  finally{busy=false;if(current?.step_index===0)$("guided-confirm").disabled=false;}
 }
-global.AI4UGuided={startLatest,resume,confirmStep};
+global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute};
 })(window);

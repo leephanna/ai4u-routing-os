@@ -1084,6 +1084,14 @@ canvas{max-width:100%;height:auto}
 .guided-next-instructions p,.guided-prompt-next p{font-size:13px;color:var(--white2);margin:10px 0}
 #guided-message[data-state="error"]{color:#ffb899!important}
 @media(max-width:600px){#guided-panel .btn,.guided-prompt-next .btn{width:100%}}
+.guided-option{display:block;border:1px solid var(--border);border-radius:9px;padding:12px;margin:10px 0;line-height:1.5;cursor:pointer}
+.guided-option:has(input:checked){border-color:var(--cyan);background:rgba(0,210,255,.07)}
+.guided-option input{margin-right:8px;accent-color:var(--cyan)}
+.guided-option strong{color:var(--white1)}
+.guided-option span{display:block;font-size:12px;color:var(--white2);margin-top:7px}
+.guided-option a{display:inline-block;font-size:12px;margin:8px 10px 0 0;color:var(--cyan)}
+.guided-check-row{display:flex;align-items:flex-start;gap:9px;margin:16px 0;font-size:13px;line-height:1.5}
+#guided-step-three[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -2900,9 +2908,23 @@ The output will include:
           <p class="intent-help">Proof level: your confirmation only. AI4U has not independently checked product details or operating costs.</p>
         </div>
         <div id="guided-step-two" hidden>
-          <div class="guided-next-instructions"><strong>DO THIS NEXT · Compare real platform options</strong>
-            <p>Requirements are saved. This checkpoint is intentionally awaiting an evidence-supported platform comparison; it is not marked complete or automatically executed.</p>
-            <p>Next development slice: compare Wix and another suitable platform on current fees, checkout, shipping, and maintenance before recommending the next click.</p>
+          <div class="guided-next-instructions">
+            <strong>DO THIS NEXT · Compare storefront platforms</strong>
+            <p>Based on your requirements, review the suggested starting route and two alternatives. Costs are sourced snapshots—not guaranteed quotes. This step only records your choice.</p>
+            <p id="guided-comparison-date" class="intent-help"></p>
+            <div id="guided-reasons" class="intent-help"></div>
+            <div id="guided-route-options" role="group" aria-label="Compare storefront platforms"></div>
+            <label class="guided-check-row"><input id="guided-review-ack" type="checkbox"> I understand that pricing, processing fees, checkout and fragile-item shipping must be confirmed with the provider before paying or launching.</label>
+            <button class="btn btn-primary" id="guided-choose-route" type="button" onclick="AI4UGuided.chooseRoute()">Save My Platform Choice</button>
+            <p class="intent-help">No payment, account creation, website deployment or external action will occur.</p>
+          </div>
+        </div>
+        <div id="guided-step-three" hidden>
+          <div class="guided-next-instructions">
+            <strong>Step 2 confirmed · Step 3 awaiting setup</strong>
+            <p id="guided-selected-route"></p>
+            <p>Your platform preference is saved. Next the system must guide actual setup and verify a working storefront. No store or checkout has been created or tested.</p>
+            <p>To reconsider this route, use a new comparison workflow rather than silently changing the recorded decision.</p>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@ test("Guided mission persists owner-scoped steps, uses idempotency and never imp
     return {rows:args[1]===OWNER&&args[0]===PLAN?[{id:PLAN,original_goal:storedGoal,chosen_prompt:storedGoal}]:[]};
    if(sql.startsWith("INSERT INTO ai4u_private.router_guided_missions")){
     if(args[0]!==OWNER)throw Error("Owner mismatch");
-    if(!record)record={id:ID,user_id:OWNER,plan_id:PLAN,status:"awaiting_user",step_index:0,revision:0,requirements:{},last_request_id:null,updated_at:"2026-11-13"};
+    if(!record)record={id:ID,user_id:OWNER,plan_id:PLAN,status:"awaiting_user",step_index:0,revision:0,requirements:{},route_choice:{},last_request_id:null,updated_at:"2026-11-13"};
     return {rows:[copy()]};
    }
    if(sql.startsWith("SELECT g.* FROM ai4u_private.router_guided_missions"))
@@ -29,8 +29,12 @@ test("Guided mission persists owner-scoped steps, uses idempotency and never imp
    if(sql.startsWith("SELECT * FROM ai4u_private.router_guided_missions WHERE id="))
     return {rows:record&&args[1]===record.user_id&&args[0]===record.id?[copy()]:[]};
    if(sql.startsWith("UPDATE ai4u_private.router_guided_missions")){
-    record.requirements=JSON.parse(args[2]);record.step_index=1;record.revision++;
-    record.status="awaiting_route_review";record.last_request_id=args[3];
+    if(sql.includes("route_choice=")){
+     record.route_choice=JSON.parse(args[2]);record.step_index=2;record.status="awaiting_setup";
+    }else{
+     record.requirements=JSON.parse(args[2]);record.step_index=1;record.status="awaiting_route_review";
+    }
+    record.revision++;record.last_request_id=args[3];
     return {rows:[copy()]};
    }
    if(sql.startsWith("INSERT INTO ai4u_private.router_guided_events")){
@@ -64,13 +68,28 @@ test("Guided mission persists owner-scoped steps, uses idempotency and never imp
   assert.equal(events.length,1);
   const stale=await call("POST",{...payload,request_id:"55555555-5555-4555-8555-555555555555"});
   assert.equal(stale.statusCode,409);
+  const comparison=(await call("GET",null,{id:ID})).body.comparison;
+  assert.equal(comparison.mode,"source_snapshot");
+  assert.equal(comparison.recommendation,"wix");
+  assert.equal(comparison.options.length,3);
+  assert.equal((await call("POST",{action:"choose_route",mission_id:ID,request_id:"66666666-6666-4666-8666-666666666666",revision:1,platform:"wix",acknowledge_review:false})).statusCode,400);
+  const routePayload={action:"choose_route",mission_id:ID,request_id:"77777777-7777-4777-8777-777777777777",revision:1,platform:"shopify",acknowledge_review:true};
+  const routeResult=await call("POST",routePayload);
+  assert.equal(routeResult.statusCode,200);
+  assert.equal(routeResult.body.mission.step_index,2);
+  assert.equal(routeResult.body.mission.route_choice.platform,"shopify");
+  assert.equal(routeResult.body.mission.route_choice.verification,"user_selected_unverified");
+  assert.equal(events.length,2);
+  assert.equal((await call("POST",routePayload)).body.replayed,true);
+  assert.equal(events.length,2);
+  assert.equal((await call("POST",{...routePayload,request_id:"88888888-8888-4888-8888-888888888888"})).statusCode,409);
   user=OTHER;
   assert.equal((await call("GET",null,{id:ID})).body.mission,null);
   assert.equal((await call("GET")).body.mission,null);
   assert.equal((await call("POST",payload)).statusCode,404);
   assert.equal((await call("POST",{action:"start",plan_id:PLAN})).statusCode,404);
   user=OWNER;
-  assert.equal((await call("GET",null,{id:ID})).body.mission.step_index,1);
+  assert.equal((await call("GET",null,{id:ID})).body.mission.step_index,2);
  }finally{
   auth.requireUser=originalAuth;db.query=originalQuery;db.transaction=originalTx;delete require.cache[route];
  }
@@ -84,7 +103,7 @@ test("Guided mission interface is distinct from website readiness and never repo
  assert.match(html,/Start Guided Mission/);
  assert.match(html,/id="guided-step-two" hidden/);
  assert.match(html,/not independently checked/);
- assert.match(client,/AI4UGuided=\{startLatest,resume,confirmStep\}/);
+ assert.match(client,/AI4UGuided=\{startLatest,resume,confirmStep,chooseRoute\}/);
  assert.match(client,/request_id:requestId/);
  assert.match(client,/step_index!==1/);
  assert.match(api,/req\.query\.guided==="1"/);
