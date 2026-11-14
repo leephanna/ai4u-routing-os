@@ -1076,6 +1076,14 @@ canvas{max-width:100%;height:auto}
 .intent-clarify p{width:100%;font-weight:700}
 .intent-clarify .btn{white-space:normal;text-align:left;font-family:var(--font-body);font-size:11px}
 @media(max-width:600px){.intent-card .mission-actions{flex-direction:column}.intent-card .btn{width:100%}}
+
+/* Guided mission P1: one visible action, no false execution claims */
+#guided-panel[hidden],#guided-step-one[hidden],#guided-step-two[hidden],#guided-prompt-next[hidden]{display:none!important}
+.guided-progress{font-size:17px;line-height:1.5;margin:16px 0;color:var(--cyan)}
+.guided-next-instructions,.guided-prompt-next{padding:16px;margin-top:14px;background:rgba(0,210,255,.06);border:1px solid var(--border);border-radius:10px;line-height:1.6}
+.guided-next-instructions p,.guided-prompt-next p{font-size:13px;color:var(--white2);margin:10px 0}
+#guided-message[data-state="error"]{color:#ffb899!important}
+@media(max-width:600px){#guided-panel .btn,.guided-prompt-next .btn{width:100%}}
 </style>
 </head>
 <body>
@@ -2201,6 +2209,11 @@ The output will include:
   → Verification Steps
   → Handoff / Escalation Rule</span>
         </div>
+        <div class="guided-prompt-next" id="guided-prompt-next" hidden>
+          <strong>DO THIS NEXT · Begin your guided mission</strong>
+          <p>Instead of copying a long prompt, start the storefront requirements checkpoint. Your progress will be saved to your account.</p>
+          <button type="button" class="btn btn-primary" onclick="AI4UGuided.startLatest()">Start Guided Mission</button>
+        </div>
         <div style="margin-top:12px">
           <div class="info-banner">
             <div class="info-banner-icon">💡</div>
@@ -2853,6 +2866,50 @@ The output will include:
   </div>
 
   <div class="section">
+    <div class="section-title">AI4U · Guided Execution Pilot</div>
+    <h2 class="section-heading">One next action. Saved progress.</h2>
+    <p class="section-sub">For storefront goals, work through the first real task in small verified checkpoints. This pilot does not build a store, handle payments, or claim that a website is complete.</p>
+    <div class="card" style="max-width:860px;margin-top:16px">
+      <div class="card-title">DO THIS NEXT · Continue your saved mission</div>
+      <div class="mission-actions" style="margin-top:12px">
+        <button class="btn btn-primary" type="button" onclick="AI4UGuided.startLatest()">Start Guided Mission</button>
+        <button class="btn btn-ghost" type="button" onclick="AI4UGuided.resume()">Resume Guided Step</button>
+      </div>
+      <p class="intent-help" id="guided-message" role="status" aria-live="polite">Start from the most recently saved storefront goal. Nothing is purchased or published.</p>
+      <div id="guided-panel" hidden>
+        <p class="intent-help">Account-saved mission: <span id="guided-id"></span></p>
+        <h3 id="guided-progress" class="guided-progress"></h3>
+        <div id="guided-step-one">
+          <p class="intent-help">Your first checkpoint: confirm three essentials. Choose <strong>Not sure</strong> whenever you don't know. AI4U will retain the uncertainty instead of inventing an answer.</p>
+          <div class="form-group"><label class="form-label" for="guided-region">Where will you sell?</label>
+            <select id="guided-region" class="form-select">
+              <option value="">Choose one</option><option value="US">United States</option><option value="CA">Canada</option><option value="UK">United Kingdom</option><option value="EU">European Union</option><option value="other">Another region</option><option value="not_sure">Not sure yet</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label" for="guided-shipping">How will customers receive their orders?</label>
+            <select id="guided-shipping" class="form-select">
+              <option value="">Choose one</option><option value="ship">Shipping</option><option value="pickup">Local pickup</option><option value="both">Shipping and pickup</option><option value="not_sure">Not sure yet</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label" for="guided-budget">Preferred monthly platform budget (USD equivalent)</label>
+            <select id="guided-budget" class="form-select">
+              <option value="">Choose one</option><option value="under_50">Under $50</option><option value="50_to_150">$50–$150</option><option value="over_150">More than $150</option><option value="not_sure">Not sure yet</option>
+            </select>
+          </div>
+          <button id="guided-confirm" type="button" class="btn btn-primary" onclick="AI4UGuided.confirmStep()">Confirm and Save Step 1</button>
+          <p class="intent-help">Proof level: your confirmation only. AI4U has not independently checked product details or operating costs.</p>
+        </div>
+        <div id="guided-step-two" hidden>
+          <div class="guided-next-instructions"><strong>DO THIS NEXT · Compare real platform options</strong>
+            <p>Requirements are saved. This checkpoint is intentionally awaiting an evidence-supported platform comparison; it is not marked complete or automatically executed.</p>
+            <p>Next development slice: compare Wix and another suitable platform on current fees, checkout, shipping, and maintenance before recommending the next click.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title">Mission Runner · Working Pilot</div>
     <div class="section-heading">Website Launch Readiness</div>
     <p class="section-sub">This first executable workflow checks a public HTTPS homepage, records actual network evidence, supports retry/resume, and creates a downloadable Proof Pack. It does not build or publish a website, simulate a browser, or test payments.</p>
@@ -3032,6 +3089,7 @@ The output will include:
 <script src="billing.js" onerror="window.AI4UBilling=null"></script>
 <script src="mission.js" onerror="window.AI4UMission=null"></script>
 <script src="mission-intent.js" onerror="window.AI4UIntent=null"></script>
+<script src="guided-mission.js" onerror="window.AI4UGuided=null"></script>
 
 <script>
 /* ═══════════════════════════════════════════════════════
@@ -3559,6 +3617,8 @@ If ${platformName} fails or produces an unsatisfactory result:
   const out = document.getElementById('prompt-output');
   out.textContent = prompt;
   out.classList.add('has-content');
+  const next=document.getElementById("guided-prompt-next");
+  if(next)next.hidden=!(routeContext&&/\b(wreath|online store|storefront|shop|checkout)\b/i.test(routeContext.goal));
   showToast('✓ Prompt generated — ready to copy');
 }
 
