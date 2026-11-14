@@ -4,12 +4,13 @@ const fs=require("node:fs"),vm=require("node:vm"),path=require("node:path");
 class Element {
  constructor(){this.value="";this.hidden=false;this.disabled=false;this.textContent="";this.dataset={};this.attributes={};this.events={};}
  setAttribute(key,val){this.attributes[key]=val;}
+ addEventListener(){}
  appendChild(child){this.children.push(child);}
  replaceChildren(){this.children=[];}
  scrollIntoView(){this.scrolled=true;}
 }
 test("Real UI lifecycle: Start saved mission → confirm choices → server readback → Resume",async()=>{
- const ids=["guided-message","guided-panel","guided-id","guided-step-one","guided-step-two","guided-step-three","guided-route-options","guided-reasons","guided-review-ack","guided-comparison-date","guided-choose-route","guided-selected-route","guided-progress","guided-region","guided-shipping","guided-budget","guided-confirm"];
+ const ids=["guided-message","guided-panel","guided-id","guided-step-one","guided-step-two","guided-step-three","guided-step-four","guided-existing-fields","guided-site-name","guided-site-url","guided-save-site","guided-selected-route","guided-site-review","guided-route-options","guided-reasons","guided-review-ack","guided-comparison-date","guided-choose-route","guided-selected-route","guided-progress","guided-region","guided-shipping","guided-budget","guided-confirm"];
  const elements=Object.fromEntries(ids.map(id=>[id,new Element()]));
  const planId="22222222-2222-4222-8222-222222222222";
  const missionId="33333333-3333-4333-8333-333333333333";
@@ -37,7 +38,7 @@ test("Real UI lifecycle: Start saved mission → confirm choices → server read
   }
   throw Error("Unexpected request: "+options.method+" "+url);
  };
- const ctx={document:{getElementById:id=>elements[id]||null,createElement:()=>({textContent:"",appendChild(){},replaceChildren(){},setAttribute(){},children:[],style:{}}),querySelector:()=>null},fetch,window:null,
+ const ctx={document:{getElementById:id=>elements[id]||null,createElement:()=>({textContent:"",appendChild(){},replaceChildren(){},setAttribute(){},children:[],style:{}}),querySelector:()=>null,querySelectorAll:()=>[]},fetch,window:null,
   AI4UBilling:{getFreshAccessToken:async()=> "mock-token"},
   crypto:{randomUUID:()=>"44444444-4444-4444-8444-444444444444"},
   showPanel:name=>{panel=name;},AbortController,setTimeout,clearTimeout,URL,console};
