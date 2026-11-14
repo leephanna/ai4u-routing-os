@@ -1,7 +1,7 @@
 (function(global){
 "use strict";
 const $=id=>document.getElementById(id);
-let plan=null,selected="recommended",busy=false;
+let plan=null,selected="recommended",busy=false,savedChoice=null;
 function status(message,error){const el=$("intent-status");if(!el)return;el.textContent=message;el.style.color=error?"#ffb4b4":"var(--white2)";}
 function clear(node){node.replaceChildren();}
 async function token(){
@@ -64,7 +64,8 @@ function showChoice(){
  const save=$("intent-save");save.disabled=busy;
 }
 function render(value){
- plan=value;selected="recommended";
+ plan=value;selected="recommended";savedChoice=null;
+ if($("intent-next"))$("intent-next").hidden=true;
  const box=$("intent-suggestions"),options=$("intent-options"),clarify=$("intent-clarify");
  clear(options);clear(clarify);
  box.hidden=false;
@@ -123,6 +124,8 @@ async function save(){
   $("intent-saved").hidden=false;
   $("intent-saved").textContent="✓ Saved and independently read back from your account · "+(saved.chosen_option==="original"?"Original wording":saved.chosen_option)+" · "+saved.id;
   saveStatus("✓ SAVED AND VERIFIED — Your plan can be restored with Resume Saved Plan.",false);
+  savedChoice=checked.saved.chosen_prompt;
+  if($("intent-next"))$("intent-next").hidden=false;
   if(result.plan.category==="website_readiness"){
     const matched=saved.original_goal.match(/https:\/\/[^\s<>\"']+/i);
     if(matched){try{const u=new URL(matched[0].replace(/[.,;!?]+$/,""));if(u.pathname==="/"&&!u.search)$("mission-url").value=u.origin+"/";}catch(_){}}
@@ -141,6 +144,8 @@ async function save(){
       $("intent-saved").hidden=false;
       $("intent-saved").textContent="✓ Verified saved plan · "+check.saved.id;
       saveStatus("✓ SAVED AND VERIFIED — The plan was found in your account after the delayed response.",false);
+      savedChoice=check.saved.chosen_prompt;
+      if($("intent-next"))$("intent-next").hidden=false;
       return;
      }
     }
@@ -164,17 +169,31 @@ async function resume(){
   showChoice();$("intent-saved").hidden=false;
   $("intent-saved").textContent="✓ Restored saved decision · "+json.saved.id;
   saveStatus("✓ Saved plan successfully restored from your account.",false);
+  savedChoice=json.saved.chosen_prompt;
+  if($("intent-next"))$("intent-next").hidden=false;
  }catch(e){saveStatus("Resume failed: "+e.message,true);}
  finally{busy=false;$("intent-resume").disabled=false;if(plan)showChoice();}
 }
 const goalEditor=$("intent-goal");
 if(goalEditor)goalEditor.addEventListener("input",()=>{
  if(!plan)return;
- plan=null;
+ plan=null;savedChoice=null;
+ if($("intent-next"))$("intent-next").hidden=true;
  $("intent-suggestions").hidden=true;
  $("intent-saved").hidden=true;
  $("intent-save-status").hidden=true;
  status("Goal changed. Select Improve My Goal to review up-to-date choices before saving.");
 });
-global.AI4UIntent={preview,save,resume};
+function next(){
+ if(!savedChoice){saveStatus("Save and verify your plan before opening the next step.",true);return;}
+ const routeGoal=$("r-goal");
+ if(!routeGoal||typeof global.showPanel!=="function"){
+  saveStatus("Route Engine is unavailable. Your saved plan remains available through Resume Saved Plan.",true);
+  return;
+ }
+ routeGoal.value=savedChoice;
+ global.showPanel("router");
+ routeGoal.focus();
+}
+global.AI4UIntent={preview,save,resume,next};
 })(window);
