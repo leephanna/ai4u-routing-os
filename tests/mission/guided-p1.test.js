@@ -103,7 +103,7 @@ test("Guided mission interface is distinct from website readiness and never repo
  assert.match(html,/Start Guided Mission/);
  assert.match(html,/id="guided-step-two" hidden/);
  assert.match(html,/not independently checked/);
- assert.match(client,/AI4UGuided=\{startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory,preparePublicAudit,recordCommerceReview\}/);
+ assert.match(client,/AI4UGuided=\{startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory,preparePublicAudit,recordCommerceReview,beginWixConnection,runWixInventory\}/);
  assert.match(client,/request_id:requestId/);
  assert.match(client,/step_index!==1/);
  assert.match(api,/req\.query\.guided==="1"/);
