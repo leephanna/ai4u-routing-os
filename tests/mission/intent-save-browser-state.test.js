@@ -7,9 +7,10 @@ class Element {
  setAttribute(key,value){this.attributes[key]=value;}
  addEventListener(name,callback){this.listeners[name]=callback;}
  scrollIntoView(){}
+ focus(){this.focused=true;}
 }
 test("Improve → Save is enabled after preview; Save is called and readback verified",async()=>{
- const ids=["intent-status","intent-goal","intent-preview","intent-resume","intent-suggestions","intent-options","intent-clarify","intent-steps","intent-chosen","intent-save","intent-saved","intent-save-status","mission-url"];
+ const ids=["intent-status","intent-goal","intent-preview","intent-resume","intent-suggestions","intent-options","intent-clarify","intent-steps","intent-chosen","intent-save","intent-saved","intent-save-status","intent-next","mission-url","r-goal"];
  const elements=Object.fromEntries(ids.map(id=>[id,new Element()]));
  elements["intent-goal"].value="I want to build an affordable store for handmade wreaths.";
  const plan={original_goal:elements["intent-goal"].value,status:"ready_for_review",category:"website_project",steps:[{title:"Confirm goal",action:"Agree scope",acceptance_criteria:"User confirms"}],alternatives:[{id:"recommended",label:"Recommended — Most effective",prompt:"Build an affordable shop",tradeoff:"Balanced"}],clarification:null};
@@ -19,13 +20,14 @@ test("Improve → Save is enabled after preview; Save is called and readback ver
   if(options.method==="POST"&&body.action==="preview")return {ok:true,json:async()=>({plan})};
   if(options.method==="POST"&&body.action==="save"){
    saveCalls++;
-   stored={id:"11111111-1111-4111-8111-111111111111",original_goal:body.goal,chosen_option:body.option,plan};
+   stored={id:"11111111-1111-4111-8111-111111111111",original_goal:body.goal,chosen_option:body.option,chosen_prompt:"Build an affordable shop",plan};
    return {ok:true,json:async()=>({saved:stored,plan})};
   }
   if(url.includes("intent=1"))return {ok:true,json:async()=>({saved:stored})};
   throw new Error("Unexpected fetch "+url);
  };
- const context={document:{getElementById:id=>elements[id]||null,createElement:()=>new Element(),querySelectorAll:()=>[]},fetch,AbortController,setTimeout,clearTimeout,URL,console,window:null};
+ let shown=null;
+ const context={showPanel:name=>{shown=name;},document:{getElementById:id=>elements[id]||null,createElement:()=>new Element(),querySelectorAll:()=>[]},fetch,AbortController,setTimeout,clearTimeout,URL,console,window:null};
  context.window=context;
  context.AI4UBilling={getFreshAccessToken:async()=> "test-fake-token"};
  const script=fs.readFileSync(path.join(__dirname,"../../mission-intent.js"),"utf8");
@@ -39,4 +41,9 @@ test("Improve → Save is enabled after preview; Save is called and readback ver
  await context.AI4UIntent.resume();
  assert.equal(elements["intent-save"].disabled,false,"Resume must not leave Save disabled either");
  assert.match(elements["intent-save-status"].textContent,/successfully restored/);
+ assert.equal(elements["intent-next"].hidden,false,"Saved plan exposes one next action");
+ context.AI4UIntent.next();
+ assert.equal(shown,"router");
+ assert.equal(elements["r-goal"].value,"Build an affordable shop");
+
 });
