@@ -3462,7 +3462,7 @@ async function generatePrompt(){
 function buildRouteSpecificInstructions(route) {
   if(!route) return '';
   const platform=route.platform || 'the recommended platform';
-  const storefront=/\\b(wreath|online store|storefront|ecommerce|e-commerce|sell|checkout|shop)\\b/i.test(route.goal||'');
+  const storefront=/\b(wreath|online store|storefront|ecommerce|e-commerce|sell|checkout|shop)\b/i.test(route.goal||'');
   if(storefront){
     return [
       '━━━ STORE LAUNCH — GUIDED EXECUTION PLAN ━━━',
@@ -3475,14 +3475,14 @@ function buildRouteSpecificInstructions(route) {
       '6. Before going live, verify payment-provider test checkout, shipping calculation for at least two representative package/destination scenarios, mobile checkout, policies, taxes as applicable, and account ownership. Never claim a real charge or live order was tested without evidence.',
       '7. Save progress, decisions, unknowns, cost assumptions and evidence; ask the user whether they are satisfied only after the verified acceptance criteria are met.',
       'First response: give the recommended next action with a concise justification and at most three high-value missing inputs. Do not assume accounts are connected. No purchases, live charges or public launch without explicit authorization.'
-    ].join('\\n');
+    ].join('\n');
   }
   return [
     '━━━ GUIDED EXECUTION — NEXT ACTION ━━━',
     'Translate the selected route into numbered actions with explicit location/click instructions, a verification check for each action, and a recovery path.',
     'Identify one worthwhile alternative with concrete speed/cost/quality tradeoffs when supported by evidence.',
     'Preserve decisions and progress, request approval for irreversible steps, and never claim execution that was not observed.'
-  ].join('\\n');
+  ].join('\n');
 }
 
 function generatePromptCore(){
@@ -3521,7 +3521,8 @@ ${constraints ? `Constraints: ${constraints}` : ''}
 ${format ? `Required Output: ${format}` : ''}
 
 ━━━ TOOLCHAIN SELECTED ━━━
-Primary Platform: ${platformName}
+Prompt-authoring assistant: ${platformName}
+${implementationTarget ? `Candidate implementation platform: ${implementationTarget} (requires comparison and confirmation)` : 'Implementation platform: not yet selected'}
 Rationale: ${PLATFORM_INTROS[platform] ? 'Selected based on task requirements and platform strengths.' : 'Selected for this task type.'}
 
 ━━━ PUT THIS HERE ━━━
