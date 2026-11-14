@@ -197,10 +197,10 @@ function cleanRoutingGoal(value){
   "Check the public HTTPS homepage, record the five scoped checks, and state what was not tested."
  ];
  for(const phrase of boilerplate)result=result.split(phrase).join(" ");
- return result.replace(/\\s+/g," ").trim().replace(/\\s+[.!?]$/,"").trim();
+ return result.replace(/\s+/g," ").trim().replace(/\s+[.!?]$/,"").trim();
 }
 function paymentRisk(goal){
- return /\\b(payment|payments|checkout|credit cards?|stripe|subscriptions?|sell|ecommerce|e-commerce|online store|storefront)\\b/i.test(goal);
+ return /\b(payment|payments|checkout|credit cards?|stripe|subscriptions?|sell|ecommerce|e-commerce|online store|storefront)\b/i.test(goal);
 }
 function next(){
  if(!savedChoice){saveStatus("Save and verify your plan before opening the next step.",true);return;}
