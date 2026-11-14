@@ -3394,15 +3394,16 @@ function buildPromptFromRoute(){
   if(audience) audience.value='The person who requested this task';
   if(constraints){
     constraints.value=[
-      'AI4U recommended target: '+r.platform+'. Keep this target central to the instructions.',
-      r.asset ? 'What I already have: '+r.asset : '',
-      r.failure ? 'Constraint or blocker: '+r.failure : '',
-      'Task stage: '+r.stage+'. Risk level: '+r.risk+'.',
-      'Why this route was selected: '+r.why,
-      'Avoid: '+r.avoid
+      'Candidate implementation platform: '+r.platform+' (rule-based starting point, not independently optimized).',
+      r.asset ? 'Existing assets: '+r.asset : '',
+      r.failure ? 'Blocker: '+r.failure : '',
+      'Stage: '+r.stage+'; Risk: '+r.risk+'.',
+      'Routing rationale: '+r.why,
+      'Verify before committing: '+r.avoid,
+      'Compare feasible alternatives before recommending payment or publication.'
     ].filter(Boolean).join('\n');
   }
-  if(format) format.value=r.output || 'A complete result that can be reviewed and checked';
+  if(format) format.value=r.output || 'A guided execution plan with explicit actions, verification criteria, alternatives, and a persistent handoff';
   showPanel('prompt');
   generatePrompt();
   showToast('Prompt prepared from your route — review it before copying');
@@ -3458,6 +3459,32 @@ async function generatePrompt(){
   generatePromptCore();
 }
 
+function buildRouteSpecificInstructions(route) {
+  if(!route) return '';
+  const platform=route.platform || 'the recommended platform';
+  const storefront=/\b(wreath|online store|storefront|ecommerce|e-commerce|sell|checkout|shop)\b/i.test(route.goal||'');
+  if(storefront){
+    return [
+      '━━━ STORE LAUNCH — GUIDED EXECUTION PLAN ━━━',
+      'A storefront is NOT complete merely because a prompt or site draft exists.',
+      '1. Confirm selling region, catalog size, product dimensions and weights, packaging needs, shipping destinations, fulfillment rules, budget, available photos and domain ownership. Ask only for missing facts that change the route.',
+      '2. Compare '+platform+' against at least one viable alternative on verified current total cost, payment capability, shipping profiles, tax support, maintainability, and ease of use. Cite current official pricing; mark unverified details as unknown.',
+      '3. Select a platform using an explicit trade-off table. Keep '+platform+' as the current candidate, not a mandatory winner.',
+      '4. Prepare the smallest working store: homepage, one real product with photos/price/stock, product detail, cart, checkout configuration, shipping and return policies, contact information, and accessible mobile layout.',
+      '5. Provide the exact next click or authorized action for the chosen platform, what the user should see, how to check it, and the next recovery step if it fails.',
+      '6. Before going live, verify payment-provider test checkout, shipping calculation for at least two representative package/destination scenarios, mobile checkout, policies, taxes as applicable, and account ownership. Never claim a real charge or live order was tested without evidence.',
+      '7. Save progress, decisions, unknowns, cost assumptions and evidence; ask the user whether they are satisfied only after the verified acceptance criteria are met.',
+      'First response: give the recommended next action with a concise justification and at most three high-value missing inputs. Do not assume accounts are connected. No purchases, live charges or public launch without explicit authorization.'
+    ].join('\n');
+  }
+  return [
+    '━━━ GUIDED EXECUTION — NEXT ACTION ━━━',
+    'Translate the selected route into numbered actions with explicit location/click instructions, a verification check for each action, and a recovery path.',
+    'Identify one worthwhile alternative with concrete speed/cost/quality tradeoffs when supported by evidence.',
+    'Preserve decisions and progress, request approval for irreversible steps, and never claim execution that was not observed.'
+  ].join('\n');
+}
+
 function generatePromptCore(){
   const platform    = document.getElementById('p-platform').value;
   const goal        = document.getElementById('p-goal').value.trim();
@@ -3475,6 +3502,12 @@ function generatePromptCore(){
   const intro = PLATFORM_INTROS[platform] || 'You are an expert AI assistant.';
   const name = settings.name || 'Lee Hanna';
   const org  = settings.org  || 'AI4U LLC';
+  const routeContext=state.lastRouteResult && state.lastRouteResult.goal===goal ? state.lastRouteResult : null;
+  const implementationTarget=routeContext ? routeContext.platform : null;
+  const guidedSteps=buildRouteSpecificInstructions(routeContext);
+  const escalation=routeContext
+    ? 'Reassess the current route against an evidence-supported alternative. Do not silently change platforms or restart the project; document the reason and request approval before migration.'
+    : 'Identify a viable alternative based on the failure and document the limitation. Do not assume an external service is available.';
 
   const prompt = `━━━ AI4U ROUTING OS — PLATFORM PAYLOAD ━━━
 Generated by: ${name} | ${org}
@@ -3488,7 +3521,8 @@ ${constraints ? `Constraints: ${constraints}` : ''}
 ${format ? `Required Output: ${format}` : ''}
 
 ━━━ TOOLCHAIN SELECTED ━━━
-Primary Platform: ${platformName}
+Prompt-authoring assistant: ${platformName}
+${implementationTarget ? `Candidate implementation platform: ${implementationTarget} (requires comparison and confirmation)` : 'Implementation platform: not yet selected'}
 Rationale: ${PLATFORM_INTROS[platform] ? 'Selected based on task requirements and platform strengths.' : 'Selected for this task type.'}
 
 ━━━ PUT THIS HERE ━━━
@@ -3505,7 +3539,7 @@ ${audience ? `\nAUDIENCE: ${audience}` : ''}
 ${constraints ? `\nCONSTRAINTS: ${constraints}` : ''}
 ${format ? `\nREQUIRED OUTPUT FORMAT: ${format}` : ''}
 
-IMPORTANT: Do not stop mid-task. Complete the full deliverable. If you encounter a blocker, document it clearly and provide the best partial output you can.
+IMPORTANT: Proceed as far as authorized tools permit. If a blocker occurs, report the verified partial result and provide a practical next action. Do not fabricate completed actions. Ask before spending, publishing, sending messages, deleting records, or other irreversible changes.\n\n${guidedSteps}
 
 ━━━ VERIFICATION ━━━
 Before considering this complete, verify:
@@ -3516,7 +3550,7 @@ Before considering this complete, verify:
 
 ━━━ HANDOFF / ESCALATION RULE ━━━
 If ${platformName} fails or produces an unsatisfactory result:
-→ Escalate to: ${platform==='manus'?'Claude Code for repair':'Manus Agent for a full rebuild'}
+→ ${escalation}
 → Document the failure in the AI4U Ledger
 → Record the avoidance rule for future routing decisions
 
