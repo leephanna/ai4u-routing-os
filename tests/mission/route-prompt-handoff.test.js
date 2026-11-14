@@ -1,0 +1,31 @@
+"use strict";
+const test=require("node:test");
+const assert=require("node:assert/strict");
+const fs=require("node:fs");
+const vm=require("node:vm");
+const path=require("node:path");
+const html=fs.readFileSync(path.join(__dirname,"../../index.html"),"utf8");
+test("Storefront handoff generates actionable verified steps without assuming success",()=>{
+ const start=html.indexOf("function buildRouteSpecificInstructions(route) {");
+ const end=html.indexOf("function generatePromptCore(){",start);
+ assert.ok(start>=0&&end>start);
+ const context={};vm.runInNewContext(html.slice(start,end)+"\nthis.build=buildRouteSpecificInstructions;",context);
+ const output=context.build({platform:"Wix",goal:"Build an online shop for handmade wreaths with payments"});
+ assert.match(output,/STORE LAUNCH — GUIDED EXECUTION PLAN/);
+ assert.match(output,/shipping calculation/);
+ assert.match(output,/payment-provider test checkout/);
+ assert.match(output,/Compare Wix against at least one viable alternative/);
+ assert.match(output,/No purchases, live charges or public launch without explicit authorization/);
+ assert.equal(output.includes("\\n"),false,"Steps should have real line breaks");
+ const generic=context.build({platform:"Claude Code",goal:"Repair existing codebase"});
+ assert.match(generic,/GUIDED EXECUTION — NEXT ACTION/);
+ assert.doesNotMatch(generic,/STORE LAUNCH/);
+});
+test("Prompt payload distinguishes assistant from implementation and drops automatic Manus escalation",()=>{
+ assert.match(html,/Prompt-authoring assistant: \$\{platformName\}/);
+ assert.match(html,/Candidate implementation platform:/);
+ assert.match(html,/\$\{guidedSteps\}/);
+ assert.match(html,/Reassess the current route against an evidence-supported alternative/);
+ assert.doesNotMatch(html,/Escalate to: \$\{platform==='manus'/);
+ assert.match(html,/Compare feasible alternatives before recommending payment or publication/);
+});
