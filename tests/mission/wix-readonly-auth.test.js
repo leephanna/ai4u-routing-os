@@ -66,6 +66,22 @@ test("Permission errors are UNKNOWN, not absence of Wix commerce",async()=>{
   assert.equal(r.payments,"not_verified");
  }finally{global.fetch=previous;}
 });
+test("Wix HTTP 428 with REQUIRED_APP_NOT_INSTALLED is diagnosed as a missing native Store, not a zero-product catalog",async()=>{
+ const previous=global.fetch;
+ global.fetch=async(url)=>{
+  if(url.includes("apps-installer"))return {ok:true,json:async()=>({appInstances:[]})};
+  return {ok:false,status:428,json:async()=>({message:"Wix Stores app is not installed for site",
+   details:{applicationError:{code:"REQUIRED_APP_NOT_INSTALLED"}}})};
+ };
+ try{
+  const report=await auditReadOnly("stub-access-token");
+  assert.equal(report.catalog.status,"wix_stores_not_installed");
+  assert.equal(report.catalog.http_status,428);
+  assert.equal(report.catalog.error_code,"REQUIRED_APP_NOT_INSTALLED");
+  assert.equal(report.catalog.returned_sample_count,undefined);
+  assert.equal(report.payments,"not_verified");
+ }finally{global.fetch=previous;}
+});
 test("Wix connection route retains the existing mission API and refuses callback credentials without config",async()=>{
  const fs=require("node:fs"),path=require("node:path");
  const api=fs.readFileSync(path.join(__dirname,"../../api/mission/site-audit.js"),"utf8");

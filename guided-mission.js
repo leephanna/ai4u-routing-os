@@ -102,7 +102,9 @@ async function refreshWixStatus(record){
   ?"Last read-only inspection: "+stored.inspected_at+
    ". Installed-app inventory: "+stored.installed_apps?.status+
    (Number.isInteger(stored.installed_apps?.count)?" ("+stored.installed_apps.count+" entries)":"")+
-   ". Product catalog: "+stored.catalog?.status+
+   ". Product catalog: "+(stored.catalog?.status==="wix_stores_not_installed"
+    ?"Wix Stores app is not installed (confirmed by Wix API; no installation has been attempted)"
+    :stored.catalog?.status||"not verified")+
    ". Checkout, payments and shipping remain unverified.":"No Routing OS Wix inventory has run yet.";
  try{
   const response=await request("GET",null,"/api/mission/site-audit?wix_audit=1&mission_id="+encodeURIComponent(record.id));
