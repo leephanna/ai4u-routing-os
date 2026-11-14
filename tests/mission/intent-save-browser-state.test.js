@@ -50,7 +50,7 @@ test("Improve → Save is enabled after preview; Save is called and readback ver
  await context.AI4UIntent.resume();
  elements["r-risk"].value="low";
  context.AI4UIntent.next();
- assert.equal(elements["r-goal"].value,"I want to build an online store for handmade wreaths that accepts payments");
+ assert.equal(elements["r-goal"].value,"I want to build an online store for handmade wreaths that accepts payments.");
  assert.equal(elements["r-risk"].value,"high");
  assert.equal(elements["r-stage"].value,"idea");
  assert.match(elements["intent-route-risk-note"].textContent,/payments or selling/);
