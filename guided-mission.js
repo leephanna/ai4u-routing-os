@@ -68,7 +68,7 @@ function show(record,comparison=null){
   $("guided-confirm").disabled=false;
   message("Select the three essentials. Choosing Not sure is valid; AI4U will record what is unknown.");
  }else{
-  if(!selected||record.route_choice?.platform==="wix")message(siteRecorded?"✓ Existing-site discovery saved. Verification of access and storefront setup is next.":selected?"✓ Your route choice is saved. Confirm whether a Wix site already exists.":"✓ User-confirmed requirements saved to your account. Review the comparison before choosing.");
+  if(!selected||record.route_choice?.platform==="wix")message(siteRecorded?"✓ Existing-site discovery saved. Verification of access and storefront setup is next.":selected?"✓ Your route choice is saved. Confirm whether a Wix site already exists.":"✓ Requirements saved as user-confirmed inputs to your account. Review the comparison before choosing.");
  }
 }
 function renderComparison(comparison){
