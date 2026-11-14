@@ -184,6 +184,24 @@ if(goalEditor)goalEditor.addEventListener("input",()=>{
  $("intent-save-status").hidden=true;
  status("Goal changed. Select Improve My Goal to review up-to-date choices before saving.");
 });
+// A saved receipt is immutable. Remove only exact AI4U-generated boilerplate
+// from the *routing handoff* (including legacy duplicated saved prompts).
+function cleanRoutingGoal(value){
+ let result=String(value||"").trim();
+ const boilerplate=[
+  "Copy prompt.",
+  "Identify the most efficient practical route and return a verifiable result.",
+  "Respect my constraints and clearly identify any assumptions.",
+  "Ask before irreversible actions.",
+  "Recommend a cost-effective route, define a usable deliverable, and verify it with evidence.",
+  "Check the public HTTPS homepage, record the five scoped checks, and state what was not tested."
+ ];
+ for(const phrase of boilerplate)result=result.split(phrase).join(" ");
+ return result.replace(/\s+/g," ").trim().replace(/\s+[.!?]$/,"").trim();
+}
+function paymentRisk(goal){
+ return /\b(payment|payments|checkout|credit cards?|stripe|subscriptions?|sell|ecommerce|e-commerce|online store|storefront)\b/i.test(goal);
+}
 function next(){
  if(!savedChoice){saveStatus("Save and verify your plan before opening the next step.",true);return;}
  const routeGoal=$("r-goal");
@@ -191,7 +209,17 @@ function next(){
   saveStatus("Route Engine is unavailable. Your saved plan remains available through Resume Saved Plan.",true);
   return;
  }
- routeGoal.value=savedChoice;
+ const clean=cleanRoutingGoal(savedChoice);
+ if(!clean){saveStatus("Saved wording could not be prepared safely. Your original saved plan is unchanged.",true);return;}
+ routeGoal.value=clean;
+ // A payment-capable storefront is not a low-risk live launch.
+ // Recommend HIGH only during the confirmed saved-plan handoff, never silently execute.
+ const stage=$("r-stage"),risk=$("r-risk"),note=$("intent-route-risk-note");
+ if(stage)stage.value="idea";
+ if(risk&&paymentRisk(clean))risk.value="high";
+ if(note)note.textContent=paymentRisk(clean)
+  ?"Recommended risk: HIGH — this goal includes payments or selling. Verify checkout and security before launch. You can change the assessment."
+  :"Select the risk level that matches your project before routing.";
  global.showPanel("router");
  routeGoal.focus();
 }
