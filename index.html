@@ -2943,10 +2943,21 @@ The output will include:
         </div>
         <div id="guided-step-four" hidden>
           <div class="guided-next-instructions">
-            <strong>Step 3 confirmed · Step 4 — Verify the Wix site</strong>
+            <strong>DO THIS NEXT · Check the existing site's public homepage</strong>
             <p id="guided-site-review"></p>
-            <p>AI4U has saved your answer. The next step is verifying site access and inspecting products, shipping and checkout configuration before deciding whether to reuse or build.</p>
-            <p>Nothing has been published, purchased, or independently verified yet.</p>
+            <p>First, test the site's public HTTPS response using AI4U's existing five-check Website Launch Readiness pilot. This checks page transport and basic HTML only—not Wix access, products, cart, checkout or shipping.</p>
+            <p id="guided-site-audit-source" class="intent-help"></p>
+            <label class="form-label" for="guided-public-url">Public HTTPS homepage URL (root / only)</label>
+            <input class="form-input" type="url" maxlength="2048" id="guided-public-url" placeholder="https://your-existing-site.com/">
+            <div class="mission-actions" style="margin-top:12px">
+              <button class="btn btn-primary" type="button" id="guided-public-audit" onclick="AI4UGuided.preparePublicAudit()">Prepare Read-only Homepage Check</button>
+            </div>
+            <p class="intent-help">This transfers the URL into the existing website-check pilot. You will explicitly start the check there. No Wix connection, store changes, payment, purchase, or publication occurs.</p>
+            <details class="intent-steps-details">
+              <summary>What still requires account-authorized inspection?</summary>
+              <p class="intent-help">Wix site ownership and editor access; installed commerce apps; product catalog and inventory; cart and payment-provider configuration; shipping/pickup zones and rates. None are established by the five public homepage checks.</p>
+              <p class="intent-help">The secure Wix connection in this ChatGPT conversation is separate from the Routing OS application. It is not silently inherited.</p>
+            </details>
           </div>
         </div>
       </div>
