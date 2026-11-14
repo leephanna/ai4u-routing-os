@@ -75,7 +75,7 @@ test("Wix connection route retains the existing mission API and refuses callback
  assert.match(ui,/beginWixConnection,runWixInventory/);
  assert.match(html,/id="guided-wix-connect-consent"/);
  assert.match(html,/id="guided-wix-audit-consent"/);
- assert.match(html,/Connection setup is disabled until a dedicated Wix Developer app/);
+ assert.match(html,/This independent connection requires a dedicated Wix Developer app/);
  const res={statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v;},end(v){this.body=v;}};
  await mod({method:"GET",query:{wix_callback:"1",state:"A".repeat(43)}},res);
  assert.equal(res.statusCode,303);
