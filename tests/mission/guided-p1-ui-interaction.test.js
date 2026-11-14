@@ -33,7 +33,7 @@ test("Real UI lifecycle: Start saved mission → confirm choices → server read
    return {ok:true,json:async()=>({mission:{...record}})};
   }
   if(options.method==="GET"&&url.includes("guided=1")){
-   readCount++;return {ok:true,json:async()=>({mission:{...record}})};
+   readCount++;return {ok:true,json:async()=>({mission:{...record},comparison:record.step_index?{mode:"source_snapshot",reviewed_at:"2026-11-13",recommendation:"wix",options:[],reasons:[]}:null})};
   }
   throw Error("Unexpected request: "+options.method+" "+url);
  };
@@ -51,12 +51,12 @@ test("Real UI lifecycle: Start saved mission → confirm choices → server read
  assert.equal(elements["guided-confirm"].disabled,false);
  elements["guided-region"].value="US";elements["guided-shipping"].value="ship";elements["guided-budget"].value="not_sure";
  await ctx.AI4UGuided.confirmStep();
- assert.equal(submitCount,1);assert.equal(readCount,1);
+ assert.equal(submitCount,1);assert.equal(readCount,2);
  assert.equal(elements["guided-step-one"].hidden,true);
  assert.equal(elements["guided-step-two"].hidden,false);
  assert.match(elements["guided-message"].textContent,/user-confirmed/);
  await ctx.AI4UGuided.resume();
- assert.equal(readCount,2);
+ assert.equal(readCount,3);
  assert.equal(elements["guided-step-two"].hidden,false);
  assert.equal(submitCount,1);
 });
