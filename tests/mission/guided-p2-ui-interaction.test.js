@@ -4,12 +4,13 @@ const fs=require("node:fs"),path=require("node:path");
 class Element{
  constructor(tag="div"){this.tag=tag;this.value="";this.textContent="";this.hidden=false;this.disabled=false;this.checked=false;this.dataset={};this.children=[];this.attributes={};}
  setAttribute(k,v){this.attributes[k]=v;}
+ addEventListener(){}
  appendChild(c){this.children.push(c);return c;}
  replaceChildren(){this.children=[];}
  scrollIntoView(){}
 }
 test("Step 2 click is actionable, verifies readback and resumes without duplicate writes",async()=>{
- const ids=["guided-message","guided-panel","guided-id","guided-step-one","guided-step-two","guided-step-three","guided-progress","guided-region","guided-shipping","guided-budget","guided-confirm","guided-route-options","guided-reasons","guided-review-ack","guided-comparison-date","guided-choose-route","guided-selected-route"];
+ const ids=["guided-message","guided-panel","guided-id","guided-step-one","guided-step-two","guided-step-three","guided-step-four","guided-existing-fields","guided-site-name","guided-site-url","guided-save-site","guided-site-review","guided-progress","guided-region","guided-shipping","guided-budget","guided-confirm","guided-route-options","guided-reasons","guided-review-ack","guided-comparison-date","guided-choose-route","guided-selected-route"];
  const elements=Object.fromEntries(ids.map(id=>[id,new Element()]));
  const id="33333333-3333-4333-8333-333333333333";
  const record={id,plan_id:"22222222-2222-4222-8222-222222222222",step_index:1,status:"awaiting_route_review",revision:1,
@@ -22,7 +23,7 @@ test("Step 2 click is actionable, verifies readback and resumes without duplicat
  const doc={
   getElementById:key=>elements[key]||null,
   createElement:tag=>{const node=new Element(tag);if(tag==="input")radios.push(node);return node;},
-  querySelector:()=>radios.find(node=>node.checked)||null
+  querySelector:()=>radios.find(node=>node.checked)||null,querySelectorAll:()=>[]
  };
  const fetch=async(url,opts)=>{
   const body=opts.body?JSON.parse(opts.body):{};
