@@ -10,7 +10,7 @@ class Element {
  focus(){this.focused=true;}
 }
 test("Improve → Save is enabled after preview; Save is called and readback verified",async()=>{
- const ids=["intent-status","intent-goal","intent-preview","intent-resume","intent-suggestions","intent-options","intent-clarify","intent-steps","intent-chosen","intent-save","intent-saved","intent-save-status","intent-next","mission-url","r-goal"];
+ const ids=["intent-status","intent-goal","intent-preview","intent-resume","intent-suggestions","intent-options","intent-clarify","intent-steps","intent-chosen","intent-save","intent-saved","intent-save-status","intent-next","mission-url","r-goal","r-stage","r-risk","intent-route-risk-note"];
  const elements=Object.fromEntries(ids.map(id=>[id,new Element()]));
  elements["intent-goal"].value="I want to build an affordable store for handmade wreaths.";
  const plan={original_goal:elements["intent-goal"].value,status:"ready_for_review",category:"website_project",steps:[{title:"Confirm goal",action:"Agree scope",acceptance_criteria:"User confirms"}],alternatives:[{id:"recommended",label:"Recommended — Most effective",prompt:"Build an affordable shop",tradeoff:"Balanced"}],clarification:null};
@@ -45,5 +45,16 @@ test("Improve → Save is enabled after preview; Save is called and readback ver
  context.AI4UIntent.next();
  assert.equal(shown,"router");
  assert.equal(elements["r-goal"].value,"Build an affordable shop");
+ // A legacy saved plan can contain duplicated AI4U helper text. Clean only the handoff.
+ stored.chosen_prompt="I want to build an online store for handmade wreaths that accepts payments. Copy prompt. Identify the most efficient practical route and return a verifiable result. Ask before irreversible actions. Identify the most efficient practical route and return a verifiable result. Ask before irreversible actions.";
+ await context.AI4UIntent.resume();
+ elements["r-risk"].value="low";
+ context.AI4UIntent.next();
+ assert.equal(elements["r-goal"].value,"I want to build an online store for handmade wreaths that accepts payments");
+ assert.equal(elements["r-risk"].value,"high");
+ assert.equal(elements["r-stage"].value,"idea");
+ assert.match(elements["intent-route-risk-note"].textContent,/payments or selling/);
+ assert.equal(stored.chosen_prompt.includes("Copy prompt."),true,"saved receipt is unchanged");
+
 
 });
