@@ -18,11 +18,11 @@ test("Step 2 click is actionable, verifies readback and resumes without duplicat
   {id:"wix",name:"Wix Core",cost:"Annual commitment",strength:"Simple editor",caution:"Verify rates",fit:"Suggested",sources:["https://www.wix.com/plans"]},
   {id:"shopify",name:"Shopify Basic",cost:"Annual commitment",strength:"Retail",caution:"Verify rates",fit:"Alternative",sources:["https://www.shopify.com/pricing"]}
  ]};
- let writes=0,reads=0,radio=null;
+ let writes=0,reads=0,radios=[];
  const doc={
   getElementById:key=>elements[key]||null,
-  createElement:tag=>{const node=new Element(tag);if(tag==="input")radio=node;return node;},
-  querySelector:()=>radio&&radio.checked?radio:null
+  createElement:tag=>{const node=new Element(tag);if(tag==="input")radios.push(node);return node;},
+  querySelector:()=>radios.find(node=>node.checked)||null
  };
  const fetch=async(url,opts)=>{
   const body=opts.body?JSON.parse(opts.body):{};
@@ -41,7 +41,7 @@ test("Step 2 click is actionable, verifies readback and resumes without duplicat
  vm.runInNewContext(fs.readFileSync(path.join(__dirname,"../../guided-mission.js"),"utf8"),ctx);
  await ctx.AI4UGuided.resume();
  assert.equal(elements["guided-step-two"].hidden,false);
- assert.equal(radio.checked,true);
+ assert.equal(radios.find(node=>node.checked)?.value,"wix");
  assert.equal(elements["guided-choose-route"].disabled,false);
  elements["guided-review-ack"].checked=true;
  await ctx.AI4UGuided.chooseRoute();
