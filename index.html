@@ -1091,7 +1091,8 @@ canvas{max-width:100%;height:auto}
 .guided-option span{display:block;font-size:12px;color:var(--white2);margin-top:7px}
 .guided-option a{display:inline-block;font-size:12px;margin:8px 10px 0 0;color:var(--cyan)}
 .guided-check-row{display:flex;align-items:flex-start;gap:9px;margin:16px 0;font-size:13px;line-height:1.5}
-#guided-step-three[hidden]{display:none!important}
+#guided-step-three[hidden],#guided-step-four[hidden],#guided-existing-fields[hidden]{display:none!important}
+#guided-existing-fields .form-input{width:100%;margin-top:5px}
 </style>
 </head>
 <body>
@@ -2921,10 +2922,31 @@ The output will include:
         </div>
         <div id="guided-step-three" hidden>
           <div class="guided-next-instructions">
-            <strong>Step 2 confirmed · Step 3 awaiting setup</strong>
+            <strong>DO THIS NEXT · Check for an existing Wix site</strong>
             <p id="guided-selected-route"></p>
-            <p>Your platform preference is saved. Next the system must guide actual setup and verify a working storefront. No store or checkout has been created or tested.</p>
-            <p>To reconsider this route, use a new comparison workflow rather than silently changing the recorded decision.</p>
+            <p>Reusing an existing site may save time and money. Choose the answer that best fits. You don't need to create a new account or purchase a plan.</p>
+            <fieldset class="intent-choices"><legend>Do you already have a Wix website?</legend>
+              <label class="guided-option"><input type="radio" name="guided-site-status" value="existing"> <strong>Yes — I have an existing site</strong></label>
+              <label class="guided-option"><input type="radio" name="guided-site-status" value="new"> <strong>No — I may need a new site</strong></label>
+              <label class="guided-option"><input type="radio" name="guided-site-status" value="not_sure"> <strong>Not sure — help me check</strong></label>
+            </fieldset>
+            <div id="guided-existing-fields" hidden>
+              <label class="form-label" for="guided-site-name">Existing site name (optional)</label>
+              <input class="form-input" type="text" id="guided-site-name" maxlength="160" placeholder="Example: My Wreath Shop">
+              <label class="form-label" for="guided-site-url" style="display:block;margin-top:10px">Existing public site address (optional)</label>
+              <input class="form-input" type="url" id="guided-site-url" maxlength="500" placeholder="https://example.com/">
+              <p class="intent-help">Do not enter passwords, private admin links, or access tokens. A name or URL does not prove ownership.</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="guided-save-site" onclick="AI4UGuided.confirmSiteInventory()">Save and Continue</button>
+            <p class="intent-help">This step does not connect to Wix, create sites, publish anything, or charge you.</p>
+          </div>
+        </div>
+        <div id="guided-step-four" hidden>
+          <div class="guided-next-instructions">
+            <strong>Step 3 confirmed · Step 4 — Verify the Wix site</strong>
+            <p id="guided-site-review"></p>
+            <p>AI4U has saved your answer. The next step is verifying site access and inspecting products, shipping and checkout configuration before deciding whether to reuse or build.</p>
+            <p>Nothing has been published, purchased, or independently verified yet.</p>
           </div>
         </div>
       </div>
