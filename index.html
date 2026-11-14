@@ -1091,7 +1091,7 @@ canvas{max-width:100%;height:auto}
 .guided-option span{display:block;font-size:12px;color:var(--white2);margin-top:7px}
 .guided-option a{display:inline-block;font-size:12px;margin:8px 10px 0 0;color:var(--cyan)}
 .guided-check-row{display:flex;align-items:flex-start;gap:9px;margin:16px 0;font-size:13px;line-height:1.5}
-#guided-step-three[hidden],#guided-step-four[hidden],#guided-existing-fields[hidden]{display:none!important}
+#guided-step-three[hidden],#guided-step-four[hidden],#guided-existing-fields[hidden],#guided-commerce-record-controls[hidden],#guided-commerce-saved[hidden]{display:none!important}
 #guided-existing-fields .form-input{width:100%;margin-top:5px}
 </style>
 </head>
@@ -2953,6 +2953,21 @@ The output will include:
               <button class="btn btn-primary" type="button" id="guided-public-audit" onclick="AI4UGuided.preparePublicAudit()">Prepare Read-only Homepage Check</button>
             </div>
             <p class="intent-help">This transfers the URL into the existing website-check pilot. You will explicitly start the check there. No Wix connection, store changes, payment, purchase, or publication occurs.</p>
+            <section class="guided-next-instructions" id="guided-commerce-panel">
+              <strong>COMMERCE READINESS · Evidence-backed review</strong>
+              <p id="guided-commerce-summary">Looking for your account's completed website verification evidence…</p>
+              <div id="guided-commerce-findings"></div>
+              <p id="guided-commerce-provenance" class="intent-help"></p>
+              <div id="guided-commerce-record-controls" hidden>
+                <label class="guided-check-row">
+                  <input id="guided-commerce-ack" type="checkbox">
+                  I understand that homepage evidence does not verify a live catalog, payment processing, checkout, or delivery.
+                </label>
+                <button class="btn btn-primary" id="guided-commerce-save" type="button" onclick="AI4UGuided.recordCommerceReview()">Save Commerce Readiness Review</button>
+              </div>
+              <p id="guided-commerce-saved" class="intent-help" hidden></p>
+              <p class="intent-help">The guided mission stays at Step 4 until actual commerce capabilities are verified. No purchase, Wix installation, or publication is authorized.</p>
+            </section>
             <details class="intent-steps-details">
               <summary>What still requires account-authorized inspection?</summary>
               <p class="intent-help">Wix site ownership and editor access; installed commerce apps; product catalog and inventory; cart and payment-provider configuration; shipping/pickup zones and rates. None are established by the five public homepage checks.</p>

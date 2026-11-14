@@ -19,6 +19,7 @@ test("Step 3: owner-only, idempotent existing Wix discovery; no site is created"
   if(sql.startsWith("INSERT INTO ai4u_private.router_guided_events")){events++;return {rows:[]};}
   if(sql.startsWith("SELECT g.* FROM ai4u_private.router_guided_missions"))
     return {rows:owner===OWNER&&args[1]===OWNER?[{...row}]:[]};
+  if(sql.includes("FROM ai4u_private.router_missions m LEFT JOIN LATERAL"))return {rows:[]};
   throw Error("Unexpected SQL: "+sql.slice(0,70));
  };
  try{
