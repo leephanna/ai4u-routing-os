@@ -2,6 +2,11 @@
 "use strict";
 const $=id=>document.getElementById(id);
 let current=null,busy=false,latestComparison=null;
+// Public site reference obtained from an independent, read-only Wix account inspection.
+// Not evidence of a live homepage or an authorization granted to Routing OS.
+const KNOWN_PUBLIC_PREVIEWS={
+ "Sparrow Wreath Preview":"https://headless-etnhqsdtksr-leehanna8-1409.wix-site-host.com/"
+};
 function message(value,error=false){
  const el=$("guided-message");if(!el)return;
  el.hidden=false;el.textContent=value;el.dataset.state=error?"error":"normal";
@@ -58,6 +63,16 @@ function show(record,comparison=null){
   const context=record.setup_context||{};
   const type=context.site_status==="existing"?"Existing Wix site":context.site_status==="new"?"No existing site reported":"Site status unknown";
   $("guided-site-review").textContent=type+(context.site_name?" · "+context.site_name:"")+(context.site_url?" · "+context.site_url:"")+". User-reported only; ownership and function are not verified.";
+  const known=context.site_name&&KNOWN_PUBLIC_PREVIEWS[context.site_name]||"";
+  const suggested=context.site_url||known;
+  $("guided-public-url").value=suggested;
+  $("guided-public-audit").disabled=context.site_status!=="existing";
+  $("guided-site-audit-source").textContent=context.site_status!=="existing"
+   ?"No existing site was reported. Do not create a new site until the route is reviewed."
+   :known&&!context.site_url
+   ?"Suggested public URL from a separate Wix account inspection; confirm it is the right site. Public availability has NOT been verified."
+   :"Verify this is the correct public root homepage URL before testing. Routing OS is not connected to Wix administration.";
+
  }
  if(selected)$("guided-selected-route").textContent="Selected: "+(record.route_choice?.platform_name||record.route_choice?.platform||"saved platform")+". Pricing and checkout have not been independently verified.";
  if(active){
@@ -150,6 +165,28 @@ async function confirmSiteInventory(){
 }
 const siteStatusControls=document.querySelectorAll('input[name="guided-site-status"]');
 for(const input of siteStatusControls)input.addEventListener("change",updateExistingFields);
+async function preparePublicAudit(){
+ if(busy||!current||current.step_index!==3)return;
+ const context=current.setup_context||{};
+ if(context.site_status!=="existing"){message("No existing Wix site is selected for this mission.",true);return;}
+ const raw=$("guided-public-url").value.trim();
+ let url;
+ try{
+  url=new URL(raw);
+  if(url.protocol!=="https:"||url.username||url.password||url.search||url.hash||url.port||url.pathname!=="/"||!url.hostname.includes("."))
+   throw Error("The public audit only accepts an HTTPS root homepage URL (/) without credentials, paths, query parameters or custom ports.");
+ }catch(error){message(error.message||"Enter a public HTTPS root homepage URL.",true);return;}
+ const target=$("mission-url");
+ if(!target||!global.AI4UMission||typeof global.AI4UMission.start!=="function"){
+  message("Website Launch Readiness is unavailable. Your site selection is still saved.",true);return;
+ }
+ target.value=url.href;
+ message("URL transferred. Starting the existing read-only homepage checks; review results in Website Launch Readiness below.");
+ target.scrollIntoView({behavior:"smooth",block:"center"});
+ await global.AI4UMission.start();
+ // A public HTTPS audit is separate from the guided account/site identity and
+ // must never advance Step 4 or imply Wix commerce readiness.
+}
 function failed(error){message(error.message||"Action not confirmed.",true);}
 async function startLatest(){
  if(busy)return;busy=true;
@@ -194,5 +231,5 @@ async function confirmStep(){
  }catch(error){failed(error);}
  finally{busy=false;if(current?.step_index===0)$("guided-confirm").disabled=false;}
 }
-global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory};
+global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory,preparePublicAudit};
 })(window);
