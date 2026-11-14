@@ -97,3 +97,30 @@ test("Wix connection route retains the existing mission API and refuses callback
  assert.equal(res.statusCode,303);
  assert.equal(res.headers.Location,"https://routing.ai4utech.com/?wix_connection=unconfigured");
 });
+
+test("V1 catalog uses the published V1 read-only endpoint, bounded query and records visible total",async()=>{
+ const previous=global.fetch,calls=[];
+ global.fetch=async(url,opts)=>{
+  calls.push({url,opts});
+  return {ok:true,status:200,json:async()=>url.includes("apps-installer")?{appInstances:[]}:{products:[{id:"sample"}],totalResults:12}};
+ };
+ try{
+  const result=await auditReadOnly("test-token","v1");
+  assert.equal(result.catalog_version,"v1");
+  assert.equal(result.catalog.status,"query_succeeded");
+  assert.equal(result.catalog.returned_sample_count,1);
+  assert.equal(result.catalog.visible_total,12);
+  assert.equal(result.catalog.has_next,true);
+  assert.equal(result.payments,"not_verified");
+  const product=calls[1];
+  assert.equal(product.url,"https://www.wixapis.com/stores-reader/v1/products/query");
+  assert.deepEqual(JSON.parse(product.opts.body),{query:{paging:{limit:1,offset:0}}});
+  assert.equal(product.opts.method,"POST");
+ }finally{global.fetch=previous;}
+});
+test("Unknown catalog version is rejected before any external call",async()=>{
+ const previous=global.fetch;
+ global.fetch=async()=>{throw new Error("Must not make requests");};
+ try{await assert.rejects(()=>auditReadOnly("test-token","auto"),/Unsupported Wix catalog version/);}
+ finally{global.fetch=previous;}
+});
