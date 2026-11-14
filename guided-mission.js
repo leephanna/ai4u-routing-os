@@ -88,6 +88,75 @@ function show(record,comparison=null,commerce=null){
   if(!selected||record.route_choice?.platform==="wix")message(siteRecorded?"✓ Existing-site discovery saved. Verification of access and storefront setup is next.":selected?"✓ Your route choice is saved. Confirm whether a Wix site already exists.":"✓ Requirements saved as user-confirmed inputs to your account. Review the comparison before choosing.");
  }
 }
+async function refreshWixStatus(record){
+ const status=$("guided-wix-connection-status"),connect=$("guided-wix-connect-controls");
+ const inspect=$("guided-wix-audit-controls"),results=$("guided-wix-inventory-result");
+ if(!status||!connect||!inspect||!results)return;
+ connect.hidden=true;inspect.hidden=true;
+ if(!record?.setup_context?.commerce_review){
+  status.textContent="First save the evidence-backed Commerce Readiness review above; no Wix access is requested yet.";
+  results.textContent="";return;
+ }
+ const stored=record.setup_context?.wix_inspection;
+ results.textContent=stored
+  ?"Last read-only inspection: "+stored.inspected_at+
+   ". Installed-app inventory: "+stored.installed_apps?.status+
+   (Number.isInteger(stored.installed_apps?.count)?" ("+stored.installed_apps.count+" entries)":"")+
+   ". Product catalog: "+stored.catalog?.status+
+   ". Checkout, payments and shipping remain unverified.":"No Routing OS Wix inventory has run yet.";
+ try{
+  const response=await request("GET",null,"/api/mission/site-audit?wix_audit=1&mission_id="+encodeURIComponent(record.id));
+  if(current?.id!==record.id)return;
+  if(response.configuration!=="ready"){
+   status.textContent="Not configured — the dedicated Wix developer app, app permissions and server-only encryption secret are still required. The existing site and mission are safe.";
+  }else if(response.connection?.status==="authorized"){
+   status.textContent="Wix app installation verified for this site. A limited, read-only inventory is available. No storefront readiness has been claimed.";
+   inspect.hidden=false;
+  }else{
+   status.textContent="Connection available, but this site has not authorized the dedicated Wix inspection app.";
+   connect.hidden=false;
+  }
+ }catch(error){
+  status.textContent="Unable to check the Wix connection state: "+(error.message||"unavailable")+
+   ". Your saved Commerce Readiness review is unchanged.";
+ }
+}
+async function beginWixConnection(){
+ if(busy||!current?.setup_context?.commerce_review)return;
+ if(!$("guided-wix-connect-consent").checked){
+  message("Review and acknowledge Wix app installation before opening authorization.",true);return;
+ }
+ busy=true;$("guided-wix-connect-button").disabled=true;
+ try{
+  const result=await request("POST",{action:"begin",mission_id:current.id,explicit_consent:true},
+   "/api/mission/site-audit?wix_audit=1");
+  const url=new URL(result.install_url);
+  if(url.origin!=="https://www.wix.com"||url.pathname!=="/app-installer")
+   throw Error("Wix authorization returned an unexpected destination.");
+  global.location.assign(url.href);
+ }catch(error){message(error.message||"The Wix authorization could not be initiated.",true);}
+ finally{busy=false;$("guided-wix-connect-button").disabled=false;}
+}
+async function runWixInventory(){
+ if(busy||!current?.setup_context?.commerce_review)return;
+ if(!$("guided-wix-audit-consent").checked){
+  message("Confirm the limited read-only Wix audit scope first.",true);return;
+ }
+ const id=global.crypto?.randomUUID?.();
+ if(!id){message("Could not create a safe request identifier.",true);return;}
+ busy=true;$("guided-wix-audit-button").disabled=true;
+ try{
+  message("Reading only installed app inventory and product catalog metadata...");
+  const result=await request("POST",{action:"inspect",mission_id:current.id,
+   revision:current.revision,request_id:id,confirm_readonly:true},"/api/mission/site-audit?wix_audit=1");
+  if(!result.inspection)throw Error("No Wix inspection evidence was returned.");
+  const updated=await verifiedReadback(current.id);
+  if(updated.setup_context?.wix_inspection?.inspected_at!==result.inspection.inspected_at)
+   throw Error("The read-only Wix inspection could not be verified in saved account storage.");
+  message("✓ Limited Wix inventory saved. Payment, checkout, shipping and pickup still require independent checks.");
+ }catch(error){message(error.message||"Wix read-only inspection failed.",true);}
+ finally{busy=false;$("guided-wix-audit-button").disabled=false;}
+}
 function renderCommerceReview(record,assessment){
  const summary=$("guided-commerce-summary");
  if(!summary)return;
@@ -108,6 +177,7 @@ function renderCommerceReview(record,assessment){
   saved.hidden=false;
   saved.textContent="✓ Scoped commerce review saved to your account. Proof mission: "+review.proof_mission_id+". Checkout remains unverified.";
  }
+ void refreshWixStatus(record);
  if(!assessment){
   summary.textContent="No commerce assessment was returned. Resume this guided mission to check stored homepage evidence.";
   provenance.textContent="No Wix account is connected inside Routing OS.";
@@ -299,5 +369,5 @@ async function confirmStep(){
  }catch(error){failed(error);}
  finally{busy=false;if(current?.step_index===0)$("guided-confirm").disabled=false;}
 }
-global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory,preparePublicAudit,recordCommerceReview};
+global.AI4UGuided={startLatest,resume,confirmStep,chooseRoute,confirmSiteInventory,preparePublicAudit,recordCommerceReview,beginWixConnection,runWixInventory};
 })(window);
