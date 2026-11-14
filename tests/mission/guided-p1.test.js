@@ -107,6 +107,6 @@ test("Guided mission interface is distinct from website readiness and never repo
  assert.match(client,/request_id:requestId/);
  assert.match(client,/step_index!==1/);
  assert.match(api,/req\.query\.guided==="1"/);
- assert.doesNotMatch(client,/AI4UMission\.start\(/);
+ assert.match(client,/async function preparePublicAudit\(/);\n assert.match(client,/await global\.AI4UMission\.start\(\)/);
  assert.doesNotMatch(client,/localStorage/);
 });
