@@ -98,7 +98,7 @@ async function preview(){
   const result=await api("POST",{action:"preview",goal});
   render(result.plan);
  }catch(e){status(e.message,true);}
- finally{busy=false;$("intent-preview").disabled=false;}
+ finally{busy=false;$("intent-preview").disabled=false;if(plan)showChoice();}
 }
 async function save(){
  if(busy||!plan)return;
@@ -165,7 +165,7 @@ async function resume(){
   $("intent-saved").textContent="✓ Restored saved decision · "+json.saved.id;
   saveStatus("✓ Saved plan successfully restored from your account.",false);
  }catch(e){saveStatus("Resume failed: "+e.message,true);}
- finally{busy=false;$("intent-resume").disabled=false;}
+ finally{busy=false;$("intent-resume").disabled=false;if(plan)showChoice();}
 }
 const goalEditor=$("intent-goal");
 if(goalEditor)goalEditor.addEventListener("input",()=>{
