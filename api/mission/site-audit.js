@@ -11,6 +11,7 @@ function publicMission(row){
 module.exports=async function(req,res){
   if(req.query&&req.query.intent==="1")return require("../../lib/mission/intent-handler")(req,res);
   if(req.query&&req.query.guided==="1")return require("../../lib/mission/guided-handler")(req,res);
+  if(req.query&&(req.query.wix_audit==="1"||req.query.wix_callback==="1"))return require("../../lib/mission/wix-connection")(req,res);
   if(req.method!=="POST"&&req.method!=="GET")return send(res,405,{error:"Method not allowed"});
   let action=null,id=null,user;
   try{
