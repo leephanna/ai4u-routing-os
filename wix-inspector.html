@@ -71,7 +71,8 @@ button{cursor:pointer;background:#153251;border:1px solid #6ddfff;color:#e7f8ff;
    });
    const data=await response.json();
    if(!response.ok){
-    result.textContent=data.error||"The read-only test could not be verified.";
+    result.textContent=(data.error||"The read-only test could not be verified.")+
+     (typeof data.diagnostic_code==="string"?" Diagnostic code: "+data.diagnostic_code:"");
     return;
    }
    if(data.status!=="verified_dev_read"){result.textContent="Unexpected response; verification not recorded.";return;}

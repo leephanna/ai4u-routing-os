@@ -1,6 +1,6 @@
 "use strict";
 const test=require("node:test"),assert=require("node:assert/strict"),crypto=require("node:crypto");
-const {configuration,verifySignedInstance,probe,DEV_SITE_ID}=require("../../lib/mission/wix-dev-probe")._test;
+const {configuration,verifySignedInstance,inspectSignedInstance,probe,DEV_SITE_ID}=require("../../lib/mission/wix-dev-probe")._test;
 const appId="bda78d68-1ef8-4c6b-9baa-cfdac21e03b8",inst="22222222-2222-4222-8222-222222222222";
 const owner="33333333-3333-4333-8333-333333333333",secret="example-only-test-secret-with-length";
 const signed=payload=>{
@@ -87,4 +87,14 @@ test("Wix signed OWNER instance accepts non-UUID member IDs but rejects contribu
  assert.equal(verifySignedInstance(instance({uid:"contributor",siteOwnerId:"owner",permissions:"OWNER"}),secret),null);
  assert.equal(verifySignedInstance(instance({uid:"contributor",siteOwnerId:"owner",permissions:"CONTRIBUTOR"}),secret),null);
  assert.equal(verifySignedInstance(instance({uid:"",siteOwnerId:"",permissions:"OWNER"}),secret).instanceId,inst);
+});
+
+test("Authorization diagnostics distinguish signature mismatch from owner restriction without leaking claims",async()=>{
+ assert.equal(inspectSignedInstance("fake."+instance().split(".")[1],secret).reason,"WIX_AUTH_SIGNATURE_MISMATCH");
+ assert.equal(inspectSignedInstance(instance({uid:"contributor",siteOwnerId:"owner"}),secret).reason,"WIX_AUTH_OWNER_MISMATCH");
+ assert.equal(inspectSignedInstance(instance({permissions:"CONTRIBUTOR",uid:"",siteOwnerId:""}),secret).reason,"WIX_AUTH_OWNER_PERMISSION_MISSING");
+ const wrong=await probe(instance({uid:"contributor",siteOwnerId:"owner"}),config);
+ assert.equal(wrong.statusCode,403);
+ assert.equal(wrong.diagnostic_code,"WIX_AUTH_OWNER_MISMATCH");
+ assert.doesNotMatch(JSON.stringify(wrong),/contributor|33333333/);
 });
