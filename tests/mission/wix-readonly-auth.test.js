@@ -132,7 +132,7 @@ test("Wix app OAuth token must match the actual expected tenant before inspectio
  global.fetch=async(url)=>{
   calls.push(url);
   const payload=url.endsWith("/token")?{access_token:"test-wix-token-value"}:
-   {active:true,clientId:ID,siteId:devSite,instanceId:ID};
+   {active:true,client_id:ID,site_id:devSite,instance_id:ID};
   return {ok:true,json:async()=>payload};
  };
  try{
