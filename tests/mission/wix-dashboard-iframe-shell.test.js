@@ -13,6 +13,7 @@ test("Wix dashboard shell is a non-sensitive placeholder, not a fake connected a
  assert.match(doc,/confirm_readonly:true/);
  assert.match(doc,/dev-check-result/);
  assert.doesNotMatch(doc,/<form\b/i);
- assert.doesNotMatch(doc,/signedInstance|access_token|app_secret|api\/mission\/site-audit/i);
+ assert.doesNotMatch(doc,/signedInstance|access_token|app_secret/i);
+ assert.match(doc,/api\/mission\/site-audit\?wix_dev_probe=1/);
  assert.doesNotMatch(doc,/localStorage|sessionStorage|document\.cookie/i);
 });
