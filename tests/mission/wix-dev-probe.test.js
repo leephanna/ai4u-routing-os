@@ -61,7 +61,8 @@ test("Valid dev-site Wix owner app reads only one V1 product, returns count not 
    "https://www.wixapis.com/oauth2/token",
    "https://www.wixapis.com/stores-reader/v1/products/query"
   ]);
-  assert.equal(JSON.parse(calls[1].body).instanceId,inst);\n  assert.deepEqual(JSON.parse(calls[2].body),{query:{paging:{limit:1,offset:0}}});
+  assert.equal(JSON.parse(calls[1].body).instanceId,inst);
+  assert.deepEqual(JSON.parse(calls[2].body),{query:{paging:{limit:1,offset:0}}});
   assert.ok(calls.every(c=>c.method==="POST"));
  }finally{global.fetch=original;}
 });
