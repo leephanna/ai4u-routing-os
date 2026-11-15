@@ -59,7 +59,7 @@ Do not store `app_secret`, OAuth tokens, signedInstance or raw Wix instance ID i
 
 **Purpose:** Prove that the *dedicated AI4U app*, rather than ChatGPT's Wix connector, can query one Catalog V1 sample on **AI4U Inspector Test Site** (`428fe383-e0c7-47a9-9ae9-b714b06f9392`). The saved Sparrow Wreath Preview guided mission (`438bf0a6-4162-4166-9a14-30ccd129ff00`) must not be reassigned.
 
-- New independent `POST /api/mission/wix-dev-probe` is disabled by default unless `AI4U_WIX_DEV_PROBE_ENABLED=true` is present in Vercel Production (separate from the production mission gate `AI4U_WIX_AUDIT_ENABLED=false`).
+- New routed `POST /api/mission/site-audit?wix_dev_probe=1` is disabled by default unless `AI4U_WIX_DEV_PROBE_ENABLED=true` is present in Vercel Production (separate from the production mission gate `AI4U_WIX_AUDIT_ENABLED=false`).
 - It accepts only a Wix iframe signed `instance` value supplied by Wix and explicit `confirm_readonly:true` after a user click. It cryptographically validates the instance against the app secret, requires the signed user to match site owner, and rejects anonymous access.
 - Before minting an app OAuth token, it calls Wix Token Info on the signed value and requires an active token and an exact match to the configured app ID, signed instance ID and hardcoded **development site ID**. This is stronger than trusting a plain `tenantId` query parameter.
 - It uses Wix app OAuth credentials already stored server-side and makes one read-only Catalog V1 `/stores-reader/v1/products/query` request with a one-product limit. The response contains only counts, audit status and time, never raw product details, tokens or instance IDs.

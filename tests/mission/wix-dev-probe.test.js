@@ -1,6 +1,6 @@
 "use strict";
 const test=require("node:test"),assert=require("node:assert/strict"),crypto=require("node:crypto");
-const {configuration,verifySignedInstance,probe,DEV_SITE_ID}=require("../../api/mission/wix-dev-probe")._test;
+const {configuration,verifySignedInstance,probe,DEV_SITE_ID}=require("../../lib/mission/wix-dev-probe")._test;
 const appId="bda78d68-1ef8-4c6b-9baa-cfdac21e03b8",inst="22222222-2222-4222-8222-222222222222";
 const owner="33333333-3333-4333-8333-333333333333",secret="example-only-test-secret-with-length";
 const signed=payload=>{
@@ -66,7 +66,7 @@ test("Valid dev-site Wix owner app reads only one V1 product, returns count not 
  }finally{global.fetch=original;}
 });
 test("Non-Wix, unenabled or wrong request method cannot initiate product reads",async()=>{
- const handler=require("../../api/mission/wix-dev-probe");
+ const handler=require("../../lib/mission/wix-dev-probe");
  const old=process.env.AI4U_WIX_DEV_PROBE_ENABLED;
  process.env.AI4U_WIX_DEV_PROBE_ENABLED="false";
  const response=()=>({statusCode:200,headers:{},setHeader(k,v){this.headers[k]=v;},end(v){this.body=v}});
