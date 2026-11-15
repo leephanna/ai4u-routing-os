@@ -22,7 +22,7 @@ h2{font-size:1.12rem;margin:0 0 12px}
 ul{margin:0;padding-left:23px}
 li{margin:8px 0}
 a{color:var(--aqua);text-underline-offset:3px}
-footer{border-top:1px solid var(--border);margin-top:30px;padding-top:14px;color:var(--muted);font-size:.85rem}
+button{cursor:pointer;background:#153251;border:1px solid #6ddfff;color:#e7f8ff;border-radius:9px;padding:12px 18px;font-size:1rem;font-weight:700}button:disabled{opacity:.6;cursor:wait} .notice{margin-top:12px;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}footer{border-top:1px solid var(--border);margin-top:30px;padding-top:14px;color:var(--muted);font-size:.85rem}
 </style>
 </head>
 <body>
@@ -39,12 +39,49 @@ footer{border-top:1px solid var(--border);margin-top:30px;padding-top:14px;color
 <li>Review evidence and unknowns in the saved Guided Execution mission in <a href="https://routing.ai4utech.com/" target="_blank" rel="noopener noreferrer">AI4U Routing OS (opens in a new tab)</a>.</li>
 </ul>
 </section>
+<section class="panel" aria-labelledby="dev-check">
+<h2 id="dev-check">Development-site API verification</h2>
+<p>This optional test is restricted to the AI4U Inspector Test Site. It checks the signed Wix site-owner instance and reads at most one sample product through the AI4U app credentials. No customer data, raw product details or credentials are returned.</p>
+<button id="run-dev-check" type="button">Run read-only development check</button>
+<p id="dev-check-result" class="notice" role="status" aria-live="polite">Not run. This does not verify Sparrow Wreath Preview or checkout.</p>
+</section>
 <section class="panel" aria-labelledby="boundaries">
 <h2 id="boundaries">Protection and scope</h2>
-<p>Catalog, cart, checkout, payment processing, shipping and pickup are <strong>not verified</strong> by this page. It does not access user accounts, products, tokens or saved mission records.</p>
+<p>Catalog, cart, checkout, payment processing, shipping and pickup are <strong>not verified</strong> by this page. The optional owner-triggered development test reads only a bounded product summary, when enabled; it does not return user accounts, tokens or saved mission records.</p>
 <p>No installation, publication, purchase or site modification can be initiated from this dashboard.</p>
 </section>
 <footer>AI4U, LLC · Read-only dashboard placeholder · No customer or payment data is collected</footer>
 </main>
+<script>
+"use strict";
+(function(){
+ const button=document.getElementById("run-dev-check");
+ const result=document.getElementById("dev-check-result");
+ const status=document.querySelector(".status");
+ button.addEventListener("click",async()=>{
+  const instance=new URLSearchParams(window.location.search).get("instance");
+  if(!instance){result.textContent="The embedded Wix session did not include an app instance. Open this page from the installed Wix app dashboard.";return;}
+  button.disabled=true;
+  result.textContent="Verifying the development site and the read-only Catalog V1 endpoint...";
+  try{
+   const response=await fetch("/api/mission/wix-dev-probe",{
+    method:"POST",cache:"no-store",credentials:"omit",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({instance,confirm_readonly:true})
+   });
+   const data=await response.json();
+   if(!response.ok){
+    result.textContent=data.error||"The read-only test could not be verified.";
+    return;
+   }
+   if(data.status!=="verified_dev_read"){result.textContent="Unexpected response; verification not recorded.";return;}
+   result.textContent="Verified developer-only read: "+String(data.sample_count)+" sample product(s); "+
+    String(data.visible_total)+" visible in Catalog V1. No writes. Checkout, payment and shipping remain unverified.";
+   status.textContent="DEV SITE API VERIFIED — STOREFRONT NOT VERIFIED";
+  }catch{result.textContent="Network or authorization error. No site changes were made.";}
+  finally{button.disabled=false;}
+ });
+})();
+</script>
 </body>
 </html>

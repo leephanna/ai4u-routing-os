@@ -54,3 +54,18 @@ Do not store `app_secret`, OAuth tokens, signedInstance or raw Wix instance ID i
 - Production status endpoint must report `not_configured` until required Wix app inputs exist. A genuine signed-in authorizing user, Wix app installation, permission read, event persistence and refresh/resume check are necessary to claim end-to-end verification.
 - Rollback: revert the PR and disable the `AI4U_WIX_AUDIT_ENABLED` flag. Retain private event records and prior proof; no destructive DB migration.
 - Zapier workflows are not used or changed. If any future Zapier workflows are added, export/save them in Zapier before replacing or editing.
+
+## Development-site OAuth smoke test (2026-11-14)
+
+**Purpose:** Prove that the *dedicated AI4U app*, rather than ChatGPT's Wix connector, can query one Catalog V1 sample on **AI4U Inspector Test Site** (`428fe383-e0c7-47a9-9ae9-b714b06f9392`). The saved Sparrow Wreath Preview guided mission (`438bf0a6-4162-4166-9a14-30ccd129ff00`) must not be reassigned.
+
+- New independent `POST /api/mission/wix-dev-probe` is disabled by default unless `AI4U_WIX_DEV_PROBE_ENABLED=true` is present in Vercel Production (separate from the production mission gate `AI4U_WIX_AUDIT_ENABLED=false`).
+- It accepts only a Wix iframe signed `instance` value supplied by Wix and explicit `confirm_readonly:true` after a user click. It cryptographically validates the instance against the app secret, requires the signed user to match site owner, and rejects anonymous access.
+- Before minting an app OAuth token, it calls Wix Token Info on the signed value and requires an active token and an exact match to the configured app ID, signed instance ID and hardcoded **development site ID**. This is stronger than trusting a plain `tenantId` query parameter.
+- It uses Wix app OAuth credentials already stored server-side and makes one read-only Catalog V1 `/stores-reader/v1/products/query` request with a one-product limit. The response contains only counts, audit status and time, never raw product details, tokens or instance IDs.
+- The embedded dashboard keeps the initial "NO WIX DATA ACCESSED" message until the user clicks. A successful response changes only its local status; failures are reported accurately and do not claim connection.
+- The existing Sparrow mission callback and inspect path now also validate the Wix OAuth access token with Token Info against its expected site before saving a connection or running any inventory. This blocks signed-instance/plain-tenant mismatch across sites.
+- **Limitations:** Dev smoke results are not saved to the user's Supabase mission; persist verified test evidence in the GitHub ledger and only extend Supabase guided-mission evidence after a separately authorized production-site connection. A successful product read never proves checkout, payments, or shipping.
+- **Rollback:** Set `AI4U_WIX_DEV_PROBE_ENABLED=false` and redeploy or revert this commit. Production mission flag remains false. No migrations, Zapier workflows, Wix site settings or product data were changed.
+
+**Source validation:** Wix's signed iframe instance, Token Info response, app OAuth token flow and Catalog V1 Query Products official docs. The dedicated development test must be run from the installed app's Wix dashboard by the site owner to count as complete.
