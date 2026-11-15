@@ -22,7 +22,7 @@ test("Rejects fabricated, collaborator and anonymous instance before Wix API",as
   assert.equal(verifySignedInstance(instance({uid:"44444444-4444-4444-8444-444444444444",permissions:"CONTRIBUTOR"}),secret),null);
   assert.equal(verifySignedInstance(instance({aid:"anon"}),secret),null);
   assert.equal(verifySignedInstance("fake."+instance().split(".")[1],secret),null);
-  const result=await probe(instance({uid:"44444444-4444-4444-8444-444444444444"}),config);
+  const result=await probe(instance({uid:"44444444-4444-4444-8444-444444444444",permissions:"CONTRIBUTOR"}),config);
   assert.equal(result.statusCode,403);assert.equal(calls,0);
  }finally{global.fetch=old;}
 });
