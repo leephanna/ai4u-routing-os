@@ -124,3 +124,25 @@ test("Unknown catalog version is rejected before any external call",async()=>{
  try{await assert.rejects(()=>auditReadOnly("test-token","auto"),/Unsupported Wix catalog version/);}
  finally{global.fetch=previous;}
 });
+
+test("Wix app OAuth token must match the actual expected tenant before inspection",async()=>{
+ const original=global.fetch,calls=[],devSite="428fe383-e0c7-47a9-9ae9-b714b06f9392";
+ const auth={appId:ID,secret};
+ const {scopedToken}=mod._test;
+ global.fetch=async(url)=>{
+  calls.push(url);
+  const payload=url.endsWith("/token")?{access_token:"test-wix-token-value"}:
+   {active:true,clientId:ID,siteId:devSite,instanceId:ID};
+  return {ok:true,json:async()=>payload};
+ };
+ try{
+  assert.equal(await scopedToken(ID,auth,devSite),"test-wix-token-value");
+  await assert.rejects(()=>scopedToken(ID,auth,"438bf0a6-4162-4166-9a14-30ccd129ff00"),/site binding/);
+  assert.deepEqual(calls,[
+   "https://www.wixapis.com/oauth2/token",
+   "https://www.wixapis.com/oauth2/token-info",
+   "https://www.wixapis.com/oauth2/token",
+   "https://www.wixapis.com/oauth2/token-info"
+  ]);
+ }finally{global.fetch=original;}
+});
