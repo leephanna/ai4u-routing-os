@@ -69,3 +69,9 @@ Do not store `app_secret`, OAuth tokens, signedInstance or raw Wix instance ID i
 - **Rollback:** Set `AI4U_WIX_DEV_PROBE_ENABLED=false` and redeploy or revert this commit. Production mission flag remains false. No migrations, Zapier workflows, Wix site settings or product data were changed.
 
 **Source validation:** Wix's signed iframe instance, Token Info response, app OAuth token flow and Catalog V1 Query Products official docs. The dedicated development test must be run from the installed app's Wix dashboard by the site owner to count as complete.
+
+## 2026-11-15 — Signed OWNER role versus payment-settings identity gate
+
+A successful HMAC verification produced `WIX_AUTH_OWNER_MISMATCH` on Wix Harmony's AI4U Inspector Test Site. Per Wix *Security and Privacy Best Practice*, the **internal dashboard** access rule requires checking `permission === 'OWNER'` in the Wix-signed instance. Wix separately recommends comparing `uid === siteOwnerId` to protect **payment settings** from contributors. This dedicated dev probe does not read payment settings, customer data, checkout or orders; it performs at most one Catalog V1 read on the exact hardcoded Wix test site after Wix Token Info confirms app/site/instance identity.
+
+The dev-only probe now requires a Wix-signed `OWNER` permission; matching uid/siteOwnerId without signed OWNER does **not** suffice. Different identifiers do not override a signed OWNER permission for this non-payment audit. **Never reuse this relaxed uid check for payment, customer or write functionality.** Existing production Sparrow mission OAuth flag stays disabled. Sources: https://dev.wix.com/docs/build-apps/launch-your-app/legal-and-security/security-and-privacy-best-practice
