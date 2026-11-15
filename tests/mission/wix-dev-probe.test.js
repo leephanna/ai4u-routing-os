@@ -19,10 +19,10 @@ test("Rejects fabricated, collaborator and anonymous instance before Wix API",as
  let calls=0;const old=global.fetch;
  global.fetch=async()=>{calls++;throw Error("Should not reach Wix")};
  try{
-  assert.equal(verifySignedInstance(instance({uid:"44444444-4444-4444-8444-444444444444"}),secret),null);
+  assert.equal(verifySignedInstance(instance({uid:"44444444-4444-4444-8444-444444444444",permissions:"CONTRIBUTOR"}),secret),null);
   assert.equal(verifySignedInstance(instance({aid:"anon"}),secret),null);
   assert.equal(verifySignedInstance("fake."+instance().split(".")[1],secret),null);
-  const result=await probe(instance({uid:"44444444-4444-4444-8444-444444444444"}),config);
+  const result=await probe(instance({uid:"44444444-4444-4444-8444-444444444444",permissions:"CONTRIBUTOR"}),config);
   assert.equal(result.statusCode,403);assert.equal(calls,0);
  }finally{global.fetch=old;}
 });
@@ -84,17 +84,17 @@ test("Non-Wix, unenabled or wrong request method cannot initiate product reads",
 test("Wix signed OWNER instance accepts non-UUID member IDs but rejects contributors",()=>{
  const ownerToken=instance({uid:"wix_owner_identifier",siteOwnerId:"wix_owner_identifier"});
  assert.equal(verifySignedInstance(ownerToken,secret).instanceId,inst);
- assert.equal(verifySignedInstance(instance({uid:"contributor",siteOwnerId:"owner",permissions:"OWNER"}),secret),null);
+ assert.equal(verifySignedInstance(instance({uid:"different-session-user",siteOwnerId:"owner",permissions:"OWNER"}),secret).instanceId,inst);
  assert.equal(verifySignedInstance(instance({uid:"contributor",siteOwnerId:"owner",permissions:"CONTRIBUTOR"}),secret),null);
  assert.equal(verifySignedInstance(instance({uid:"",siteOwnerId:"",permissions:"OWNER"}),secret).instanceId,inst);
 });
 
-test("Authorization diagnostics distinguish signature mismatch from owner restriction without leaking claims",async()=>{
+test("Signed OWNER permission is required for read-only catalog even when uid and siteOwnerId match",async()=>{
  assert.equal(inspectSignedInstance("fake."+instance().split(".")[1],secret).reason,"WIX_AUTH_SIGNATURE_MISMATCH");
- assert.equal(inspectSignedInstance(instance({uid:"contributor",siteOwnerId:"owner"}),secret).reason,"WIX_AUTH_OWNER_MISMATCH");
- assert.equal(inspectSignedInstance(instance({permissions:"CONTRIBUTOR",uid:"",siteOwnerId:""}),secret).reason,"WIX_AUTH_OWNER_PERMISSION_MISSING");
- const wrong=await probe(instance({uid:"contributor",siteOwnerId:"owner"}),config);
+ assert.equal(inspectSignedInstance(instance({uid:"other-id",siteOwnerId:"owner",permissions:"OWNER"}),secret).reason,null);
+ assert.equal(inspectSignedInstance(instance({permissions:"CONTRIBUTOR",uid:owner,siteOwnerId:owner}),secret).reason,"WIX_AUTH_OWNER_PERMISSION_MISSING");
+ const wrong=await probe(instance({uid:owner,siteOwnerId:owner,permissions:"CONTRIBUTOR"}),config);
  assert.equal(wrong.statusCode,403);
- assert.equal(wrong.diagnostic_code,"WIX_AUTH_OWNER_MISMATCH");
+ assert.equal(wrong.diagnostic_code,"WIX_AUTH_OWNER_PERMISSION_MISSING");
  assert.doesNotMatch(JSON.stringify(wrong),/contributor|33333333/);
 });
