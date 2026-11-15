@@ -64,7 +64,7 @@ button{cursor:pointer;background:#153251;border:1px solid #6ddfff;color:#e7f8ff;
   button.disabled=true;
   result.textContent="Verifying the development site and the read-only Catalog V1 endpoint...";
   try{
-   const response=await fetch("/api/mission/wix-dev-probe",{
+   const response=await fetch("/api/mission/site-audit?wix_dev_probe=1",{
     method:"POST",cache:"no-store",credentials:"omit",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({instance,confirm_readonly:true})
