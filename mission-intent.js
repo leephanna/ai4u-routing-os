@@ -63,6 +63,53 @@ function showChoice(){
  $("intent-chosen").textContent=chosen();
  const save=$("intent-save");save.disabled=busy;
 }
+// Foresight v0 UI experiment: progressive disclosure on an explicitly opted-in preview URL.
+// It reuses the CURRENT server's goal plan and does not claim predictive research was run.
+function foresightPreviewEnabled(){
+ try{return new URLSearchParams(global.location.search).get("foresight_preview")==="1";}
+ catch(_){return false;}
+}
+function renderForesightPreview(value){
+ const prior=$("foresight-next-preview");if(prior)prior.remove();
+ if(!foresightPreviewEnabled()||!Array.isArray(value.steps)||!value.steps.length)return;
+ const wrapper=$("intent-steps")?.closest("details");
+ if(!wrapper?.parentNode)return;
+ const first=value.steps[0];
+ const card=document.createElement("section");
+ card.id="foresight-next-preview";
+ card.setAttribute("aria-label","Suggested next action");
+ card.style.cssText="background:rgba(10,34,54,.92);border:1px solid rgba(0,212,255,.4);border-radius:14px;padding:18px;margin:14px 0";
+ const heading=text(card,"p","DO THIS NEXT · Preview","intent-help");
+ heading.style.cssText="font-weight:800;letter-spacing:.08em;color:var(--cyan)";
+ const title=text(card,"h3",String(first.title||"Start with the first task").trim());
+ title.style.cssText="font-size:18px;margin:8px 0";
+ const raw=String(first.action||"Start with the first task in your plan.").trim();
+ const summary=raw.length>180?raw.slice(0,177).trimEnd()+"…":raw;
+ const short=text(card,"p",summary);
+ short.style.cssText="line-height:1.6;margin:8px 0 14px";
+ const how=document.createElement("details");
+ how.className="intent-steps-details";
+ text(how,"summary","Show me exactly how");
+ text(how,"p",String(first.action||"Action details will appear after review."));
+ text(how,"p","You'll know this worked when: "+String(first.acceptance_criteria||"The result meets your goal."));
+ card.appendChild(how);
+ const why=document.createElement("details");
+ why.className="intent-steps-details";
+ text(why,"summary","Why this step?");
+ text(why,"p","It comes first in the current proposed plan and helps prepare what follows. The ranking has not yet been independently tested.");
+ card.appendChild(why);
+ const research=document.createElement("details");
+ research.className="intent-steps-details";
+ text(research,"summary","Explore deeper research");
+ text(research,"p","No proactive research has been performed in this preview. Current prices, technical choices and sources must be verified before action.");
+ card.appendChild(research);
+ const hint=text(card,"p","Review your route options below, then use Save This Plan to preserve your choice.","intent-help");
+ hint.style.marginTop="10px";
+ wrapper.parentNode.insertBefore(card,wrapper);
+ const sectionTitle=wrapper.querySelector("summary");
+ if(sectionTitle)sectionTitle.textContent="See the other proposed steps ("+Math.max(0,value.steps.length-1)+" after this)";
+}
+
 function render(value){
  plan=value;selected="recommended";savedChoice=null;
  if($("intent-next"))$("intent-next").hidden=true;
@@ -76,6 +123,7 @@ function render(value){
   text(item,"span",step.action+" Success: "+step.acceptance_criteria);
   steps.appendChild(item);
  });
+ renderForesightPreview(plan);
  text(options,"p","Choose your preferred route. Nothing changes without your approval.","intent-help");
  plan.alternatives.forEach(a=>options.appendChild(optionRow(a)));
  options.appendChild(optionRow({id:"original",label:"Keep my wording",tradeoff:"Preserve exactly what I meant."}));
